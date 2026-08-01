@@ -972,7 +972,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .hero{height:250vh}
   #divisions{margin-top:-80vh}
   /* stacked mobile hero: logo + text on top, inset video card below */
-  .hero-sticky{background:#fff}
+  .hero-sticky{background:#fff; height:100svh;}
   /* hero-content is absolutely positioned inside the sticky viewport;
      padding-top aligns the logo with the burger's vertical centre;
      padding-inline matches the nav-inner padding so edges line up. */

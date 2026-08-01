@@ -149,7 +149,7 @@
       // • Right/bottom gaps and border-radius close in the final 28%.
       const gap = lerp(14, 0, tail);
       const rad = lerp(26, 0, tail);
-      const frameTop = lerp(58, 0, e);           // percent
+      const frameTop = lerp(48, 0, e);           // percent
       heroFrame.style.left = "0px";
       heroFrame.style.top = `${frameTop}%`;
       heroFrame.style.right = `${gap}px`;
@@ -159,7 +159,7 @@
       heroVideo.style.transform = "none";
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
-      heroContent.style.transform = `translateY(${-e * innerHeight * 0.58}px)`;
+      heroContent.style.transform = `translateY(${-e * innerHeight * 0.48}px)`;
     } else {
       // curtains: video edge sweeps left over the bottom strip, text exits left
       const x = seam * (1 - e);
