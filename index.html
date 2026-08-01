@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAPITAN — Mine. Construct. Evolve.</title>
+<meta name="description" content="Capitan is a leading mining, engineered sand, infrastructure and realty group — delivering the materials and works that build modern India.">
+<link rel="icon" href="assets/img/capitan-favicon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.pexels.com">
+<link rel="preconnect" href="https://videos.pexels.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=58">
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-view" aria-hidden="true"><span>View</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></div>
+
+<!-- ============ LEFT RAIL (hero only) ============ -->
+<aside class="rail" id="rail">
+  <button class="rail-btn" id="railBtn" aria-label="Open menu" aria-expanded="false" aria-controls="slideMenu">
+    <span class="rail-burger"><i></i><i></i></span>
+  </button>
+  <div class="rail-mid"></div>
+  <ul class="rail-social">
+    <li><a href="https://wa.me/918793085551" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 15l-1.1 4 4.1-1.07A9.9 9.9 0 1 0 12.04 2Zm5.8 14.06c-.25.7-1.46 1.35-2 1.4-.53.05-1.02.24-3.44-.72-2.9-1.15-4.72-4.1-4.86-4.29-.14-.19-1.15-1.53-1.15-2.92s.73-2.07 1-2.35a1.03 1.03 0 0 1 .75-.35h.53c.17 0 .4-.6.63.48.24.58.8 2 .87 2.14.7.14.12.31.02.5-.1.19-.14.31-.29.48l-.43.5c-.14.14-.29.3-.12.58.17.29.75 1.24 1.6 2 1.1.98 2.03 1.28 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.85.92-1.14.19-.29.38-.24.63-.14.26.09 1.63.77 1.9.91.29.14.48.22.55.34.07.12.07.68-.18 1.38Z"/></svg></a></li>
+    <li><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.3 8.4h3.4V20H3.3V8.4Zm5.6 0h3.26v1.58h.05c.45-.86 1.56-1.77 3.22-1.77 3.44 0 4.08 2.27 4.08 5.22V20h-3.4v-5.87c0-1.4-.02-3.2-1.95-3.2-1.95 0-2.25 1.52-2.25 3.1V20H8.9V8.4Z"/></svg></a></li>
+    <li><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.55.45-1 1-1Z"/></svg></a></li>
+    <li><a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.2 3h3.3l-7.2 8.2L21.8 21h-6.6l-4.3-5.6L5.9 21H2.6l7.7-8.8L2.5 3h6.8l3.9 5.2L17.2 3Zm-1.2 16h1.8L8.1 4.9H6.2L16 19Z"/></svg></a></li>
+  </ul>
+</aside>
+
+<div class="menu-scrim" id="menuScrim" hidden></div>
+<nav class="slide-menu" id="slideMenu" aria-label="Overlay menu" inert>
+  <a class="menu-item" href="#home"><span class="m-label">Home</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <a class="menu-item" href="#about"><span class="m-label">About</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <a class="menu-item" href="#divisions"><span class="m-label">Divisions</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <a class="menu-item" href="#projects"><span class="m-label">Projects</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <a class="menu-item" href="#products"><span class="m-label">Products</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <a class="menu-item" href="#insights"><span class="m-label">Insights</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <span class="menu-gap"></span>
+  <a class="menu-item menu-contact" href="#contact"><span class="m-live"></span><span class="m-label">Contact</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+  <ul class="menu-social">
+    <li><a href="https://wa.me/918793085551" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 15l-1.1 4 4.1-1.07A9.9 9.9 0 1 0 12.04 2Zm5.8 14.06c-.25.7-1.46 1.35-2 1.4-.53.05-1.02.24-3.44-.72-2.9-1.15-4.72-4.1-4.86-4.29-.14-.19-1.15-1.53-1.15-2.92s.73-2.07 1-2.35a1.03 1.03 0 0 1 .75-.35h.53c.17 0 .4-.6.63.48.24.58.8 2 .87 2.14.7.14.12.31.02.5-.1.19-.14.31-.29.48l-.43.5c-.14.14-.29.3-.12.58.17.29.75 1.24 1.6 2 1.1.98 2.03 1.28 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.85.92-1.14.19-.29.38-.24.63-.14.26.09 1.63.77 1.9.91.29.14.48.22.55.34.07.12.07.68-.18 1.38Z"/></svg></a></li>
+    <li><a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.3 8.4h3.4V20H3.3V8.4Zm5.6 0h3.26v1.58h.05c.45-.86 1.56-1.77 3.22-1.77 3.44 0 4.08 2.27 4.08 5.22V20h-3.4v-5.87c0-1.4-.02-3.2-1.95-3.2-1.95 0-2.25 1.52-2.25 3.1V20H8.9V8.4Z"/></svg></a></li>
+    <li><a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.55.45-1 1-1Z"/></svg></a></li>
+    <li><a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.2 3h3.3l-7.2 8.2L21.8 21h-6.6l-4.3-5.6L5.9 21H2.6l7.7-8.8L2.5 3h6.8l3.9 5.2L17.2 3Zm-1.2 16h1.8L8.1 4.9H6.2L16 19Z"/></svg></a></li>
+  </ul>
+</nav>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#home" aria-label="Capitan home">
+      <!-- full stacked lockup (with tagline) at rest; compact once scrolled -->
+      <img class="brand-full" src="assets/img/capitan-logo-r.png?v=2" alt="Capitan — Pursuit of Excellence">
+      <img class="brand-logo" src="assets/img/capitan-mark.png?v=3" alt="">
+      <img class="brand-word-img" src="assets/img/capitan-wordmark.png?v=3" alt="Capitan">
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#divisions">Divisions</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#products">Products</a>
+      <a href="#insights">Insights</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-pill" href="#contact" data-cursor>Get a Quote</a>
+      <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO (pinned, video scroll-expand) ============ -->
+<section class="hero" id="home">
+  <div class="hero-sticky">
+
+    <!-- Layer 1 : intro content -->
+    <div class="hero-content" id="heroContent">
+      <div class="hero-left">
+        <!-- phone only: the lockup lives in the hero so it travels with the copy -->
+        <img class="hero-logo" src="assets/img/capitan-logo-r.png?v=1" alt="Capitan — Pursuit of Excellence">
+        <p class="hero-kicker rv"><span class="star">✳</span> We are mining &amp; infrastructure</p>
+        <h1 class="hero-title rv" style="--d:.08s">CAPITAN</h1>
+        <p class="hero-sub rv" style="--d:.16s">Mine. Construct. Evolve. — engineered sand, aggregates and infrastructure for modern India.</p>
+      </div>
+
+    </div>
+
+    <!-- Layer 2 : video owns the right side; scroll sweeps it to full-bleed -->
+    <div class="hero-media" id="heroMedia">
+      <div class="hero-media-frame" id="heroMediaFrame">
+        <video id="heroVideo" muted loop playsinline preload="auto"
+          poster="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920">
+          <source src="assets/video/hero.mp4" type="video/mp4">
+          <source src="https://videos.pexels.com/video-files/8382435/8382435-hd_1920_1080_30fps.mp4" type="video/mp4">
+        </video>
+        <div class="hero-media-shade"></div>
+      </div>
+
+      <!-- Curved sticky panel over the video (bottom-right) -->
+      <div class="hero-panel">
+        <span class="fillet f-tl-of-panel"></span>
+        <span class="fillet f-above-panel"></span>
+        <h2>Building India's<br>foundations</h2>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ DIVISIONS (numbered rows + hover preview + accordion) ============ -->
+<section class="section" id="divisions">
+  <div class="container">
+    <p class="tag rv"><i>{</i> Our Divisions <i>}</i></p>
+    <h2 class="h2 rv">Explore what we deliver</h2>
+
+    <div class="svc-list rv" id="svcList">
+
+      <article class="svc" data-img="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900">
+        <button class="svc-top" data-cursor aria-expanded="false">
+          <span class="svc-no">01</span>
+          <span class="svc-name">Mining<small>Basalt &amp; Aggregates</small></span>
+          <span class="svc-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M12 5v14M5 12h14"/></svg></span>
+        </button>
+        <div class="svc-body">
+          <div class="svc-grid">
+            <p>Two decades of responsible quarrying. We extract black basalt rock and process construction aggregates under strict government compliance — supporting the core of every structure we serve.</p>
+            <ul class="chip-row"><li>Black Basalt Rock</li><li>10mm / 20mm Metal</li><li>GSB &amp; WMM</li><li>Responsible Mining</li></ul>
+            <img loading="lazy" src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Aerial view of quarry operations">
+          </div>
+        </div>
+      </article>
+
+      <article class="svc" data-img="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900">
+        <button class="svc-top" data-cursor aria-expanded="false">
+          <span class="svc-no">02</span>
+          <span class="svc-name">C'Square Sand<small>VSI Engineered</small></span>
+          <span class="svc-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M12 5v14M5 12h14"/></svg></span>
+        </button>
+        <div class="svc-body">
+          <div class="svc-grid">
+            <p>Engineered concrete and plaster sand manufactured on Japanese VSI technology — zero silt, zero clay, consistent gradation. The eco-friendly answer to river sand, load after load.</p>
+            <ul class="chip-row"><li>Concrete Sand</li><li>Plaster Sand</li><li>Zero Silt &amp; Clay</li><li>Higher Strength</li></ul>
+            <img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Sand quarry with wheel loader">
+          </div>
+        </div>
+      </article>
+
+      <article class="svc" data-img="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900">
+        <button class="svc-top" data-cursor aria-expanded="false">
+          <span class="svc-no">03</span>
+          <span class="svc-name">Infrastructure<small>Roads &amp; Civil Works</small></span>
+          <span class="svc-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M12 5v14M5 12h14"/></svg></span>
+        </button>
+        <div class="svc-body">
+          <div class="svc-grid">
+            <p>High-quality infrastructure development — roads, earthwork and heavy civil packages executed with our own material chain, machinery fleet and an uncompromising safety record.</p>
+            <ul class="chip-row"><li>Roads &amp; Highways</li><li>Earthwork</li><li>Heavy Civil</li><li>Own Fleet</li></ul>
+            <img loading="lazy" src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Aerial view of highway interchange">
+          </div>
+        </div>
+      </article>
+
+      <article class="svc" data-img="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900">
+        <button class="svc-top" data-cursor aria-expanded="false">
+          <span class="svc-no">04</span>
+          <span class="svc-name">Realty<small>Development</small></span>
+          <span class="svc-toggle" aria-hidden="true"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M12 5v14M5 12h14"/></svg></span>
+        </button>
+        <div class="svc-body">
+          <div class="svc-grid">
+            <p>Building since 2014 — residential, commercial and industrial development, plus redevelopment work that upgrades ageing structures rather than simply replacing them. Smart use of resources, built on our own engineered materials.</p>
+            <ul class="chip-row"><li>Residential</li><li>Commercial</li><li>Industrial</li><li>Redevelopment</li></ul>
+            <img loading="lazy" src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Contemporary high-rise buildings">
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+  <div class="svc-preview" id="svcPreview" aria-hidden="true"><div class="svc-preview-track" id="svcPreviewTrack"></div></div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="section section-tight" id="about">
+  <div class="container">
+    <p class="tag rv"><i>{</i> Who We Are <i>}</i></p>
+    <h2 class="h2 h2-wide rv">A leading mining &amp;<br>infrastructure group</h2>
+
+    <div class="about-grid">
+      <figure class="about-media rv">
+        <img loading="lazy" src="https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Excavator working a terraced stone quarry face">
+        <span class="about-badge-notch" aria-hidden="true">
+          <i class="fillet f-notch-t"></i><i class="fillet f-notch-r"></i>
+          <span class="badge-spin badge-spin-sm">
+            <svg class="badge-text" viewBox="0 0 150 150">
+              <defs><path id="badgeCircle2" d="M75,75 m-57,0 a57,57 0 1,1 114,0 a57,57 0 1,1 -114,0"/></defs>
+              <text textLength="356" lengthAdjust="spacingAndGlyphs"><textPath href="#badgeCircle2" textLength="356" lengthAdjust="spacingAndGlyphs">CAPITAN • PURSUIT OF EXCELLENCE •&nbsp;</textPath></text>
+            </svg>
+            <span class="badge-core badge-core-mark"><img src="assets/img/capitan-mark.png?v=3" alt=""></span>
+          </span>
+        </span>
+      </figure>
+
+      <aside class="about-col rv" style="--d:.1s">
+        <div class="story-wrap">
+          <span class="story-tab">Our story</span>
+          <div class="story-card">
+            <p>Capitan runs on two principles — responsibility and innovation. From responsible basalt quarrying to VSI-engineered sand that meets river-sand standards without the environmental cost, we build the material backbone of construction in and around Mumbai.</p>
+            <a class="link-underline" href="#contact" data-cursor>Talk to our team ↗</a>
+          </div>
+        </div>
+        <figure class="about-media-2">
+          <img loading="lazy" src="https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Crusher and haul road in an open-pit quarry">
+        </figure>
+      </aside>
+    </div>
+
+    <div class="stats rv">
+      <div class="stat"><span class="stat-num" data-count="25" data-suffix="+">0</span><span class="stat-label">Years Experience</span></div>
+      <div class="stat"><span class="stat-num" data-count="50" data-suffix="+">0</span><span class="stat-label">Team Members</span></div>
+      <div class="stat"><span class="stat-num" data-count="250" data-suffix="+">0</span><span class="stat-label">Happy Clients</span></div>
+      <div class="stat"><span class="stat-num" data-count="98" data-suffix="%">0</span><span class="stat-label">On-time Dispatch</span></div>
+    </div>
+  </div>
+
+  <div class="ribbon" aria-hidden="true">
+    <div class="ribbon-track">
+      <span>MINE ✳ CONSTRUCT ✳ EVOLVE ✳ ENGINEERED SAND ✳ AGGREGATES ✳ INFRASTRUCTURE ✳ REALTY ✳&nbsp;</span>
+      <span>MINE ✳ CONSTRUCT ✳ EVOLVE ✳ ENGINEERED SAND ✳ AGGREGATES ✳ INFRASTRUCTURE ✳ REALTY ✳&nbsp;</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS (sticky stacking cards + View cursor) ============ -->
+<section class="section" id="projects">
+  <div class="container">
+    <p class="tag rv"><i>{</i> Featured Projects <i>}</i></p>
+    <h2 class="h2 rv">Showcasing our most impactful work</h2>
+  </div>
+
+  <div class="proj-stack container">
+    <a class="proj" href="#contact" data-cursor-view style="--i:0">
+      <img loading="lazy" src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Aerial view of basalt quarry operations">
+      <span class="pill">Mining</span>
+      <h3>Basalt Ridge Quarry</h3>
+      <span class="proj-meta">Extraction · Crushing · Aggregates</span>
+    </a>
+    <a class="proj" href="#contact" data-cursor-view style="--i:1">
+      <img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Engineered sand plant stockpile and loader">
+      <span class="pill">C'Square</span>
+      <h3>Engineered Sand Plant</h3>
+      <span class="proj-meta">VSI Technology · Concrete &amp; Plaster Sand</span>
+    </a>
+    <a class="proj" href="#contact" data-cursor-view style="--i:2">
+      <img loading="lazy" src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Highway interchange aerial view">
+      <span class="pill">Infrastructure</span>
+      <h3>Coastal Link Roadworks</h3>
+      <span class="proj-meta">Roads · Earthwork · Heavy Civil</span>
+    </a>
+    <a class="proj" href="#contact" data-cursor-view style="--i:3">
+      <img loading="lazy" src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Premium residential towers">
+      <span class="pill">Realty</span>
+      <h3>Residential Development</h3>
+      <span class="proj-meta">Residential · Commercial · Redevelopment</span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ APPROACH (sticky left + progress steps) ============ -->
+<section class="section" id="approach">
+  <div class="container approach-grid">
+    <div class="approach-left">
+      <div class="approach-sticky">
+        <p class="tag rv"><i>{</i> How We Work <i>}</i></p>
+        <h2 class="h2 rv">Strategic steps to lasting results</h2>
+        <figure class="approach-media rv" style="--d:.12s">
+          <img loading="lazy" src="https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Industrial quarry site with heavy machinery at work">
+          <span class="media-notch notch-br" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+
+    <div class="approach-right" id="approachSteps">
+      <div class="approach-line" aria-hidden="true"><span id="approachFill"></span></div>
+
+      <div class="step rv">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-no">1</span>
+        <div class="step-body"><h3>Survey &amp; Exploration</h3><p>We study the deposit, the site and your specification — grades, volumes and logistics — before a single machine moves.</p></div>
+      </div>
+      <div class="step rv">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-no">2</span>
+        <div class="step-body"><h3>Planning &amp; Approvals</h3><p>Mining plans, environmental clearances and government compliance are locked in — responsibility is the first deliverable.</p></div>
+      </div>
+      <div class="step rv">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-no">3</span>
+        <div class="step-body"><h3>Extraction &amp; Processing</h3><p>Controlled blasting, crushing and VSI shaping turn raw basalt into consistent, construction-grade material.</p></div>
+      </div>
+      <div class="step rv">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-no">4</span>
+        <div class="step-body"><h3>Quality Assurance</h3><p>Every batch is tested for gradation, silt content and strength — so what reaches your site performs exactly as promised.</p></div>
+      </div>
+      <div class="step rv">
+        <span class="step-dot" aria-hidden="true"></span>
+        <span class="step-no">5</span>
+        <div class="step-body"><h3>Delivery &amp; Support</h3><p>Our own fleet dispatches on schedule, with documentation and after-supply support that keeps your pour on time.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS (curved-plate cards) ============ -->
+<section class="section" id="products">
+  <div class="container">
+    <p class="tag rv"><i>{</i> C'Square Products <i>}</i></p>
+    <h2 class="h2 rv">Materials engineered to perform</h2>
+
+    <div class="prod-grid">
+      <a class="prod prod-pack rv" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="assets/img/csquare-products.png" alt="Capitan engineered concrete and plaster sand 40 kg bags"></span>
+        <span class="plate"><b>Engineered Concrete Sand</b><small>VSI · Zone II</small></span>
+      </a>
+      <a class="prod rv" style="--d:.06s" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Plant worker beside processing machinery"></span>
+        <span class="plate"><b>Plaster Sand</b><small>Fine · Silt-free</small></span>
+      </a>
+      <a class="prod rv" style="--d:.12s" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Bulldozer working on basalt rock"></span>
+        <span class="plate"><b>Black Basalt Rock</b><small>Boulder · Rubble</small></span>
+      </a>
+      <a class="prod rv" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Excavator loading aggregates"></span>
+        <span class="plate"><b>Aggregates 10 / 20 mm</b><small>Cubical · Graded</small></span>
+      </a>
+      <a class="prod rv" style="--d:.06s" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Industrial storage facility"></span>
+        <span class="plate"><b>GSB &amp; WMM Mixes</b><small>Road base</small></span>
+      </a>
+      <a class="prod rv" style="--d:.12s" href="#contact" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Worker silhouette against crane"></span>
+        <span class="plate"><b>Crushed Stone Dust</b><small>Filling · Bedding</small></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS (two-row marquee) ============ -->
+<section class="section section-tight" id="testimonials">
+  <div class="container">
+    <p class="tag rv"><i>{</i> What Our Clients Say <i>}</i></p>
+    <h2 class="h2 rv">Trust built load by load</h2>
+  </div>
+
+  <div class="tst-rows rv">
+    <div class="tst-track" data-dir="1">
+      <div class="tst-set">
+        <div class="tst"><header><span class="tst-avatar" style="--a:#F8962A">RK</span><div><b>Rajesh K.</b><small>RMC Plant Head</small></div></header><p>Silt-free, every single load. Our cube results improved within the first month of switching to C'Square concrete sand.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#2A6B5D">SP</span><div><b>Sandeep P.</b><small>Civil Contractor</small></div></header><p>Dispatch discipline is what sets Capitan apart. The pour schedule has never slipped because of material.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#1F3A5F">AM</span><div><b>Anita M.</b><small>Project Director, Developer</small></div></header><p>Consistent gradation means predictable concrete. We stopped over-ordering cement to compensate for bad sand.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#8C5A2B">VF</span><div><b>Vikram F.</b><small>Structural Consultant</small></div></header><p>Their test documentation is the cleanest I've reviewed — gradation curves and silt reports with every batch.</p><div class="tst-stars">★★★★☆</div></div>
+      </div>
+      <div class="tst-set" aria-hidden="true">
+        <div class="tst"><header><span class="tst-avatar" style="--a:#F8962A">RK</span><div><b>Rajesh K.</b><small>RMC Plant Head</small></div></header><p>Silt-free, every single load. Our cube results improved within the first month of switching to C'Square concrete sand.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#2A6B5D">SP</span><div><b>Sandeep P.</b><small>Civil Contractor</small></div></header><p>Dispatch discipline is what sets Capitan apart. The pour schedule has never slipped because of material.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#1F3A5F">AM</span><div><b>Anita M.</b><small>Project Director, Developer</small></div></header><p>Consistent gradation means predictable concrete. We stopped over-ordering cement to compensate for bad sand.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#8C5A2B">VF</span><div><b>Vikram F.</b><small>Structural Consultant</small></div></header><p>Their test documentation is the cleanest I've reviewed — gradation curves and silt reports with every batch.</p><div class="tst-stars">★★★★☆</div></div>
+      </div>
+    </div>
+
+    <div class="tst-track" data-dir="-1">
+      <div class="tst-set">
+        <div class="tst"><header><span class="tst-avatar" style="--a:#5B4A8A">NG</span><div><b>Nilesh G.</b><small>Procurement Lead, EPC</small></div></header><p>One vendor for basalt, aggregates and engineered sand across three sites — logistics got dramatically simpler.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#B0492F">PT</span><div><b>Priya T.</b><small>Architect</small></div></header><p>Plaster sand with no organic impurities — finishes cure evenly and rework has dropped to near zero.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#3E6B8C">MD</span><div><b>Mahesh D.</b><small>Site Engineer</small></div></header><p>Full strength in seven days, exactly as specified. The lab reports match what we see on site.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#6B7A2A">KS</span><div><b>Kavita S.</b><small>Builder, Vasai</small></div></header><p>After the dredging ban we needed a river-sand replacement we could trust. We found it — and never looked back.</p><div class="tst-stars">★★★★★</div></div>
+      </div>
+      <div class="tst-set" aria-hidden="true">
+        <div class="tst"><header><span class="tst-avatar" style="--a:#5B4A8A">NG</span><div><b>Nilesh G.</b><small>Procurement Lead, EPC</small></div></header><p>One vendor for basalt, aggregates and engineered sand across three sites — logistics got dramatically simpler.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#B0492F">PT</span><div><b>Priya T.</b><small>Architect</small></div></header><p>Plaster sand with no organic impurities — finishes cure evenly and rework has dropped to near zero.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#3E6B8C">MD</span><div><b>Mahesh D.</b><small>Site Engineer</small></div></header><p>Full strength in seven days, exactly as specified. The lab reports match what we see on site.</p><div class="tst-stars">★★★★★</div></div>
+        <div class="tst"><header><span class="tst-avatar" style="--a:#6B7A2A">KS</span><div><b>Kavita S.</b><small>Builder, Vasai</small></div></header><p>After the dredging ban we needed a river-sand replacement we could trust. We found it — and never looked back.</p><div class="tst-stars">★★★★★</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section" id="faq">
+  <div class="container faq-grid">
+    <div class="faq-left">
+      <div class="faq-sticky">
+        <p class="tag rv"><i>{</i> FAQ <i>}</i></p>
+        <h2 class="h2 rv">Clear answers to your questions</h2>
+        <figure class="faq-media rv" style="--d:.12s">
+          <img loading="lazy" src="https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Bulldozers working a rock face">
+          <span class="media-notch notch-tl" aria-hidden="true"></span>
+        </figure>
+      </div>
+    </div>
+
+    <div class="faq-list rv">
+      <details class="qa" open>
+        <summary data-cursor>What is engineered concrete sand?<span class="qa-toggle"></span></summary>
+        <p>Sand manufactured from basalt rock on VSI (vertical shaft impactor) technology. Particles are cubical and consistently graded — free of the silt, clay and organic impurities found in natural river sand.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>How does it compare to river sand?<span class="qa-toggle"></span></summary>
+        <p>It meets river-sand standards with better particle locking, stronger cement bonding, lower water absorption and higher compressive strength — while being fully eco-friendly after the dredging ban.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Is it approved for structural concrete?<span class="qa-toggle"></span></summary>
+        <p>Yes. Our concrete sand conforms to Zone II gradation requirements for RCC work, and every dispatch carries a batch quality certificate. Third-party lab reports are available on request.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>What is your delivery radius and minimum order?<span class="qa-toggle"></span></summary>
+        <p>We deliver across Vasai, Virar, Mira-Bhayandar and greater Mumbai on our own fleet. Minimum order depends on material and distance — send us your site pin and we'll confirm same day.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>How is quality controlled?<span class="qa-toggle"></span></summary>
+        <p>Every production run is tested for gradation, silt content and moisture. Quarry-to-plant sourcing means the raw material never changes — so neither does the output.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Do you take infrastructure work contracts?<span class="qa-toggle"></span></summary>
+        <p>Yes — roads, earthwork and heavy civil packages, backed by our own material chain and machinery. Share your BOQ through the contact form and our projects desk will respond.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>How do I get a rate quote?<span class="qa-toggle"></span></summary>
+        <p>Use the enquiry form below or reach us on WhatsApp. Share material, approximate monthly volume and site location — quotes are typically issued within one working day.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>What is the difference between concrete sand and plaster sand?<span class="qa-toggle"></span></summary>
+        <p>Concrete sand is coarser and graded to Zone II for structural RCC work, giving better particle interlock and compressive strength. Plaster sand is finer and screened for a smooth finish on walls and ceilings, so renders cure evenly without surface cracking.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Do you supply aggregates as well as sand?<span class="qa-toggle"></span></summary>
+        <p>Yes. Alongside engineered sand we supply black basalt rock, 10mm and 20mm cubical aggregates, crushed stone dust, and GSB and WMM road-base mixes — all from the same quarry, so gradation stays consistent across your order.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Can you match a custom gradation for our mix design?<span class="qa-toggle"></span></summary>
+        <p>We can. Our VSI plant lets us tune the output curve to a specified fineness modulus. Send us your mix design or target gradation and our technical team will confirm what we can hold and at what tolerance.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>How soon can material reach my site?<span class="qa-toggle"></span></summary>
+        <p>For sites within Vasai, Virar and Mira-Bhayandar we typically dispatch same or next working day. Greater Mumbai deliveries depend on load size and traffic windows — our dispatch desk confirms a slot when the order is placed.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Is manufactured sand really more economical than river sand?<span class="qa-toggle"></span></summary>
+        <p>In most cases, yes. Consistent gradation and zero silt mean less cement is needed to hit the same strength, and there is no wastage from washing or screening on site. Add stable supply pricing and the delivered cost per cubic metre usually works out lower.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>How does Capitan handle environmental compliance?<span class="qa-toggle"></span></summary>
+        <p>Every quarry we operate runs under an approved mining plan with the required environmental clearances. Dust suppression, controlled blasting windows and phased restoration are part of the operating routine, not an afterthought.</p>
+      </details>
+      <details class="qa">
+        <summary data-cursor>Do you work with government and institutional projects?<span class="qa-toggle"></span></summary>
+        <p>Yes. We supply and execute for EPC contractors and institutional buyers, and can provide the batch documentation, test certificates and invoicing formats those projects require. Reach out through the form and our projects desk will take it forward.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSIGHTS ============ -->
+<section class="section" id="insights">
+  <div class="container">
+    <p class="tag rv"><i>{</i> Our Insights <i>}</i></p>
+    <h2 class="h2 rv">Stay ahead of what's building</h2>
+
+    <div class="blog-grid">
+      <a class="blog rv" href="#contact" data-cursor-view>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Manufactured sand stockpiles"></figure>
+        <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> Jun 12, 2026 <em>/</em> Materials</p>
+        <h3>Why VSI manufactured sand outperforms river sand</h3>
+      </a>
+      <a class="blog rv" style="--d:.08s" href="#contact" data-cursor-view>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Worker silhouette against tower crane"></figure>
+        <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> May 28, 2026 <em>/</em> Industry</p>
+        <h3>The dredging ban: what it means for Mumbai builders</h3>
+      </a>
+      <a class="blog rv" style="--d:.16s" href="#contact" data-cursor-view>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Cranes over a rising structure at dusk"></figure>
+        <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> May 3, 2026 <em>/</em> Operations</p>
+        <h3>Inside our quarry: responsible mining in practice</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / CONTACT (dark) ============ -->
+<section class="section section-dark" id="contact">
+  <div class="container">
+    <p class="tag rv"><i>{</i> Get in Touch <i>}</i></p>
+    <h2 class="h2 h2-light rv">Let's build something that lasts</h2>
+
+    <div class="cta-grid">
+      <div class="cta-left rv">
+        <div class="cta-person">
+          <img class="cta-face" src="assets/img/director.png?v=2" alt="Mr Pradeep Chavan">
+          <div><b>Mr Pradeep Chavan</b><small>Chairman &amp; Managing Director</small></div>
+        </div>
+        <p>Our business rests on two principles — responsibility and innovation. Whether it is mining, infrastructure or realty, we deliver quality on time and build relationships that last. Tell us what you are building, and we will respond within one working day.</p>
+        <ul class="cta-contacts">
+          <li><span>Call</span><a href="tel:+912502990551" data-cursor>+91 250 299 0551</a></li>
+          <li><span>Call</span><a href="tel:+912502320551" data-cursor>+91 250 232 0551</a></li>
+          <li><span>WhatsApp</span><a href="https://wa.me/918793085551" target="_blank" rel="noopener" data-cursor>+91 87930 85551</a></li>
+        </ul>
+      </div>
+
+      <form class="cta-form rv" style="--d:.1s" id="quoteForm">
+        <div class="form-row">
+          <label>Name<input type="text" name="name" placeholder="Your name" required></label>
+          <label>Phone / Email<input type="text" name="contact" placeholder="How do we reach you?" required></label>
+        </div>
+        <label>Division Needed
+          <select name="division">
+            <option>C'Square Engineered Sand</option>
+            <option>Mining — Basalt &amp; Aggregates</option>
+            <option>Infrastructure Works</option>
+            <option>Realty</option>
+            <option>Other / Investor Relations</option>
+          </select>
+        </label>
+        <label>What can we help you build?
+          <textarea name="message" rows="5" placeholder="Material, monthly volume, site location…"></textarea>
+        </label>
+        <button class="btn btn-block btn-accent btn-lg" type="submit" data-cursor>Send Enquiry<span class="btn-dot">↗</span></button>
+        <p class="form-note" id="formNote">Submitting opens WhatsApp with your enquiry pre-filled.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand brand-lg" href="#home" aria-label="Back to top"><img class="brand-logo" src="assets/img/capitan-logo-r.png?v=1" alt="Capitan — Pursuit of Excellence"></a>
+        <p class="footer-tel"><a href="tel:+912502990551" data-cursor>+91 250 299 0551</a></p>
+        <p class="footer-tel"><a href="https://wa.me/918793085551" target="_blank" rel="noopener" data-cursor>+91 87930 85551</a></p>
+        <p class="footer-nav-label">Navigation</p>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="#home">Home</a><a href="#about">About</a><a href="#divisions">Divisions</a><a href="#projects">Projects</a><a href="#products">Products</a><a href="#insights">Insights</a><a href="#contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-address">
+        <p class="footer-nav-label">Address</p>
+        <p>Unit B-109 &amp; 110, Emerald, Solitaire Castle, Fort Rd., Vasai (W), Mumbai 401 201, India</p>
+        <!-- Google Maps embed. Keyless embed endpoint — works with no setup.
+             To use the official Maps Embed API instead, swap the src for:
+             https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=<same query>&zoom=15 -->
+        <div class="map-frame">
+          <iframe
+            class="map-embed"
+            title="Capitan head office — Solitaire Castle, Vasai (W), Mumbai"
+            src="https://maps.google.com/maps?q=Emerald%20Solitaire%20Castle%2C%20Pam%20High%20Street%2C%20Fort%20Road%2C%20Vasai%20West%2C%20Mumbai%20401201&z=15&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Capitan. All rights reserved.</p>
+      <p>Pursuit of Excellence</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js?v=58"></script>
+</body>
+</html>

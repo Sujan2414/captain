@@ -1,0 +1,1044 @@
+/* ============================================================
+   CAPITAN — Mine. Construct. Evolve.
+   Design language: Archivo grotesque · #F55733 accent ·
+   alabaster surface · hairline rules · inverted-radius corners
+   ============================================================ */
+
+:root{
+  /* Capitan brand — sampled from the official logo */
+  --bg:#FCFCFC;
+  --ink:#2F3A40;          /* slate-tinted ink, harmonises with the mark */
+  --ink-2:#5C6B73;
+  --line:#D4DBDF;
+  --accent:#F8962A;       /* Capitan orange */
+  --slate:#808E96;        /* Capitan slate grey */
+  --accent-ink:#FFF7EE;
+  --dark:#1E2A30;
+  --dark-2:#26343B;
+  /* Figma token --radius/40: the template's corners are soft, not tight */
+  --r-card:40px;
+  --r-big:40px;
+  --pad:clamp(20px, 5vw, 96px);
+  --nav-h:76px;
+  --nav-tall:178px;
+  --rail-w:82px;
+  --fillet:40px;
+  --ease:cubic-bezier(.22,.61,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-variation-settings:"wdth" 100;
+  background:var(--bg);
+  color:var(--ink-2);
+  font-size:17px;
+  line-height:1.55;
+  font-weight:400;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;background:none;border:0;cursor:pointer;color:inherit}
+::selection{background:var(--accent);color:#fff}
+
+h1,h2,h3{color:var(--ink);font-weight:600;line-height:1.1}
+
+/* ---------- reveal-on-scroll ---------- */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .9s var(--ease-out) var(--d,0s),transform .9s var(--ease-out) var(--d,0s)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rv{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+html.insta{scroll-behavior:auto}
+html.insta .rv{opacity:1;transform:none;transition:none}
+html.insta *{animation-play-state:paused !important}
+
+/* ---------- custom cursor ---------- */
+.cursor-dot{
+  position:fixed;z-index:2000;top:0;left:0;width:12px;height:12px;border-radius:50%;
+  background:#9a9a9a;pointer-events:none;transform:translate(-50%,-50%);
+  transition:width .25s,height .25s,opacity .25s;opacity:0;
+}
+body.cursor-on .cursor-dot{opacity:.85}
+body.cursor-hover .cursor-dot{width:34px;height:34px;opacity:.35}
+.cursor-view{
+  position:fixed;z-index:2000;top:0;left:0;width:96px;height:96px;border-radius:50%;
+  background:rgba(252,252,252,.92);color:var(--ink);pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:15px;font-weight:500;letter-spacing:.02em;
+  transform:translate(-50%,-50%) scale(.4);opacity:0;
+  transition:transform .35s var(--ease-out),opacity .3s;
+  backdrop-filter:blur(2px);
+}
+.cursor-view svg{width:22px;height:22px}
+body.cursor-viewing .cursor-view{opacity:1;transform:translate(-50%,-50%) scale(1)}
+body.cursor-viewing .cursor-dot{opacity:0}
+@media (hover:none){.cursor-dot,.cursor-view{display:none}}
+
+/* ---------- inverted-radius fillet (the curved-edge trick) ----------
+   A square whose corner is scooped out with a transparent quarter-circle,
+   painted in the surface color, so plates appear to "melt" into images. */
+.fillet{
+  position:absolute;width:var(--fillet);height:var(--fillet);pointer-events:none;
+  --c:var(--bg);
+}
+.fillet.tl{background:radial-gradient(circle at 100% 100%,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.fillet.tr{background:radial-gradient(circle at 0 100%,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.fillet.bl{background:radial-gradient(circle at 100% 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.fillet.br{background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+
+/* ---------- layout primitives ---------- */
+.container{max-width:1440px;margin:0 auto;padding-inline:var(--pad)}
+.section{padding-block:clamp(64px,9vw,130px);position:relative}
+.section-tight{padding-block:clamp(48px,7vw,96px)}
+
+.tag{
+  color:var(--accent);font-weight:300;font-size:18px;letter-spacing:.01em;margin-bottom:14px;
+}
+.tag i{font-style:normal;opacity:.9}
+.h2{
+  font-size:clamp(26px,3.1vw,44px);font-weight:600;text-transform:uppercase;
+  letter-spacing:.005em;line-height:1.04;margin-bottom:clamp(34px,4.5vw,64px);
+  max-width:24ch;
+}
+.h2-wide{max-width:none}
+.h2-light{color:#fff}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  background:var(--ink);color:#fff;border-radius:99px;padding:14px 26px;
+  font-weight:500;font-size:16px;letter-spacing:.01em;
+  transition:background .3s,transform .3s var(--ease-out);
+  position:relative;overflow:hidden;
+}
+.btn .btn-dot{display:inline-grid;place-items:center;transition:transform .35s var(--ease-out)}
+.btn:hover{background:var(--accent);transform:translateY(-2px)}
+.btn:hover .btn-dot{transform:translate(2px,-2px)}
+.btn-accent{background:var(--accent)}
+.btn-accent:hover{background:#e14a28}
+.btn-block{width:100%}
+.btn-lg{padding:18px 28px;font-size:17px}
+.btn-pill{padding:11px 22px;font-size:15px}
+
+.arrow-btn{
+  width:60px;height:60px;border:1px solid var(--ink-2);border-radius:50%;
+  display:inline-grid;place-items:center;color:var(--ink);
+  transition:background .3s,color .3s,border-color .3s,transform .35s var(--ease-out);
+}
+.arrow-btn svg{width:26px;height:26px}
+.arrow-btn-sm{width:42px;height:42px}
+.arrow-btn-sm svg{width:18px;height:18px}
+
+.link-underline{
+  color:var(--ink);font-weight:500;position:relative;display:inline-block;margin-top:6px;
+}
+.link-underline::after{
+  content:"";position:absolute;left:0;bottom:-3px;height:1.5px;width:100%;
+  background:var(--accent);transform-origin:right;transition:transform .4s var(--ease-out);
+}
+.link-underline:hover::after{transform:scaleX(0)}
+
+/* ============================================================
+   LEFT RAIL + SLIDE-OUT MENU (hero only)
+   ============================================================ */
+.rail{
+  position:fixed;left:0;top:0;bottom:0;width:var(--rail-w);z-index:1200;
+  background:#26292E;display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;padding:18px 0 26px;
+  will-change:transform,opacity;   /* position is driven by hero scroll progress */
+}
+.rail.away{pointer-events:none}
+
+.rail-btn{
+  width:54px;height:54px;border-radius:50%;background:#fff;
+  display:grid;place-items:center;flex-shrink:0;
+  transition:transform .4s var(--ease-out),background .3s;
+}
+.rail-btn:hover{transform:scale(1.07)}
+.rail-burger{display:flex;flex-direction:column;gap:6px;align-items:center}
+.rail-burger i{
+  display:block;width:20px;height:2px;background:#26292E;border-radius:2px;
+  transition:transform .4s var(--ease),width .3s;
+}
+.rail-burger i:last-child{width:13px}
+body.menu-open .rail-burger i:first-child{transform:translateY(4px) rotate(45deg)}
+body.menu-open .rail-burger i:last-child{width:20px;transform:translateY(-4px) rotate(-45deg)}
+
+.rail-mid{flex:1}
+.rail-social{list-style:none;display:grid;gap:20px;justify-items:center}
+.rail-social a{
+  display:grid;place-items:center;width:22px;height:22px;color:#C6CBD0;
+  transition:color .3s,transform .3s var(--ease-out);
+}
+.rail-social svg{width:100%;height:100%}
+.rail-social a:hover{color:var(--accent);transform:translateY(-2px)}
+
+.menu-scrim{
+  position:fixed;inset:0;z-index:1150;background:rgba(12,16,18,.62);
+  opacity:0;transition:opacity .45s var(--ease);
+}
+body.menu-open .menu-scrim{opacity:1}
+
+.slide-menu{
+  position:fixed;left:var(--rail-w);top:0;bottom:0;z-index:1180;
+  width:min(460px,72vw);background:#fff;display:flex;flex-direction:column;
+  /* shift by its own width PLUS the rail offset, or its right edge peeks out */
+  transform:translateX(calc(-100% - var(--rail-w)));
+  visibility:hidden;
+  transition:transform .55s var(--ease),visibility .55s;
+  overflow-y:auto;
+}
+body.menu-open .slide-menu{transform:none;visibility:visible}
+
+.menu-item{
+  position:relative;display:flex;align-items:center;gap:14px;
+  padding:26px 34px;border-bottom:1px solid #E7E9EA;
+  color:var(--ink);font-size:clamp(19px,1.6vw,23px);font-weight:500;
+  overflow:hidden;isolation:isolate;
+}
+.menu-item::before{                      /* orange wipe sweeps in from the left */
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease-out);
+}
+.menu-item:hover::before{transform:scaleX(1)}
+.menu-item:hover{color:#fff}
+.m-label{transition:transform .4s var(--ease-out)}
+.menu-item:hover .m-label{transform:translateX(4px)}
+.m-dot{
+  width:9px;height:9px;border-radius:50%;background:#A8320F;
+  opacity:0;transition:opacity .3s .05s;
+}
+.menu-item:hover .m-dot{opacity:1}
+.m-arrow{
+  margin-left:auto;width:24px;height:24px;display:grid;place-items:center;
+  opacity:0;transform:translate(-8px,8px);
+  transition:opacity .35s,transform .45s var(--ease-out);
+}
+.m-arrow svg{width:100%;height:100%}
+.menu-item:hover .m-arrow{opacity:1;transform:none}
+.menu-gap{flex:1;min-height:56px;border-bottom:1px solid #E7E9EA}
+.menu-contact{border-bottom:0}
+.m-live{
+  width:9px;height:9px;border-radius:50%;background:#28B463;flex-shrink:0;
+  box-shadow:0 0 0 0 rgba(40,180,99,.6);animation:live 2.2s infinite;
+}
+@keyframes live{70%{box-shadow:0 0 0 9px rgba(40,180,99,0)}100%{box-shadow:0 0 0 0 rgba(40,180,99,0)}}
+.menu-contact:hover .m-live{background:#fff;animation:none}
+.menu-social{display:none;list-style:none;justify-content:center;gap:16px;padding:30px 0 34px}
+.menu-social a{
+  width:44px;height:44px;border-radius:50%;background:#26292E;color:#fff;
+  display:grid;place-items:center;transition:background .3s,transform .3s var(--ease-out);
+}
+.menu-social svg{width:20px;height:20px}
+.menu-social a:hover{background:var(--accent);transform:translateY(-3px)}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:1000;height:var(--nav-tall);
+  transition:transform .45s var(--ease),background .35s,border-color .35s,height .4s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{height:var(--nav-h)}
+.nav.scrolled{background:rgba(252,252,252,.82);backdrop-filter:blur(14px);border-color:var(--line)}
+.nav.hidden{transform:translateY(-100%)}
+/* mid-hero the bar is pushed out by the advancing video edge (driven inline) */
+.nav.in-hero{pointer-events:none}
+.nav-inner{
+  max-width:1440px;margin:0 auto;height:100%;padding-inline:var(--pad);
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  transition:padding-left .5s var(--ease);
+}
+/* clear the left rail while it is on screen */
+@media (min-width:761px){
+  .nav-inner{padding-left:calc(var(--pad) + var(--rail-w) - 20px)}
+  .nav.scrolled .nav-inner{padding-left:var(--pad)}
+  .hero-logo{display:none !important}   /* phone-only element */
+}
+/* Official artwork: full stacked lockup (with tagline) while the page is at
+   rest; collapses to a compact horizontal mark + wordmark once scrolled. */
+.brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
+/* at rest: the full stacked lockup incl. the "Pursuit of Excellence" tagline */
+.brand-full{height:110px;width:auto;transition:opacity .3s}
+.brand-logo,.brand-word-img{display:none;width:auto}
+.brand-logo{height:38px;transition:transform .5s var(--ease-out)}
+.brand-word-img{height:17px;transition:opacity .3s}
+/* once scrolled: compact horizontal mark + wordmark */
+.nav.scrolled .brand-full{display:none}
+.nav.scrolled .brand-logo,
+.nav.scrolled .brand-word-img{display:block}
+.brand:hover .brand-logo{transform:scale(1.06)}
+.brand:hover .brand-full,.brand:hover .brand-word-img{opacity:.82}
+.nav-links{
+  display:flex;gap:34px;
+  transition:opacity .4s var(--ease),transform .4s var(--ease),visibility .4s;
+}
+/* over the hero the rail menu handles navigation — links and the CTA fade
+   back in only once the hero is behind us */
+@media (min-width:761px){
+  .nav:not(.scrolled) .nav-links,
+  .nav:not(.scrolled) .nav-cta .btn-pill{
+    opacity:0;visibility:hidden;transform:translateY(-8px);pointer-events:none;
+  }
+}
+.nav-cta .btn-pill{transition:opacity .4s var(--ease),transform .4s var(--ease),visibility .4s,background .3s}
+.nav-links a{
+  font-size:15.5px;font-weight:500;color:var(--ink-2);position:relative;padding-block:6px;
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1.5px;width:100%;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease-out);
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-cta{display:flex;align-items:center;gap:14px}
+.nav-burger{
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  width:46px;height:46px;padding:0;background:#fff;border-radius:50%;
+  transition:transform .35s var(--ease-out);
+}
+.nav-burger:hover{transform:scale(1.06)}
+.nav-burger span{
+  display:block;width:20px;height:2px;background:#26292E;border-radius:2px;
+  transition:transform .35s var(--ease),width .3s;
+}
+.nav-burger span:last-child{width:13px}
+body.menu-open .nav-burger span:first-child{transform:translateY(4px) rotate(45deg)}
+body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px) rotate(-45deg)}
+
+/* ============================================================
+   HERO — pinned section, video slides up & expands (built-to-last)
+   ============================================================ */
+.hero{height:300vh;position:relative;z-index:0}
+.hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--bg)}
+/* Parallax reveal: the video stays pinned while the next section slides up
+   over it, rather than the whole hero scrolling away. */
+#divisions{position:relative;z-index:2;background:var(--bg);margin-top:-100vh}
+
+.hero-content{
+  position:absolute;inset:0;z-index:3;display:flex;align-items:center;
+  padding-inline:clamp(24px,8vw,150px);gap:30px;
+  will-change:transform;pointer-events:none;
+}
+.hero-content a{pointer-events:auto}
+.hero-left{max-width:1050px}
+.hero-kicker{
+  display:flex;align-items:center;gap:12px;color:var(--ink);
+  font-size:clamp(20px,2.4vw,34px);font-weight:500;margin-bottom:6px;
+}
+.hero-kicker .star{color:var(--accent);font-size:1.15em;animation:starSpin 9s linear infinite}
+@keyframes starSpin{to{transform:rotate(360deg)}}
+.hero-title{
+  font-size:clamp(64px,15.5vw,238px);font-weight:800;letter-spacing:-.015em;
+  line-height:.88;text-transform:uppercase;color:var(--ink);
+  font-variation-settings:"wdth" 104;
+}
+.hero-sub{max-width:520px;font-size:18px;margin-top:26px}
+.hero-logo{display:none}   /* phone only — see the max-width:760px block */
+
+/* rotating badge straddles the seam between text and video */
+.hero-right{position:absolute;left:calc(var(--seam) - 75px);top:52%;z-index:3;will-change:transform}
+
+/* rotating badge */
+.badge-spin{position:relative;width:150px;height:150px;display:block}
+.badge-text{width:100%;height:100%;animation:spin 14s linear infinite}
+.badge-text text{
+  font-size:12.5px;font-weight:600;letter-spacing:.2em;fill:var(--ink);text-transform:uppercase;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.badge-core{
+  position:absolute;inset:35px;background:var(--accent);border-radius:50%;
+  display:grid;place-items:center;color:#fff;transition:transform .4s var(--ease-out);
+}
+.badge-core svg{width:30px;height:30px}
+.badge-spin:hover .badge-core{transform:scale(1.12)}
+/* no backing disc — its soft shadow read as a stray arc behind the badge */
+.badge-spin-sm{width:118px;height:118px}
+.badge-spin-sm .badge-core{inset:28px;font-size:26px}
+/* Capitan triangle sits in the badge centre — white disc so the mark reads */
+.badge-core-mark{background:none;box-shadow:none;padding:0}
+.badge-core-mark img{
+  width:58px;height:auto;min-height:0;max-width:none;
+  object-fit:contain;display:block;
+}
+
+/* hero media — occupies the right side from the start; the frame is a
+   full-bleed clipping window shifted right by the seam, and the video is
+   counter-shifted so the reveal is pure GPU transform (curtain effect) */
+.hero{--seam:50%}
+.hero-media{position:absolute;inset:0;pointer-events:none;z-index:2}
+.hero-media-frame{
+  position:absolute;inset:0;overflow:hidden;background:#d8d4cf;
+  transform:translateX(var(--seam));border-radius:0 0 0 44px;
+  will-change:transform,border-radius;
+}
+.hero-media-frame video{
+  width:100%;height:100%;object-fit:cover;
+  transform:translateX(calc(-1 * var(--seam)));will-change:transform;
+}
+.hero-media-shade{
+  position:absolute;inset:0;
+  background:linear-gradient(200deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.28) 100%);
+}
+
+/* curved white panel on the bottom strip, carved into the video (Figma: 400x104 @1920) */
+.hero-panel{
+  position:absolute;right:0;bottom:28px;z-index:4;
+  background:var(--bg);padding:20px 24px 12px 38px;
+  border-top-left-radius:24px;will-change:transform;
+}
+.hero-panel h2{
+  font-size:clamp(19px,2.19vw,42px);font-weight:600;text-transform:uppercase;
+  text-align:right;line-height:1.02;letter-spacing:0;
+}
+.hero-panel .fillet{--c:var(--bg)}
+.f-tl-of-panel{left:calc(-1 * var(--fillet) + 1px);bottom:0;background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.f-above-panel{right:0;top:calc(-1 * var(--fillet) + 1px);background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+
+/* ============================================================
+   DIVISIONS — numbered rows, accordion, cursor-follow preview
+   ============================================================ */
+.svc-list{border-top:1px solid var(--line)}
+.svc{border-bottom:1px solid var(--line)}
+.svc-top{
+  width:100%;display:flex;align-items:center;gap:22px;
+  padding-block:clamp(26px,3.4vw,42px);text-align:left;
+}
+.svc-no{color:var(--accent);font-weight:300;font-size:18px;align-self:flex-start;min-width:28px}
+.svc-name{
+  flex:1;font-size:clamp(38px,5.6vw,84px);font-weight:800;text-transform:uppercase;
+  color:var(--ink);line-height:.92;letter-spacing:-.005em;
+  font-variation-settings:"wdth" 103;
+  display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;
+  transition:transform .45s var(--ease-out),color .3s;
+}
+.svc-name small{
+  font-size:17px;font-weight:300;color:var(--ink-2);letter-spacing:0;
+  text-transform:none;font-variation-settings:"wdth" 100;padding-bottom:6px;
+}
+/* .hot mirrors :hover — CSS :hover doesn't re-evaluate while scrolling,
+   so JS hit-testing drives the same highlight as the image reel */
+.svc-top:hover .svc-name,
+.svc.hot .svc-name{transform:translateX(16px);color:var(--accent)}
+.svc-toggle{
+  width:48px;height:48px;border:1px solid var(--ink-2);border-radius:50%;
+  display:grid;place-items:center;flex-shrink:0;color:var(--ink);
+  transition:background .3s,color .3s,transform .5s var(--ease-out),border-color .3s;
+}
+.svc-toggle svg{width:20px;height:20px}
+.svc.open .svc-toggle{background:var(--accent);border-color:var(--accent);color:#fff;transform:rotate(135deg)}
+.svc-body{
+  display:grid;grid-template-rows:0fr;transition:grid-template-rows .6s var(--ease);
+}
+.svc-body>.svc-grid{overflow:hidden}
+.svc.open .svc-body{grid-template-rows:1fr}
+.svc-grid{
+  display:grid;grid-template-columns:1.1fr .9fr 1fr;gap:clamp(22px,3vw,48px);
+  align-items:start;
+}
+.svc-grid p{padding-bottom:clamp(26px,3vw,42px);max-width:46ch}
+.chip-row{list-style:none;display:flex;flex-wrap:wrap;gap:10px;align-content:start}
+.chip-row li{
+  border:1px solid var(--line);border-radius:99px;padding:8px 16px;
+  font-size:14.5px;color:var(--ink);white-space:nowrap;background:#fff;
+}
+.svc-grid img{
+  width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r-card);
+  margin-bottom:clamp(26px,3vw,42px);
+}
+/* floating preview that chases the cursor; two imgs crossfade inside */
+.svc-preview{
+  position:fixed;z-index:60;width:min(420px,24vw);aspect-ratio:4/3;
+  border-radius:14px;overflow:hidden;pointer-events:none;
+  opacity:0;transform:scale(.8) rotate(2deg);
+  transition:opacity .35s,transform .5s var(--ease-out);
+  box-shadow:0 26px 60px rgba(0,0,0,.2);
+}
+.svc-preview.on{opacity:1;transform:scale(1) rotate(5deg)}
+/* vertical strip of all division images — rolls like a slot reel */
+.svc-preview-track{
+  position:absolute;inset:0;
+  transition:transform .65s var(--ease);will-change:transform;
+}
+.svc-preview-track img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid{
+  display:grid;grid-template-columns:1.62fr 1fr;gap:clamp(24px,3vw,40px);
+  align-items:stretch;margin-bottom:clamp(48px,6vw,84px);
+}
+/* no clip here — the image carries its own radius, so the notch below is
+   drawn with a single edge instead of blending against the clipped photo */
+.about-media{position:relative}
+/* direct child only — otherwise this also hits the badge's logo image */
+.about-media > img{
+  width:100%;height:100%;min-height:420px;object-fit:cover;display:block;
+  border-radius:var(--r-big);
+}
+
+/* white notch scooped out of the image's bottom-left, holding the badge */
+.about-badge-notch{
+  position:absolute;left:0;bottom:0;background:var(--bg);
+  padding:22px 22px 0 0;
+  border-top-right-radius:var(--fillet);
+  border-bottom-left-radius:calc(var(--r-big) - 5px);   /* see .plate note */
+}
+.about-badge-notch .fillet{--c:var(--bg)}
+.f-notch-t{left:0;top:calc(-1 * var(--fillet));
+  background:radial-gradient(circle at 100% 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.f-notch-r{right:calc(-1 * var(--fillet));bottom:0;
+  background:radial-gradient(circle at 100% 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+
+/* right column: folder-tab "Our story" card, then a second image */
+.about-col{display:flex;flex-direction:column;gap:clamp(16px,2vw,24px)}
+.story-wrap{position:relative;padding-top:62px}
+.story-tab{
+  position:absolute;left:0;top:0;height:62px;display:flex;align-items:center;
+  padding:0 30px;background:#F1F4F5;border-radius:26px 26px 0 0;
+  font-size:clamp(19px,1.5vw,24px);font-weight:600;color:var(--ink);white-space:nowrap;
+}
+.story-tab::after{                 /* concave fillet joining tab to card */
+  content:"";position:absolute;left:100%;bottom:0;width:26px;height:26px;
+  background:radial-gradient(circle at 100% 0,transparent 25.5px,#F1F4F5 26px);
+}
+.story-card{
+  background:#F1F4F5;border-radius:0 26px 26px 26px;
+  padding:clamp(24px,2.2vw,32px);
+}
+.story-card p{font-size:16.5px;margin-bottom:16px}
+.about-media-2{flex:1;border-radius:var(--r-big);overflow:hidden;min-height:190px}
+.about-media-2 img{
+  width:100%;height:100%;min-height:190px;object-fit:cover;display:block;
+  transition:transform .9s var(--ease-out);
+}
+.about-media-2:hover img{transform:scale(1.05)}
+
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,3vw,40px);
+  border-top:1px solid var(--line);padding-top:clamp(36px,4vw,60px);
+}
+.stat-num{
+  font-size:clamp(56px,7vw,110px);font-weight:400;color:var(--ink);line-height:1;
+  display:inline-block;
+}
+.stat-num::after{
+  content:attr(data-suffix);color:var(--accent);font-size:.42em;font-weight:500;
+  vertical-align:top;margin-left:2px;
+}
+.stat-label{display:block;margin-top:10px;font-size:16.5px}
+
+/* marquee ribbon */
+.ribbon{overflow:hidden;margin-top:clamp(56px,7vw,100px);border-block:1px solid var(--line);padding-block:18px}
+.ribbon-track{display:flex;width:max-content;animation:ribbon 30s linear infinite}
+.ribbon:hover .ribbon-track{animation-play-state:paused}
+.ribbon-track span{
+  font-size:clamp(28px,3.4vw,52px);font-weight:800;text-transform:uppercase;
+  letter-spacing:.02em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px var(--ink-2);
+}
+@keyframes ribbon{to{transform:translateX(-50%)}}
+
+/* ============================================================
+   PROJECTS — sticky stacked cards + View cursor
+   ============================================================ */
+.proj-stack{display:flex;flex-direction:column;gap:clamp(28px,4vw,56px)}
+.proj{
+  position:sticky;top:calc(var(--nav-h) + 14px + var(--i) * 12px);
+  display:block;height:min(82vh,760px);border-radius:var(--r-big);overflow:hidden;
+  box-shadow:0 24px 60px rgba(0,0,0,.18);
+  isolation:isolate;
+}
+.proj img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform 1s var(--ease-out);
+}
+.proj:hover img{transform:scale(1.05)}
+.proj::after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(140deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.12) 45%,rgba(0,0,0,.25) 100%);
+}
+.proj .pill{
+  position:absolute;z-index:2;top:34px;left:38px;
+  background:var(--accent);color:#fff;border-radius:99px;padding:10px 20px;
+  font-size:15.5px;font-weight:500;
+}
+.proj h3{
+  position:absolute;z-index:2;top:86px;left:38px;color:#fff;
+  font-size:clamp(34px,4.6vw,66px);font-weight:700;text-transform:uppercase;
+  letter-spacing:.005em;line-height:1;max-width:12ch;
+}
+.proj-meta{
+  position:absolute;z-index:2;left:38px;bottom:30px;color:rgba(255,255,255,.85);
+  font-size:15.5px;font-weight:300;letter-spacing:.02em;
+}
+
+/* ============================================================
+   APPROACH — sticky left, progress line right
+   ============================================================ */
+.approach-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(30px,5vw,90px)}
+.approach-sticky{position:sticky;top:calc(var(--nav-h) + 30px)}
+.approach-media{position:relative;margin-top:34px}
+/* Figma 6:905 — image is 564x350 landscape, notch block 160x100 (28.4%/28.6%) */
+.approach-media{max-width:564px}
+.approach-media img{
+  display:block;width:100%;aspect-ratio:564/350;object-fit:cover;
+  border-radius:var(--r-big);
+}
+/* Notch cut out of one corner (Figma 6:907 / 6:1923). Three curves, not one:
+   a convex inner corner plus a concave fillet on each side where the notch
+   meets the photo edge — that pair is what makes the join read as smooth. */
+.media-notch{position:absolute;background:var(--bg);pointer-events:none}
+.media-notch::before,.media-notch::after{
+  content:"";position:absolute;width:var(--fillet);height:var(--fillet);
+}
+
+.notch-br{
+  right:0;bottom:0;width:28.4%;height:28.6%;
+  border-top-left-radius:var(--fillet);
+  border-bottom-right-radius:calc(var(--r-big) - 5px);
+}
+.notch-br::before{           /* above the notch, hugging the right edge */
+  right:0;bottom:100%;
+  background:radial-gradient(circle at 0 0,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+.notch-br::after{            /* left of the notch, along the bottom edge */
+  left:calc(-1 * var(--fillet));bottom:0;
+  background:radial-gradient(circle at 0 0,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+
+.notch-tl{
+  left:0;top:0;width:28.4%;height:28.6%;
+  border-bottom-right-radius:var(--fillet);
+  border-top-left-radius:calc(var(--r-big) - 5px);
+}
+.notch-tl::before{           /* below the notch, hugging the left edge */
+  left:0;top:100%;
+  background:radial-gradient(circle at 100% 100%,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+.notch-tl::after{            /* right of the notch, along the top edge */
+  right:calc(-1 * var(--fillet));top:0;
+  background:radial-gradient(circle at 100% 100%,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+
+.approach-right{position:relative;padding-left:clamp(44px,5vw,80px)}
+.approach-line{
+  position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:var(--line);
+  border-radius:2px;overflow:hidden;
+}
+.approach-line span{
+  display:block;width:100%;height:0%;background:var(--accent);transition:height .1s linear;
+}
+.step{position:relative;display:flex;gap:22px;padding-block:clamp(34px,4.5vw,60px)}
+.step + .step{border-top:1px solid #E4E4E2}
+.step-dot{
+  position:absolute;left:calc(-1 * clamp(44px,5vw,80px) + 4px);top:calc(clamp(34px,4.5vw,60px) + 8px);
+  width:18px;height:18px;border-radius:50%;border:1px solid var(--ink-2);background:var(--bg);
+  display:grid;place-items:center;
+}
+.step-dot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--ink-2);transition:background .3s}
+.step.active .step-dot::after{background:var(--accent)}
+.step-no{
+  color:var(--accent);font-weight:800;font-size:clamp(56px,6vw,96px);line-height:.8;
+  font-variation-settings:"wdth" 104;
+}
+.step-body h3{font-size:clamp(24px,2.4vw,36px);font-weight:700;margin-bottom:12px}
+.step-body p{max-width:44ch}
+
+/* ============================================================
+   PRODUCTS — image cards with curved name plates
+   ============================================================ */
+.prod-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,34px);
+}
+/* The clip lives on .prod-media, not the card. If the card clipped the plate
+   too, the plate's antialiased edge blended with the photo underneath and
+   left a faint arc — the template keeps the label outside the image clip. */
+.prod{position:relative;isolation:isolate}
+.prod-media{
+  display:block;border-radius:var(--r-card);overflow:hidden;
+}
+.prod img{
+  display:block;width:100%;aspect-ratio:3/3.4;object-fit:cover;
+  transition:transform .9s var(--ease-out);
+}
+.prod:hover img{transform:scale(1.06)}
+/* packshot on transparent bg — show it whole rather than cropping it */
+/* backdrop goes on the clipped media, not the square card — otherwise it
+   spills past the rounded corners. Plate stays white so the notch reads
+   exactly like the photo cards. */
+.prod-pack .prod-media{background:#EDF1F2}
+.prod-pack img{object-fit:contain;padding:34px 30px 86px}
+.plate{
+  /* Sits above the clipped media, so its own corners are the only edges
+     drawn — bottom-left matches the card radius, top-right is the notch. */
+  /* --plate-bg lets a card with its own backdrop (the packshot) tint the
+     plate and its fillets to match, instead of stamping page-white on it */
+  position:absolute;left:0;bottom:0;z-index:2;
+  background:var(--plate-bg,var(--bg));
+  padding:18px 24px 16px 2px;
+  border-top-right-radius:var(--fillet);
+  /* a touch tighter than the image's corner, so the plate fully covers it and
+     its own antialiased edge lands on the white page, not on the photo */
+  border-bottom-left-radius:calc(var(--r-card) - 5px);
+  max-width:82%;
+}
+/* the two concave fillets that turn the plate's corner into a flowing S —
+   same idiom as .media-notch: transparent quarter-disc on the corner
+   diagonally opposite the block, page colour filling the rest */
+.plate::before,.plate::after{
+  content:"";position:absolute;
+  width:var(--fillet);height:var(--fillet);pointer-events:none;
+  background:radial-gradient(circle at 100% 0,
+    transparent calc(var(--fillet) - .5px),
+    var(--plate-bg,var(--bg)) var(--fillet));
+}
+.plate::before{left:0;bottom:100%}                      /* up the left edge */
+.plate::after{right:calc(-1 * var(--fillet));bottom:0}  /* along the bottom */
+.plate b{display:block;color:var(--ink);font-size:18.5px;font-weight:600;line-height:1.2}
+.plate small{color:var(--ink-2);font-size:14px;font-weight:300}
+
+/* ============================================================
+   SUPPLY PROGRAMS — pricing cards
+   ============================================================ */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,30px)}
+.price{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-card);
+  padding:clamp(24px,2.6vw,36px);
+  transition:transform .45s var(--ease-out),box-shadow .45s;
+}
+.price:hover{transform:translateY(-8px);box-shadow:0 26px 60px rgba(0,0,0,.09)}
+.price-hot{border-color:var(--accent);box-shadow:0 18px 50px rgba(245,87,51,.12)}
+.price h3{font-size:21px;font-weight:600;margin-bottom:18px}
+.price-amt{color:var(--accent);font-size:clamp(28px,2.6vw,38px);font-weight:700;line-height:1}
+.price-amt span{color:var(--ink-2);font-size:15px;font-weight:300;margin-left:8px}
+.price-for{margin:14px 0 22px;font-size:15.5px}
+.feat{list-style:none;margin-top:26px;display:grid;gap:14px}
+.feat li{position:relative;padding-left:30px;font-size:15.5px}
+.feat li::before{
+  position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;
+  display:grid;place-items:center;font-size:11.5px;font-weight:700;
+}
+.feat .y::before{content:"✓";background:#E8F5EC;color:#1F8A4C}
+.feat .n{opacity:.42}
+.feat .n::before{content:"✕";background:#FDEBE6;color:#D64C2A}
+
+/* ============================================================
+   TESTIMONIALS — dual marquee rows
+   ============================================================ */
+/* rows fade out at both edges instead of colliding with the next section */
+.tst-rows{
+  display:grid;gap:22px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);
+}
+/* position is driven in JS so hovering can ease the speed down rather than
+   hard-stopping the animation */
+.tst-track{display:flex;width:max-content;gap:22px;will-change:transform}
+.tst-set{display:flex;gap:22px}
+.tst{
+  width:min(380px,84vw);background:#fff;border:1px solid #E6E6E4;border-radius:20px;
+  padding:26px 26px 22px;flex-shrink:0;
+  transition:transform .4s var(--ease-out),box-shadow .4s;
+}
+.tst:hover{
+  transform:translateY(-8px) scale(1.035);
+  box-shadow:0 26px 60px rgba(0,0,0,.13);
+  border-color:#D9DDDF;
+}
+.tst header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.tst-avatar{
+  width:46px;height:46px;border-radius:50%;background:var(--a,#333);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:15px;flex-shrink:0;
+}
+.tst header b{color:var(--ink);font-size:16.5px;display:block}
+.tst header small{font-size:13.5px;color:var(--ink-2)}
+.tst p{font-size:15.5px}
+.tst-stars{margin-top:16px;color:var(--accent);letter-spacing:4px;font-size:15px}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(30px,5vw,90px)}
+.faq-sticky{position:sticky;top:calc(var(--nav-h) + 30px)}
+.faq-media{position:relative;margin-top:34px;max-width:564px}
+.faq-media img{
+  display:block;width:100%;aspect-ratio:564/350;object-fit:cover;
+  border-radius:var(--r-big);
+}
+
+.faq-list{border-top:1px solid var(--line)}
+.qa{border-bottom:1px solid var(--line)}
+.qa summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding-block:clamp(22px,2.6vw,32px);cursor:pointer;
+  color:var(--ink);font-size:clamp(19px,2vw,26px);font-weight:500;line-height:1.3;
+  transition:color .3s;
+}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary:hover{color:var(--accent)}
+.qa-toggle{
+  position:relative;width:44px;height:44px;border:1px solid var(--ink-2);border-radius:50%;
+  flex-shrink:0;transition:transform .45s var(--ease-out),background .3s,border-color .3s;
+}
+.qa-toggle::before,.qa-toggle::after{
+  content:"";position:absolute;inset:0;margin:auto;background:currentColor;transition:background .3s;
+}
+.qa-toggle::before{width:16px;height:1.6px}
+.qa-toggle::after{width:1.6px;height:16px}
+.qa[open] .qa-toggle{transform:rotate(45deg);background:var(--accent);border-color:var(--accent);color:#fff}
+.qa p{padding:0 64px clamp(22px,2.6vw,32px) 0;max-width:62ch}
+
+/* ============================================================
+   INSIGHTS
+   ============================================================ */
+.blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.6vw,36px)}
+.blog figure{border-radius:var(--r-card);overflow:hidden}
+.blog img{
+  width:100%;aspect-ratio:4/3.4;object-fit:cover;transition:transform .9s var(--ease-out);
+}
+.blog:hover img{transform:scale(1.06)}
+.blog-meta{
+  display:flex;align-items:center;gap:8px;margin:18px 0 8px;
+  font-size:14.5px;color:var(--ink-2);
+}
+.blog-meta svg{width:16px;height:16px}
+.blog-meta em{font-style:normal;opacity:.5}
+.blog h3{
+  font-size:clamp(19px,1.8vw,24px);font-weight:600;line-height:1.25;max-width:26ch;
+  transition:color .3s;
+}
+.blog:hover h3{color:var(--accent)}
+
+/* ============================================================
+   CTA / CONTACT — dark
+   ============================================================ */
+/* Figma 6:2185 — site photo under a flat Cod Gray 80% overlay */
+.section-dark{
+  position:relative;isolation:isolate;color:#C9D2D8;
+  background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1920")
+    center/cover no-repeat fixed;
+}
+.section-dark::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:rgba(28,28,28,.8);
+}
+.section-dark .tag{color:var(--accent)}
+.cta-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:clamp(34px,5vw,90px);align-items:start}
+.cta-person{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.cta-face{
+  width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:top center;
+  flex-shrink:0;background:#2A3238;
+}
+.cta-person b{color:#fff;display:block;font-size:17px}
+.cta-person small{font-size:14px}
+.cta-left p{font-size:16.5px;max-width:40ch}
+.cta-contacts{list-style:none;margin-top:30px;display:grid;gap:12px}
+.cta-contacts span{
+  display:inline-block;min-width:92px;color:#7C8794;font-size:13.5px;
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.cta-contacts a{color:#fff;font-size:18px;font-weight:500;transition:color .3s}
+.cta-contacts a:hover{color:var(--accent)}
+
+.cta-form{display:grid;gap:18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cta-form label{display:grid;gap:9px;font-size:15px;color:#E3E9ED;font-weight:500}
+.cta-form input,.cta-form select,.cta-form textarea{
+  font:inherit;color:#fff;background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:15px 17px;
+  transition:border-color .3s,background .3s;width:100%;
+}
+.cta-form textarea{resize:vertical;min-height:120px}
+.cta-form input::placeholder,.cta-form textarea::placeholder{color:#C2CBD2}
+.cta-form input:focus,.cta-form select:focus,.cta-form textarea:focus{
+  outline:none;border-color:var(--accent);background:rgba(255,255,255,.1);
+}
+.cta-form select option{background:var(--dark-2);color:#fff}
+.form-note{font-size:13.5px;color:#7C8794;text-align:center}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer{border-top:1px solid var(--line);padding-top:clamp(48px,6vw,84px)}
+.footer-grid{
+  display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(30px,5vw,80px);
+  padding-bottom:clamp(40px,5vw,70px);
+}
+/* footer uses the full lockup; override the nav's show/hide swap */
+.brand-lg .brand-logo{display:block;height:clamp(90px,11vw,140px)}
+.brand-lg .brand-word,.brand-lg .brand-word-img{display:none}
+.footer-tel{margin-top:14px;font-size:19px}
+.footer-tel:first-of-type{margin-top:26px}
+.footer-tel a{color:var(--ink);transition:color .3s}
+.footer-tel a:hover{color:var(--accent)}
+.footer-nav-label{
+  margin:38px 0 14px;color:var(--ink);font-weight:600;font-size:16px;
+}
+.footer-nav{display:flex;flex-wrap:wrap;gap:8px 24px}
+.footer-nav a{font-size:16px;position:relative}
+.footer-nav a:hover{color:var(--accent)}
+.footer-address .footer-nav-label{margin-top:0}
+.footer-address p{font-size:16.5px;max-width:46ch}
+.map-frame{
+  margin-top:22px;border-radius:var(--r-card);overflow:hidden;
+  border:1px solid var(--line);background:#EDF0F1;
+}
+.map-embed{display:block;width:100%;height:clamp(260px,29vw,360px);border:0}
+.map-link{
+  margin-top:14px;display:flex;align-items:center;gap:16px;
+  border:1px solid var(--line);border-radius:18px;padding:16px 20px;background:#fff;
+  transition:transform .4s var(--ease-out),box-shadow .4s;max-width:420px;
+}
+.map-link:hover{transform:translateY(-4px);box-shadow:0 18px 44px rgba(0,0,0,.08)}
+.map-link:hover .arrow-btn{background:var(--accent);border-color:var(--accent);color:#fff}
+.map-pin{font-size:22px}
+.map-link b{display:block;color:var(--ink);font-size:16px}
+.map-link small{color:var(--ink-2);font-size:13.5px}
+.map-link .arrow-btn{margin-left:auto}
+.footer-bottom{
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  border-top:1px solid var(--line);padding-block:26px;font-size:14.5px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1080px){
+  .svc-grid{grid-template-columns:1fr 1fr}
+  .svc-grid img{grid-column:1/-1}
+  .about-grid{grid-template-columns:1fr}
+  .about-media > img{min-height:320px}   /* direct child — not the badge logo */
+  .about-media-2{min-height:240px}
+  .prod-grid{grid-template-columns:repeat(2,1fr)}
+  .price-grid{grid-template-columns:1fr;max-width:620px;margin:0 auto}
+  .approach-grid,.faq-grid{grid-template-columns:1fr}
+  .approach-sticky,.faq-sticky{position:static}
+  .approach-media img,.faq-media{max-width:100%}
+  .approach-media img{aspect-ratio:16/9}
+  .faq-media{display:none}
+  .cta-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  :root{--fillet:20px;--nav-h:64px}
+  /* rail is desktop-only; the phone gets a dark app bar + full-width menu */
+  .rail,.menu-scrim{display:none}
+  /* over the hero there is NO bar — just a floating burger on the white page.
+     The dark app bar only appears once the hero is behind us. */
+  .nav,.nav.scrolled{
+    border-color:transparent;transform:none;opacity:1;pointer-events:auto;
+  }
+  /* video is stretched — get the burger out of the way */
+  .nav.in-hero{opacity:0;transform:translateY(-130%);pointer-events:none}
+  .nav:not(.scrolled){background:transparent;height:auto;padding-top:16px}
+  .nav:not(.scrolled) .nav-inner{height:auto;padding-inline:20px;justify-content:flex-end}
+  .nav:not(.scrolled) .brand{display:none}
+  .nav:not(.scrolled) .nav-burger{background:#26292E;box-shadow:0 6px 18px rgba(0,0,0,.16)}
+  .nav:not(.scrolled) .nav-burger span{background:#fff}
+  .nav.scrolled{background:#26292E;height:var(--nav-h);padding-top:0}
+  .nav.scrolled .nav-inner{padding-inline:20px}
+  .nav .brand-full{display:none}
+  .nav.scrolled .brand-logo,.nav.scrolled .brand-word-img{display:block}
+  .nav.scrolled .brand-logo{height:32px}
+  .nav.scrolled .brand-word-img{filter:brightness(0) invert(1);height:15px}
+
+  /* full-width dropdown menu, template style */
+  .slide-menu{
+    left:0;right:0;width:100%;top:var(--nav-h);bottom:auto;max-height:calc(100vh - var(--nav-h));
+    transform:translateY(-104%);box-shadow:0 22px 50px rgba(0,0,0,.18);
+  }
+  body.menu-open .slide-menu{transform:none;visibility:visible}
+  .menu-item{padding:22px 24px;font-size:19px}
+  .menu-gap{display:none}
+  .menu-contact{border-bottom:1px solid #E7E9EA}
+  .menu-social{display:flex}
+  .nav-cta .btn-pill{display:none}
+  .nav-links{display:none}
+  .nav-burger{display:flex}
+  .hero{height:250vh}
+  #divisions{margin-top:-80vh}
+  /* stacked mobile hero: logo + text on top, inset video card below */
+  .hero-sticky{background:#fff}
+  /* hero-content is absolutely positioned inside the sticky viewport;
+     padding-top aligns the logo with the burger's vertical centre;
+     padding-inline matches the nav-inner padding so edges line up. */
+  .hero-content{
+    align-items:flex-start;
+    padding-top:16px;
+    padding-inline:20px;
+    z-index:2;          /* below video on mobile so video covers text */
+  }
+  /* video layer sits above text on mobile so it masks the copy as it rises */
+  .hero-media{z-index:4}
+  .hero-logo{
+    display:block;
+    height:76px;
+    width:auto;
+    margin-bottom:20px;
+  }
+  .hero-kicker{margin-bottom:4px}
+  .hero-sub{margin-top:16px;line-height:1.55}
+  /* card is flush left with gutters on the right and bottom;
+     the JS interpolates these gaps to 0 during expansion.
+     Only the right side is rounded (flush left edge). */
+  .hero-media-frame{border-radius:0 26px 26px 0}
+  /* lock the video to the full viewport size and anchor it to the bottom
+     of its frame. As the frame's top edge rises, more of the video is
+     revealed — a pure curtain effect where the video never moves. */
+  .hero-media-frame video{
+    position:absolute;
+    width:100vw;
+    height:100vh;
+    max-width:none;
+    bottom:0;
+    left:0;
+    transform:none;
+  }
+  /* panel sits inside the video card's right/bottom inset;
+     fillets give the smooth concave curves at the join */
+  .hero-panel{right:14px;bottom:14px;border-top-left-radius:20px}
+  .f-tl-of-panel{--fillet:20px;display:block}
+  .f-above-panel{--fillet:20px;display:block}
+  /* pointer-driven affordances never apply on a phone */
+  .cursor-dot,.cursor-view,.svc-preview{display:none !important}
+  /* during the hero the bar is just the burger; the lockup is in the hero
+     itself. Once the hero is done the bar takes the logo back. */
+  .nav:not(.scrolled) .brand{opacity:0;visibility:hidden}
+  .brand{transition:opacity .35s var(--ease),visibility .35s}
+  .hero-right{display:none}
+  .hero-left{width:100%;min-width:0}
+  .hero-title{font-size:clamp(32px,13.5vw,238px)}
+  .hero-kicker{font-size:clamp(17px,4.6vw,34px)}
+  .hero-sub{font-size:16px;max-width:100%}
+  .hero-panel{padding:20px 20px 14px 30px;max-width:88%}
+  .hero-panel h2{font-size:clamp(17px,4.9vw,48px)}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .svc-name{font-size:clamp(20px,7.3vw - 7px,84px)}
+  .svc-name small{font-size:14px;padding-bottom:3px}
+  .svc-top{gap:14px}
+  .svc-toggle{width:40px;height:40px}
+  .svc-grid{grid-template-columns:1fr}
+  .prod-grid{grid-template-columns:1fr}
+  .blog-grid{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .proj{height:64vh}
+  .proj .pill{top:22px;left:22px}
+  .proj h3{top:66px;left:22px}
+  .proj-meta{left:22px;bottom:20px}
+  .step{gap:16px}
+  .qa p{padding-right:0}
+}
