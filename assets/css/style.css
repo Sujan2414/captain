@@ -997,16 +997,17 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
      the JS interpolates these gaps to 0 during expansion.
      Only the right side is rounded (flush left edge). */
   .hero-media-frame{border-radius:0 26px 26px 0}
-  /* video is fixed at full-viewport size; JS applies a counter-translateY
-     so the video appears stationary while the frame reveals it (vertical
-     curtain effect matching the desktop horizontal one) */
+  /* Use a landscape-proportioned container so the video isn't heavily
+     cropped/zoomed in portrait. 177vh ≈ 16:9 relative to viewport height.
+     The frame clips the excess width via overflow:hidden. */
   .hero-media-frame video{
     position:absolute;
-    width:100vw;
+    width:max(100vw, 177vh);
     height:100vh;
     max-width:none;
     top:0;
-    left:0;
+    left:50%;
+    margin-left:calc(-0.5 * max(100vw, 177vh));
   }
   /* panel sits inside the video card's right/bottom inset;
      fillets give the smooth concave curves at the join */
