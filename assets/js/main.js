@@ -156,7 +156,9 @@
       heroFrame.style.bottom = `${gap}px`;
       heroFrame.style.borderRadius = `0 ${rad}px ${rad}px 0`;
       heroFrame.style.transform = "none";
-      heroVideo.style.transform = "none";
+      // counter-shift: video moves up by the same distance the frame is
+      // pushed down, so the video appears frozen — vertical curtain reveal
+      heroVideo.style.transform = `translateY(${-frameTop / 100 * innerHeight}px)`;
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
       heroContent.style.transform = `translateY(${-e * innerHeight * 0.58}px)`;
