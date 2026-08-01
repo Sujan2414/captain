@@ -171,9 +171,11 @@
       heroVideo.style.transform = `translateX(${-x}px) scale(${lerp(1.05, 1, e)})`;
       heroContent.style.transform = `translateX(${-e * innerWidth * 0.92}px)`;
     }
-    // the caption exits sideways with the desktop curtain; on a phone it rides
-    // along on the card instead of sliding away
-    heroPanel.style.transform = desktop ? `translateX(${e * innerWidth * 0.78}px)` : "";
+    // desktop: caption exits sideways with the curtain
+    // mobile:  caption exits downward as the video goes full-bleed
+    heroPanel.style.transform = desktop
+      ? `translateX(${e * innerWidth * 0.78}px)`
+      : `translateY(${e * innerHeight * 0.5}px)`;
 
     // The advancing video edge physically pushes the rail and top bar off
     // screen — both are driven by the edge's x position, not by raw progress.
