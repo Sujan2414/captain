@@ -155,6 +155,7 @@
       heroFrame.style.right = `${gap}px`;
       heroFrame.style.bottom = `${gap}px`;
       heroFrame.style.borderRadius = `0 ${rad}px ${rad}px 0`;
+      heroFrame.style.transform = "none";
       heroVideo.style.transform = "none";
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
