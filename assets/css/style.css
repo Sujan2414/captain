@@ -375,9 +375,12 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
    counter-shifted so the reveal is pure GPU transform (curtain effect) */
 .hero{--seam:50%}
 .hero-media{position:absolute;inset:0;pointer-events:none;z-index:2}
+/* These insets must match what renderHero() writes on its first frame. When
+   they differed, the frame jumped once JS ran and cost 0.36 CLS. */
 .hero-media-frame{
-  position:absolute;inset:0;overflow:hidden;background:#d8d4cf;
-  transform:translateX(var(--seam));border-radius:0 0 0 44px;
+  position:absolute;top:0;left:0;right:0;bottom:28px;
+  overflow:hidden;background:#d8d4cf;
+  transform:translateX(var(--seam));border-radius:0 0 40px 60px;
   will-change:transform,border-radius;
 }
 .hero-media-frame video{
@@ -390,8 +393,18 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 }
 
 /* curved white panel on the bottom strip, carved into the video (Figma: 400x104 @1920) */
+/* Mirrors the video frame's box exactly (JS keeps them in sync) and clips its
+   contents, so the caption is cut off by the card edge on its way out. */
+.hero-panel-clip{
+  position:absolute;top:0;left:0;right:0;bottom:28px;
+  z-index:4;overflow:hidden;pointer-events:none;
+  /* deliberately square: if the clip rounds this corner too it shaves the
+     caption and leaves a visible arc. The caption carries the radius itself. */
+  border-radius:0;
+  transform:translateX(var(--seam));
+}
 .hero-panel{
-  position:absolute;right:0;bottom:28px;z-index:4;
+  position:absolute;right:0;bottom:0;
   background:var(--bg);padding:20px 24px 12px 38px;
   border-top-left-radius:24px;will-change:transform;
 }
@@ -399,6 +412,10 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   font-size:clamp(19px,2.19vw,42px);font-weight:600;text-transform:uppercase;
   text-align:right;line-height:1.02;letter-spacing:0;
 }
+/* curtain reveal: the caption wipes up from behind its own edge as the video
+   opens out, instead of the whole plate sliding away */
+.hero-panel .panel-clip{display:block;overflow:hidden}
+.hero-panel .panel-clip h2{will-change:transform}
 .hero-panel .fillet{--c:var(--bg)}
 .f-tl-of-panel{left:calc(-1 * var(--fillet) + 1px);bottom:0;background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
 .f-above-panel{right:0;top:calc(-1 * var(--fillet) + 1px);background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
@@ -829,8 +846,16 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 /* Figma 6:2185 — site photo under a flat Cod Gray 80% overlay */
 .section-dark{
   position:relative;isolation:isolate;color:#C9D2D8;
-  background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1920")
-    center/cover no-repeat fixed;
+  /* `fixed` attachment repaints the whole layer on every scroll frame and is
+     the classic mobile jank source — scroll it with the page instead */
+  background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1400")
+    center/cover no-repeat scroll;
+}
+@media (max-width:760px){
+  /* phones only ever see ~430 CSS px of it */
+  .section-dark{
+    background-image:url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=800");
+  }
 }
 .section-dark::before{
   content:"";position:absolute;inset:0;z-index:-1;
@@ -996,18 +1021,32 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   /* card is flush left with gutters on the right and bottom;
      the JS interpolates these gaps to 0 during expansion.
      Only the right side is rounded (flush left edge). */
-  .hero-media-frame{border-radius:0 26px 26px 0}
-  /* let the video fill the frame naturally — no forced 100vh that causes
-     extreme zoom on portrait phones */
+  /* must match renderHero()'s first mobile frame, or it jumps once JS runs.
+     The caption clip mirrors the frame, so it needs the same starting box. */
+  .hero-media-frame,
+  .hero-panel-clip{
+    top:48%;left:0;right:14px;bottom:14px;
+    border-radius:0 26px 26px 0;transform:none;
+  }
+  .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
+  /* Video fills the frame. A fixed viewport-sized box would be a purer reveal,
+     but with this 16:9 drone footage it crops ~3.8x on a portrait phone and
+     the quarry becomes unreadable — the mild rescale is the better trade. */
   .hero-media-frame video{
+    position:static;
     width:100%;
     height:100%;
     object-fit:cover;
-    transform:none;
+    object-position:center;
+    transform:scale(1.14);      /* matches renderHero()'s first frame */
+    transform-origin:center;
+    will-change:transform;
   }
   /* panel sits inside the video card's right/bottom inset;
      fillets give the smooth concave curves at the join */
-  .hero-panel{right:14px;bottom:14px;border-top-left-radius:20px}
+  /* the clip already carries the 14px inset — offsetting again pushed the
+     caption off the card's corner into the middle of the video */
+  .hero-panel{right:0;bottom:0;border-top-left-radius:20px}
   .f-tl-of-panel{--fillet:20px;display:block}
   .f-above-panel{--fillet:20px;display:block}
   /* pointer-driven affordances never apply on a phone */

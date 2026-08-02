@@ -10,9 +10,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://images.pexels.com">
 <link rel="preconnect" href="https://videos.pexels.com">
-<link rel="preload" as="image" href="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css?v=69">
+<link rel="preload" as="image" href="assets/img/hero-poster.jpg?v=5" fetchpriority="high">
+<!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
+<link rel="stylesheet" href="assets/css/style.css?v=87">
 </head>
 <body>
 
@@ -57,9 +59,9 @@
   <div class="nav-inner">
     <a class="brand" href="#home" aria-label="Capitan home">
       <!-- full stacked lockup (with tagline) at rest; compact once scrolled -->
-      <img class="brand-full" src="assets/img/capitan-logo-r.png?v=2" alt="Capitan — Pursuit of Excellence">
-      <img class="brand-logo" src="assets/img/capitan-mark.png?v=3" alt="">
-      <img class="brand-word-img" src="assets/img/capitan-wordmark.png?v=3" alt="Capitan">
+      <img class="brand-full" src="assets/img/capitan-logo-r.webp?v=5" alt="Capitan — Pursuit of Excellence">
+      <img class="brand-logo" src="assets/img/capitan-mark.webp?v=5" alt="">
+      <img class="brand-word-img" src="assets/img/capitan-wordmark.webp?v=5" alt="Capitan">
     </a>
     <nav class="nav-links" id="navLinks" aria-label="Primary">
       <a href="#divisions">Divisions</a>
@@ -85,7 +87,7 @@
     <div class="hero-content" id="heroContent">
       <div class="hero-left">
         <!-- phone only: the lockup lives in the hero so it travels with the copy -->
-        <img class="hero-logo" src="assets/img/capitan-logo-r.png?v=1" alt="Capitan — Pursuit of Excellence" fetchpriority="high">
+        <img class="hero-logo" src="assets/img/capitan-logo-r.webp?v=5" alt="Capitan — Pursuit of Excellence" fetchpriority="high">
         <p class="hero-kicker rv">We are mining &amp; infrastructure</p>
         <h1 class="hero-title rv" style="--d:.08s">CAPITAN</h1>
         <p class="hero-sub rv" style="--d:.16s">Mine. Construct. Evolve. — engineered sand, aggregates and infrastructure for modern India.</p>
@@ -96,19 +98,28 @@
     <!-- Layer 2 : video owns the right side; scroll sweeps it to full-bleed -->
     <div class="hero-media" id="heroMedia">
       <div class="hero-media-frame" id="heroMediaFrame">
-        <video id="heroVideo" autoplay muted loop playsinline preload="auto"
-          poster="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920">
-          <source src="assets/video/hero.mp4" type="video/mp4">
-          <source src="https://videos.pexels.com/video-files/8382435/8382435-hd_1920_1080_30fps.mp4" type="video/mp4">
-        </video>
+        <!-- src is attached in JS after first paint so the 2 MB download never
+             competes with LCP; the local poster carries the first frame -->
+        <video id="heroVideo" muted loop playsinline preload="none"
+          width="1920" height="1080"
+          poster="assets/img/hero-poster.jpg?v=5"
+          data-src-sm="assets/video/hero-720.mp4"
+          data-src-lg="assets/video/hero-1080.mp4"></video>
         <div class="hero-media-shade"></div>
       </div>
 
-      <!-- Curved sticky panel over the video (bottom-right) -->
-      <div class="hero-panel">
+      <!-- Caption rides inside a clip that mirrors the video card, so it is
+
+           cut off by the card edge as it exits instead of floating over the page -->
+
+      <div class="hero-panel-clip" id="heroPanelClip">
+
+        <div class="hero-panel">
         <span class="fillet f-tl-of-panel"></span>
         <span class="fillet f-above-panel"></span>
-        <h2>Building India's<br>foundations</h2>
+        <span class="panel-clip"><h2>Building India's<br>foundations</h2></span>
+      </div>
+
       </div>
     </div>
 
@@ -133,7 +144,7 @@
           <div class="svc-grid">
             <p>Two decades of responsible quarrying. We extract black basalt rock and process construction aggregates under strict government compliance — supporting the core of every structure we serve.</p>
             <ul class="chip-row"><li>Black Basalt Rock</li><li>10mm / 20mm Metal</li><li>GSB &amp; WMM</li><li>Responsible Mining</li></ul>
-            <img loading="lazy" src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Aerial view of quarry operations">
+            <img loading="lazy" data-src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900" data-srcset="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900 900w" sizes="(max-width:760px) 100vw, 45vw" alt="Aerial view of quarry operations">
           </div>
         </div>
       </article>
@@ -148,7 +159,7 @@
           <div class="svc-grid">
             <p>Engineered concrete and plaster sand manufactured on Japanese VSI technology — zero silt, zero clay, consistent gradation. The eco-friendly answer to river sand, load after load.</p>
             <ul class="chip-row"><li>Concrete Sand</li><li>Plaster Sand</li><li>Zero Silt &amp; Clay</li><li>Higher Strength</li></ul>
-            <img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Sand quarry with wheel loader">
+            <img loading="lazy" data-src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900" data-srcset="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900 900w" sizes="(max-width:760px) 100vw, 45vw" alt="Sand quarry with wheel loader">
           </div>
         </div>
       </article>
@@ -163,7 +174,7 @@
           <div class="svc-grid">
             <p>High-quality infrastructure development — roads, earthwork and heavy civil packages executed with our own material chain, machinery fleet and an uncompromising safety record.</p>
             <ul class="chip-row"><li>Roads &amp; Highways</li><li>Earthwork</li><li>Heavy Civil</li><li>Own Fleet</li></ul>
-            <img loading="lazy" src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Aerial view of highway interchange">
+            <img loading="lazy" data-src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900" data-srcset="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900 900w" sizes="(max-width:760px) 100vw, 45vw" alt="Aerial view of highway interchange">
           </div>
         </div>
       </article>
@@ -178,7 +189,7 @@
           <div class="svc-grid">
             <p>Building since 2014 — residential, commercial and industrial development, plus redevelopment work that upgrades ageing structures rather than simply replacing them. Smart use of resources, built on our own engineered materials.</p>
             <ul class="chip-row"><li>Residential</li><li>Commercial</li><li>Industrial</li><li>Redevelopment</li></ul>
-            <img loading="lazy" src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Contemporary high-rise buildings">
+            <img loading="lazy" data-src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900" data-srcset="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900 900w" sizes="(max-width:760px) 100vw, 45vw" alt="Contemporary high-rise buildings">
           </div>
         </div>
       </article>
@@ -196,7 +207,7 @@
 
     <div class="about-grid">
       <figure class="about-media rv">
-        <img loading="lazy" src="https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=1400" alt="Excavator working a terraced stone quarry face">
+        <img loading="lazy" src="https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=1400" srcset="https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/15138925/pexels-photo-15138925.jpeg?auto=compress&cs=tinysrgb&w=1400 1400w" sizes="(max-width:1080px) 100vw, 55vw" alt="Excavator working a terraced stone quarry face">
         <span class="about-badge-notch" aria-hidden="true">
           <i class="fillet f-notch-t"></i><i class="fillet f-notch-r"></i>
           <span class="badge-spin badge-spin-sm">
@@ -204,7 +215,7 @@
               <defs><path id="badgeCircle2" d="M75,75 m-57,0 a57,57 0 1,1 114,0 a57,57 0 1,1 -114,0"/></defs>
               <text textLength="356" lengthAdjust="spacingAndGlyphs"><textPath href="#badgeCircle2" textLength="356" lengthAdjust="spacingAndGlyphs">CAPITAN • PURSUIT OF EXCELLENCE •&nbsp;</textPath></text>
             </svg>
-            <span class="badge-core badge-core-mark"><img src="assets/img/capitan-mark.png?v=3" alt=""></span>
+            <span class="badge-core badge-core-mark"><img src="assets/img/capitan-mark.webp?v=5" alt=""></span>
           </span>
         </span>
       </figure>
@@ -218,7 +229,7 @@
           </div>
         </div>
         <figure class="about-media-2">
-          <img loading="lazy" src="https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Crusher and haul road in an open-pit quarry">
+          <img loading="lazy" src="https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=900" srcset="https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/6109673/pexels-photo-6109673.jpeg?auto=compress&cs=tinysrgb&w=900 900w" sizes="(max-width:760px) 100vw, 45vw" alt="Crusher and haul road in an open-pit quarry">
         </figure>
       </aside>
     </div>
@@ -248,25 +259,25 @@
 
   <div class="proj-stack container">
     <a class="proj" href="#contact" data-cursor-view style="--i:0">
-      <img loading="lazy" src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Aerial view of basalt quarry operations">
+      <img loading="lazy" src="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920" srcset="https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/2101137/pexels-photo-2101137.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w" sizes="100vw" alt="Aerial view of basalt quarry operations">
       <span class="pill">Mining</span>
       <h3>Basalt Ridge Quarry</h3>
       <span class="proj-meta">Extraction · Crushing · Aggregates</span>
     </a>
     <a class="proj" href="#contact" data-cursor-view style="--i:1">
-      <img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Engineered sand plant stockpile and loader">
+      <img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1920" srcset="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w" sizes="100vw" alt="Engineered sand plant stockpile and loader">
       <span class="pill">C'Square</span>
       <h3>Engineered Sand Plant</h3>
       <span class="proj-meta">VSI Technology · Concrete &amp; Plaster Sand</span>
     </a>
     <a class="proj" href="#contact" data-cursor-view style="--i:2">
-      <img loading="lazy" src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Highway interchange aerial view">
+      <img loading="lazy" src="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=1920" srcset="https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/7381786/pexels-photo-7381786.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w" sizes="100vw" alt="Highway interchange aerial view">
       <span class="pill">Infrastructure</span>
       <h3>Coastal Link Roadworks</h3>
       <span class="proj-meta">Roads · Earthwork · Heavy Civil</span>
     </a>
     <a class="proj" href="#contact" data-cursor-view style="--i:3">
-      <img loading="lazy" src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="Premium residential towers">
+      <img loading="lazy" src="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=1920" srcset="https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=1280 1280w, https://images.pexels.com/photos/30021862/pexels-photo-30021862.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w" sizes="100vw" alt="Premium residential towers">
       <span class="pill">Realty</span>
       <h3>Residential Development</h3>
       <span class="proj-meta">Residential · Commercial · Redevelopment</span>
@@ -282,7 +293,7 @@
         <p class="tag rv"><i>{</i> How We Work <i>}</i></p>
         <h2 class="h2 rv">Strategic steps to lasting results</h2>
         <figure class="approach-media rv" style="--d:.12s">
-          <img loading="lazy" src="https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Industrial quarry site with heavy machinery at work">
+          <img loading="lazy" src="https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=1200" srcset="https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/36224115/pexels-photo-36224115.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w" sizes="(max-width:1080px) 100vw, 40vw" alt="Industrial quarry site with heavy machinery at work">
           <span class="media-notch notch-br" aria-hidden="true"></span>
         </figure>
       </div>
@@ -328,27 +339,27 @@
 
     <div class="prod-grid">
       <a class="prod prod-pack rv" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="assets/img/csquare-products.png" alt="Capitan engineered concrete and plaster sand 40 kg bags"></span>
+        <span class="prod-media"><img loading="lazy" src="assets/img/csquare-products.webp?v=5" alt="Capitan engineered concrete and plaster sand 40 kg bags"></span>
         <span class="plate"><b>Engineered Concrete Sand</b><small>VSI · Zone II</small></span>
       </a>
       <a class="prod rv" style="--d:.06s" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Plant worker beside processing machinery"></span>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/2760241/pexels-photo-2760241.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Plant worker beside processing machinery"></span>
         <span class="plate"><b>Plaster Sand</b><small>Fine · Silt-free</small></span>
       </a>
       <a class="prod rv" style="--d:.12s" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Bulldozer working on basalt rock"></span>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/259966/pexels-photo-259966.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Bulldozer working on basalt rock"></span>
         <span class="plate"><b>Black Basalt Rock</b><small>Boulder · Rubble</small></span>
       </a>
       <a class="prod rv" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Excavator loading aggregates"></span>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/1078884/pexels-photo-1078884.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Excavator loading aggregates"></span>
         <span class="plate"><b>Aggregates 10 / 20 mm</b><small>Cubical · Graded</small></span>
       </a>
       <a class="prod rv" style="--d:.06s" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Industrial storage facility"></span>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/236698/pexels-photo-236698.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Industrial storage facility"></span>
         <span class="plate"><b>GSB &amp; WMM Mixes</b><small>Road base</small></span>
       </a>
       <a class="prod rv" style="--d:.12s" href="#contact" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Worker silhouette against crane"></span>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Worker silhouette against crane"></span>
         <span class="plate"><b>Crushed Stone Dust</b><small>Filling · Bedding</small></span>
       </a>
     </div>
@@ -403,7 +414,7 @@
         <p class="tag rv"><i>{</i> FAQ <i>}</i></p>
         <h2 class="h2 rv">Clear answers to your questions</h2>
         <figure class="faq-media rv" style="--d:.12s">
-          <img loading="lazy" src="https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Bulldozers working a rock face">
+          <img loading="lazy" src="https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/17146231/pexels-photo-17146231.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Bulldozers working a rock face">
           <span class="media-notch notch-tl" aria-hidden="true"></span>
         </figure>
       </div>
@@ -478,17 +489,17 @@
 
     <div class="blog-grid">
       <a class="blog rv" href="#contact" data-cursor-view>
-        <figure><img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Manufactured sand stockpiles"></figure>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/461789/pexels-photo-461789.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Manufactured sand stockpiles"></figure>
         <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> Jun 12, 2026 <em>/</em> Materials</p>
         <h3>Why VSI manufactured sand outperforms river sand</h3>
       </a>
       <a class="blog rv" style="--d:.08s" href="#contact" data-cursor-view>
-        <figure><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Worker silhouette against tower crane"></figure>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/585418/pexels-photo-585418.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Worker silhouette against tower crane"></figure>
         <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> May 28, 2026 <em>/</em> Industry</p>
         <h3>The dredging ban: what it means for Mumbai builders</h3>
       </a>
       <a class="blog rv" style="--d:.16s" href="#contact" data-cursor-view>
-        <figure><img loading="lazy" src="https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1000" alt="Cranes over a rising structure at dusk"></figure>
+        <figure><img loading="lazy" src="https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1000" srcset="https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=400 400w, https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=640 640w, https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=900 900w, https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1000 1000w" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Cranes over a rising structure at dusk"></figure>
         <p class="blog-meta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg> May 3, 2026 <em>/</em> Operations</p>
         <h3>Inside our quarry: responsible mining in practice</h3>
       </a>
@@ -505,7 +516,7 @@
     <div class="cta-grid">
       <div class="cta-left rv">
         <div class="cta-person">
-          <img class="cta-face" src="assets/img/director.png?v=2" alt="Mr Pradeep Chavan">
+          <img class="cta-face" src="assets/img/director.webp?v=5" alt="Mr Pradeep Chavan">
           <div><b>Mr Pradeep Chavan</b><small>Chairman &amp; Managing Director</small></div>
         </div>
         <p>Our business rests on two principles — responsibility and innovation. Whether it is mining, infrastructure or realty, we deliver quality on time and build relationships that last. Tell us what you are building, and we will respond within one working day.</p>
@@ -547,7 +558,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="brand brand-lg" href="#home" aria-label="Back to top"><img class="brand-logo" src="assets/img/capitan-logo-r.png?v=1" alt="Capitan — Pursuit of Excellence"></a>
+        <a class="brand brand-lg" href="#home" aria-label="Back to top"><img class="brand-logo" src="assets/img/capitan-logo-r.webp?v=5" alt="Capitan — Pursuit of Excellence"></a>
         <p class="footer-tel"><a href="tel:+912502990551" data-cursor>+91 250 299 0551</a></p>
         <p class="footer-tel"><a href="https://wa.me/918793085551" target="_blank" rel="noopener" data-cursor>+91 87930 85551</a></p>
         <p class="footer-nav-label">Navigation</p>
@@ -579,6 +590,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=69"></script>
+<script src="assets/js/main.js?v=87"></script>
 </body>
 </html>

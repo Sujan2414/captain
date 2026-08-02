@@ -111,9 +111,21 @@
   const heroContent = document.getElementById("heroContent");
   const heroFrame = document.getElementById("heroMediaFrame");
   const heroPanel = document.querySelector(".hero-panel");
+  const heroPanelClip = document.getElementById("heroPanelClip");
   const heroVideo = document.getElementById("heroVideo");
   const navBrand = document.querySelector(".nav .brand");
   let heroP = 0, heroTarget = 0, videoStarted = false, seamFrac = 0.55;
+  /* Visibility gates: without these the loop restyled the hero, the marquee
+     and the step rail on every frame even when they were far off-screen,
+     which dominated main-thread Style & Layout time. */
+  let heroVisible = true, tstVisible = false, approachVisible = false;
+  const gate = (el, set) => {
+    if (!el) return;
+    new IntersectionObserver(([e]) => set(e.isIntersecting),
+      { rootMargin: "200px" }).observe(el);
+  };
+  // layout values cached at load/resize so the rAF loop never reads geometry
+  let cachedRailW = 82, cachedBrandRight = 380, cachedPreviewH = 200;
 
   function measureHero() {
     if (!hero) return;
@@ -125,6 +137,9 @@
   }
 
   function renderHero() {
+    // once the hero is well behind us its transforms are already at their end
+    // state — no need to keep rewriting them every frame
+    if (!heroVisible && heroP > 0.999) return;
     heroP = (reduceMotion || staticJump || forcedHeroP !== null) ? heroTarget : lerp(heroP, heroTarget, 0.09);
     const p = heroP;
 
@@ -135,6 +150,9 @@
     // clipping window sweeps left, video counter-shifts so it stays put
     const tail = clamp((reveal - 0.72) / 0.28, 0, 1);
     const desktop = innerWidth > 760;
+    // hoisted: the caption-clip sync below reads these after the branch
+    const gap = lerp(14, 0, tail);
+    const rad = lerp(26, 0, tail);
     const edgeX = desktop ? seam * (1 - e) : innerWidth;
     const heroDone = p > 0.985;
     if (!desktop) {
@@ -147,8 +165,6 @@
       //   so the text bottom edge and frame top edge stay synchronised —
       //   the text appears to be pushed up by the rising video border.
       // • Right/bottom gaps and border-radius close in the final 28%.
-      const gap = lerp(14, 0, tail);
-      const rad = lerp(26, 0, tail);
       const frameTop = lerp(48, 0, e);           // percent
       heroFrame.style.left = "0px";
       heroFrame.style.top = `${frameTop}%`;
@@ -156,7 +172,15 @@
       heroFrame.style.bottom = `${gap}px`;
       heroFrame.style.borderRadius = `0 ${rad}px ${rad}px 0`;
       heroFrame.style.transform = "none";
-      heroVideo.style.transform = "none";
+      /* Fills the frame (see the CSS note). `cover` alone tightens the framing
+         as the card grows, which reads as an accidental zoom-in, so ease a
+         counter push-out over it — the motion then feels deliberate and the
+         end state settles on the natural framing. */
+      heroVideo.style.top = "";
+      heroVideo.style.transform = `scale(${lerp(1.14, 1, e)})`;
+      // keep the caption glued to the card's corner as the gap closes, so its
+      // concave fillets stay welded to the video edge on the way down
+      heroPanel.style.borderTopLeftRadius = `${lerp(20, 26, tail)}px`;
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
       heroContent.style.transform = `translateY(${-e * innerHeight * 0.48}px)`;
@@ -168,19 +192,39 @@
       heroFrame.style.bottom = `${lerp(28, 0, tail)}px`;
       heroFrame.style.transform = `translateX(${x}px)`;
       heroFrame.style.borderRadius = `0 0 ${lerp(40, 0, tail)}px ${lerp(60, 0, tail)}px`;
-      heroVideo.style.transform = `translateX(${-x}px) scale(${lerp(1.05, 1, e)})`;
+      // pure counter-translate, no scale: the window sweeps across a video
+      // that never moves, so it reveals rather than zooms
+      heroVideo.style.top = "";
+      heroVideo.style.transform = `translateX(${-x}px)`;
       heroContent.style.transform = `translateX(${-e * innerWidth * 0.92}px)`;
+      heroPanel.style.borderTopLeftRadius = "";
     }
-    // desktop: caption exits sideways with the curtain
-    // mobile:  caption exits downward as the video goes full-bleed
+
+    // keep the clip welded to the card so the caption is cut at its edge
+    if (heroPanelClip) {
+      const f = heroFrame.style;
+      const c = heroPanelClip.style;
+      c.left = f.left; c.right = f.right; c.top = f.top; c.bottom = f.bottom;
+      c.transform = f.transform;   // radius stays square — see the CSS note
+      // the caption draws the card's outer corner itself, so there is exactly
+      // one antialiased edge there instead of two stacked ones
+      heroPanel.style.borderBottomRightRadius =
+        `${desktop ? lerp(40, 0, tail) : rad}px`;
+    }
+    // desktop: caption exits sideways with the curtain.
+    // mobile:  it stays nested in the video's corner and rides the expansion,
+    //          the way the reference does — it must not slide off the card.
+    // desktop: caption exits to the right; mobile: it exits downward. Either
+    // way the clip above cuts it at the card edge as it leaves.
     heroPanel.style.transform = desktop
       ? `translateX(${e * innerWidth * 0.78}px)`
-      : `translateY(${e * innerHeight * 0.5}px)`;
+      : `translateY(${e * 130}%)`;
+
 
     // The advancing video edge physically pushes the rail and top bar off
     // screen — both are driven by the edge's x position, not by raw progress.
     if (rail && desktop) {
-      const railW = rail.offsetWidth || 82;
+      const railW = cachedRailW;
       const push = clamp((railW - edgeX) / railW, 0, 1);
       rail.style.transform = `translateX(${-push * 100}%)`;
       rail.style.opacity = String(1 - push);
@@ -195,8 +239,8 @@
     if (desktop && !heroDone && navBrand) {
       // the logo leaves with the headline, on the same easing — it does not
       // wait for the video edge to reach it
-      // offsets, not getBoundingClientRect: the rect includes our own transform
-      const brandRight = (navBrand.offsetLeft + navBrand.offsetWidth) || 380;
+      // cached: reading offsets here forced a layout on every frame
+      const brandRight = cachedBrandRight;
       navBrand.style.transform = `translateX(${-e * (brandRight + 80)}px)`;
       navBrand.style.opacity = String(1 - clamp(e * 1.5, 0, 1));
       nav.classList.toggle("in-hero", e > 0.02);
@@ -207,11 +251,29 @@
       nav.classList.toggle("in-hero", !desktop && !heroDone && e > 0.3);
     }
 
-    // video is on screen from the start
-    if (!videoStarted) {
-      videoStarted = true;
-      heroVideo.play().catch(() => { videoStarted = false; });
+  }
+
+  /* Attach the video source only after first paint, and pick the tier by
+     viewport. Loading it up front cost ~10 MB and pushed LCP past 9 s. */
+  function startHeroVideo() {
+    if (videoStarted || !heroVideo) return;
+    videoStarted = true;
+    const small = innerWidth <= 760;
+    const src = small ? heroVideo.dataset.srcSm : heroVideo.dataset.srcLg;
+    if (!src) return;
+    // phones get a portrait cut, so the poster has to match or the first
+    // painted frame is a landscape crop that then jumps
+    if (small && heroVideo.dataset.posterSm) {
+      heroVideo.poster = heroVideo.dataset.posterSm;
     }
+    heroVideo.src = src;
+    heroVideo.load();
+    heroVideo.play().catch(() => {});
+  }
+  if (document.readyState === "complete") {
+    requestAnimationFrame(startHeroVideo);
+  } else {
+    addEventListener("load", () => setTimeout(startHeroVideo, 150), { once: true });
   }
 
   /* ---------------- DIVISIONS : accordion + slot-reel cursor preview ---------------- */
@@ -220,13 +282,22 @@
   const pvTrack = document.getElementById("svcPreviewTrack");
   let pvx = 0, pvy = 0, pvOn = false;
 
-  // build the reel: one frame per division, in row order
-  svcList?.querySelectorAll(".svc").forEach((svc) => {
-    const im = document.createElement("img");
-    im.src = svc.dataset.img;
-    im.alt = "";
-    pvTrack.appendChild(im);
-  });
+  /* Build the hover reel only for real pointers, and only once the section is
+     near. It was eagerly fetching ~460 KB of full-size frames on phones, where
+     the preview is display:none and can never be shown. */
+  let reelBuilt = false;
+  function buildReel() {
+    if (reelBuilt || !fine || !svcList || !pvTrack) return;
+    reelBuilt = true;
+    svcList.querySelectorAll(".svc").forEach((svc) => {
+      const im = document.createElement("img");
+      im.src = svc.dataset.img;
+      im.alt = "";
+      im.decoding = "async";
+      pvTrack.appendChild(im);
+    });
+  }
+  if (fine) gate(document.getElementById("divisions"), (v) => { if (v) buildReel(); });
 
   const svcArr = svcList ? [...svcList.querySelectorAll(".svc")] : [];
 
@@ -282,6 +353,13 @@
         o.querySelector(".svc-top").setAttribute("aria-expanded", "false");
       });
       if (!isOpen) {
+        // the body was collapsed to 0px, so its image was never worth fetching
+        const lazyImg = svc.querySelector(".svc-grid img[data-src]");
+        if (lazyImg) {
+          if (lazyImg.dataset.srcset) lazyImg.srcset = lazyImg.dataset.srcset;
+          lazyImg.src = lazyImg.dataset.src;
+          lazyImg.removeAttribute("data-src");
+        }
         svc.classList.add("open");
         top.setAttribute("aria-expanded", "true");
         preview.classList.remove("on");
@@ -291,6 +369,7 @@
 
     if (fine) {
       svc.addEventListener("mouseenter", () => {
+        buildReel();                      // safety net if the gate hasn't fired
         if (svc.classList.contains("open")) return;
         pvTrack.style.transform = `translateY(-${i * 100}%)`;
         preview.classList.add("on");
@@ -313,14 +392,14 @@
     const state = { track, dir, x: null, speed: 46, hovered: false };
     track.addEventListener("mouseenter", () => { state.hovered = true; });
     track.addEventListener("mouseleave", () => { state.hovered = false; });
+    state.span = 0;
     return state;
   });
 
   function renderTestimonials(dt) {
+    if (!tstVisible) return;
     tstTracks.forEach((s) => {
-      const set = s.track.querySelector(".tst-set");
-      if (!set) return;
-      const span = set.offsetWidth + GAP;
+      const span = s.span;              // cached; measuring here forced layout
       if (!span) return;
       if (s.x === null) s.x = s.dir === 1 ? 0 : -span;
       // 46 px/s cruising, ~8 px/s while hovered — eased, never fully stopped
@@ -337,16 +416,26 @@
   const fill = document.getElementById("approachFill");
   const steps = stepsWrap ? [...stepsWrap.querySelectorAll(".step")] : [];
 
-  function renderApproach() {
+  /* Geometry is cached and refreshed on resize. Reading offsets every frame
+     forced a synchronous layout on each rAF tick, which Lighthouse flagged. */
+  let apTop = 0, apH = 1, stepTops = [];
+  function measureApproach() {
     if (!stepsWrap) return;
     const r = stepsWrap.getBoundingClientRect();
-    const p = clamp((innerHeight * 0.55 - r.top) / r.height, 0, 1);
+    apTop = r.top + scrollY;
+    apH = r.height || 1;
+    stepTops = steps.map((s) => s.getBoundingClientRect().top + scrollY);
+  }
+
+  function renderApproach() {
+    if (!stepsWrap || !approachVisible) return;
+    const top = apTop - scrollY;                 // no layout read
+    const p = clamp((innerHeight * 0.55 - top) / apH, 0, 1);
     fill.style.height = `${p * 100}%`;
-    const lineY = r.top + p * r.height;
-    steps.forEach((s) => {
-      const sr = s.getBoundingClientRect();
-      s.classList.toggle("active", sr.top + 30 <= lineY);
-    });
+    const lineY = top + p * apH;
+    for (let i = 0; i < steps.length; i++) {
+      steps[i].classList.toggle("active", stepTops[i] - scrollY + 30 <= lineY);
+    }
   }
 
   /* ---------------- STATS : count-up ---------------- */
@@ -409,7 +498,7 @@
       if (pvOn) {
         pvx = lerp(pvx, mx, 0.12); pvy = lerp(pvy, my, 0.12);
         preview.style.left = `${pvx + 30}px`;
-        preview.style.top = `${pvy - preview.offsetHeight / 2}px`;
+        preview.style.top = `${pvy - cachedPreviewH / 2}px`;
       }
     }
     renderHero();
@@ -420,7 +509,34 @@
   }
 
   addEventListener("scroll", measureHero, { passive: true });
-  addEventListener("resize", measureHero, { passive: true });
-  measureHero();
+  /* One batched geometry read. Everything the rAF loop needs is captured here
+     and refreshed only on resize / after fonts settle, so no frame triggers a
+     synchronous layout. */
+  function measureAll() {
+    measureHero();
+    measureApproach();
+    if (rail) cachedRailW = rail.offsetWidth || 82;
+    if (navBrand) cachedBrandRight = (navBrand.offsetLeft + navBrand.offsetWidth) || 380;
+    if (preview) cachedPreviewH = preview.offsetHeight || 200;
+    tstTracks.forEach((s) => {
+      const set = s.track.querySelector(".tst-set");
+      if (set) s.span = set.offsetWidth + GAP;
+    });
+  }
+
+  let resizeTimer;
+  addEventListener("resize", () => {
+    measureHero();                       // cheap, needed for scroll accuracy
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(measureAll, 150);
+  }, { passive: true });
+
+  gate(hero, (v) => { heroVisible = v; });
+  gate(document.querySelector(".tst-rows"), (v) => { tstVisible = v; });
+  gate(stepsWrap, (v) => { approachVisible = v; });
+
+  measureAll();
+  addEventListener("load", measureAll, { once: true });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureAll);
   requestAnimationFrame(frame);
 })();
