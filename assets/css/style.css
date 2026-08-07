@@ -2237,9 +2237,10 @@ body.menu-open .subnav{z-index:1100}
    and give the copy the bar's height as clearance.
    ============================================================ */
 @media (min-width:761px) and (max-height:1000px){
-  .nav:not(.scrolled) .brand-full{height:86px}
+  /* clearance alone fixes the collision — the lockup keeps its size */
   .hero-content{padding-top:var(--nav-h)}
 }
 @media (min-width:761px) and (max-height:820px){
-  .nav:not(.scrolled) .brand-full{height:70px}
+  .nav:not(.scrolled) .brand-full{height:96px}
+  .hero-content{padding-top:var(--nav-tall)}
 }
