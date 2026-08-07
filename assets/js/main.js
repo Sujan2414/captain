@@ -439,21 +439,29 @@
   }
 
   /* ---------------- STATS : count-up ---------------- */
+  // Re-runs on every entry rather than once per page load: reset to zero on
+  // the way out, re-count on the way back in. The in-flight frame is
+  // cancelled first so a quick scroll-out-and-back can't leave two
+  // animations fighting over the same element.
   const stats = document.querySelectorAll(".stat-num");
-  const counted = new WeakSet();
+  const frames = new WeakMap();
+  const countUp = (el) => {
+    const end = parseInt(el.dataset.count, 10);
+    if (!Number.isFinite(end)) return;
+    cancelAnimationFrame(frames.get(el));
+    const t0 = performance.now(), dur = 1600;
+    const tick = (now) => {
+      const t = clamp((now - t0) / dur, 0, 1);
+      el.textContent = String(Math.round(end * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frames.set(el, requestAnimationFrame(tick));
+    };
+    frames.set(el, requestAnimationFrame(tick));
+  };
   const statObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting || counted.has(entry.target)) return;
-      counted.add(entry.target);
       const el = entry.target;
-      const end = parseInt(el.dataset.count, 10);
-      const t0 = performance.now();
-      const dur = 1600;
-      (function tick(now) {
-        const t = clamp((now - t0) / dur, 0, 1);
-        el.textContent = String(Math.round(end * (1 - Math.pow(1 - t, 3))));
-        if (t < 1) requestAnimationFrame(tick);
-      })(t0);
+      if (entry.isIntersecting) countUp(el);
+      else { cancelAnimationFrame(frames.get(el)); el.textContent = "0"; }
     });
   }, { threshold: 0.6 });
   stats.forEach((s) => statObserver.observe(s));
@@ -469,18 +477,38 @@
   }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
   document.querySelectorAll(".rv").forEach((el) => revealObserver.observe(el));
 
-  /* ---------------- QUOTE FORM → WhatsApp ---------------- */
+  /* ---------------- QUOTE FORM → CRM (Supabase enquiries) ---------------- */
   const form = document.getElementById("quoteForm");
-  form?.addEventListener("submit", (e) => {
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const data = new FormData(form);
-    const msg =
-      `Hello Capitan! I'd like a quote.%0A` +
-      `Name: ${encodeURIComponent(data.get("name") || "")}%0A` +
-      `Contact: ${encodeURIComponent(data.get("contact") || "")}%0A` +
-      `Division: ${encodeURIComponent(data.get("division") || "")}%0A` +
-      `Details: ${encodeURIComponent(data.get("message") || "")}`;
-    window.open(`https://wa.me/918793085551?text=${msg}`, "_blank", "noopener");
+    const btn = form.querySelector('button[type="submit"]');
+    const toastEl = document.getElementById("toast");
+    const say = (msg, kind) => {
+      if (!toastEl) return alert(msg);
+      toastEl.textContent = msg;
+      toastEl.className = `toast on ${kind || ""}`;
+      setTimeout(() => toastEl.classList.remove("on"), 4500);
+    };
+    if (!window.CapitanDB) { say("Form is unavailable right now.", "err"); return; }
+    btn.disabled = true;
+    const prev = btn.firstChild.textContent;
+    btn.firstChild.textContent = "Sending… ";
+    try {
+      await window.CapitanDB.submitEnquiry({
+        name: data.get("name"),
+        contact: data.get("contact"),
+        division: data.get("division"),
+        message: data.get("message") || null,
+      });
+      form.reset();
+      say("Enquiry received — our sales desk will reach out within one working day.", "ok");
+    } catch (err) {
+      say("Couldn't send right now — please try WhatsApp instead.", "err");
+    } finally {
+      btn.disabled = false;
+      btn.firstChild.textContent = prev;
+    }
   });
 
   /* ---------------- master rAF loop ---------------- */

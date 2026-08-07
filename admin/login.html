@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — CAPITAN Admin</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/img/capitan-favicon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,500;100,600;100,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css?v=36">
+</head>
+<body>
+
+<div class="login-wrap">
+  <aside class="login-art">
+    <img src="https://images.pexels.com/photos/31096912/pexels-photo-31096912.jpeg?auto=compress&cs=tinysrgb&w=1600"
+         alt="Radial stacker conveyors feeding graded aggregate stockpiles at a working plant">
+    <div class="login-art-cap">
+      <b>Mine. Construct. Evolve.</b>
+      <small>Engineered sand, aggregates and infrastructure — Vasai, Mumbai.</small>
+    </div>
+  </aside>
+
+  <main class="login-side" id="loginPanel">
+    <div class="login-card">
+      <div class="login-brandmark">
+        <img src="/assets/img/capitan-logo-r.webp?v=5" width="240" height="72"
+             alt="Capitan — Pursuit of Excellence">
+      </div>
+
+      <!-- ============ sign in ============ -->
+      <section id="viewLogin">
+        <h2>Welcome</h2>
+        <p class="sub">Sign in to the Capitan admin panel.</p>
+        <form class="login-form" id="loginForm">
+          <div class="form-msg" id="loginMsg"></div>
+          <label class="field">Email
+            <input type="email" name="email" required autocomplete="email" placeholder="you@capitan.co.in">
+          </label>
+          <label class="field">Password
+            <span class="pw-wrap">
+              <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••" id="pwInput">
+              <button type="button" class="pw-toggle" id="pwToggle">Show</button>
+            </span>
+          </label>
+          <div class="row-between">
+            <span></span>
+            <a class="link" href="#" id="toForgot">Forgot password?</a>
+          </div>
+          <button class="btn btn-accent" type="submit" id="loginBtn">Sign in</button>
+          <div class="divider">Or</div>
+          <button class="google-btn" type="button" id="googleBtn">
+            <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.3 0-9.7-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.5l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+            Continue with Google
+          </button>
+        </form>
+        <div class="login-social">
+          <a href="https://wa.me/918793085551" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 15l-1.1 4 4.1-1.07A9.9 9.9 0 1 0 12.04 2Zm5.8 14.06c-.25.7-1.46 1.35-2 1.4-.53.05-1.02.24-3.44-.72-2.9-1.15-4.72-4.1-4.86-4.29-.14-.19-1.15-1.53-1.15-2.92s.73-2.07 1-2.35a1.03 1.03 0 0 1 .75-.35h.53c.17 0 .4-.6.63.48.24.58.8 2 .87 2.14.7.14.12.31.02.5-.1.19-.14.31-.29.48l-.43.5c-.14.14-.29.3-.12.58.17.29.75 1.24 1.6 2 1.1.98 2.03 1.28 2.32 1.43.29.14.46.12.63-.07.17-.2.72-.85.92-1.14.19-.29.38-.24.63-.14.26.09 1.63.77 1.9.91.29.14.48.22.55.34.07.12.07.68-.18 1.38Z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.3 8.4h3.4V20H3.3V8.4Zm5.6 0h3.26v1.58h.05c.45-.86 1.56-1.77 3.22-1.77 3.44 0 4.08 2.27 4.08 5.22V20h-3.4v-5.87c0-1.4-.02-3.2-1.95-3.2-1.95 0-2.25 1.52-2.25 3.1V20H8.9V8.4Z"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h3l1-3h-4v-2c0-.55.45-1 1-1Z"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.2 3h3.3l-7.2 8.2L21.8 21h-6.6l-4.3-5.6L5.9 21H2.6l7.7-8.8L2.5 3h6.8l3.9 5.2L17.2 3Zm-1.2 16h1.8L8.1 4.9H6.2L16 19Z"/></svg></a>
+        </div>
+      </section>
+
+      <!-- ============ forgot password ============ -->
+      <section id="viewForgot" hidden>
+        <h2>Reset password</h2>
+        <p class="sub">Enter your admin email and we'll send a reset link.</p>
+        <form class="login-form" id="forgotForm">
+          <div class="form-msg" id="forgotMsg"></div>
+          <label class="field">Email
+            <input type="email" name="email" required autocomplete="email" placeholder="you@capitan.co.in">
+          </label>
+          <button class="btn btn-accent" type="submit" id="forgotBtn">Send reset link</button>
+          <button class="btn btn-ghost" type="button" id="backToLogin">Back to sign in</button>
+        </form>
+      </section>
+
+      <!-- ============ set new password (from email link) ============ -->
+      <section id="viewRecovery" hidden>
+        <h2>Set a new password</h2>
+        <p class="sub">You followed a reset link — choose a new password for your account.</p>
+        <form class="login-form" id="recoveryForm">
+          <div class="form-msg" id="recoveryMsg"></div>
+          <label class="field">New password
+            <input type="password" name="password" required minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters">
+          </label>
+          <label class="field">Confirm new password
+            <input type="password" name="confirm" required minlength="8" autocomplete="new-password" placeholder="Repeat it">
+          </label>
+          <button class="btn btn-accent" type="submit" id="recoveryBtn">Update password</button>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  "use strict";
+  const sb = supabase.createClient(
+    "https://iybbkkwffusypyavmmvd.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml5YmJra3dmZnVzeXB5YXZtbXZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5OTk5MzksImV4cCI6MjEwMTU3NTkzOX0.qKD9jSKzJP8_AR9qu_RISdEm1tE0Ta5xnXZ2Bj2CbB8"
+  );
+
+  const $ = (id) => document.getElementById(id);
+  const views = { login: $("viewLogin"), forgot: $("viewForgot"), recovery: $("viewRecovery") };
+  const show = (name) => Object.entries(views).forEach(([k, el]) => (el.hidden = k !== name));
+  const msg = (id, text, kind) => {
+    const el = $(id);
+    el.textContent = text;
+    el.className = `form-msg on ${kind}`;
+  };
+
+  const PANEL = "/admin/";
+
+  /* Surface why a sign-in bounced. Three cases land here: the panel turned an
+     authenticated-but-unlisted account away (?denied=), Google itself refused
+     (?error= / #error=), or the provider is switched off. */
+  (() => {
+    const q = new URLSearchParams(location.search);
+    const h = new URLSearchParams(location.hash.replace(/^#/, ""));
+    const denied = q.get("denied");
+    const oauthErr = q.get("error_description") || q.get("error") ||
+                     h.get("error_description") || h.get("error");
+    if (denied !== null) {
+      msg("loginMsg",
+        (denied ? denied + " isn't " : "That account isn't ") +
+        "authorised for the Capitan admin panel. Ask a super admin to add you under Users, then sign in again.",
+        "err");
+    } else if (oauthErr) {
+      msg("loginMsg", decodeURIComponent(String(oauthErr).replace(/\+/g, " ")), "err");
+    }
+    if (denied !== null || oauthErr) {
+      history.replaceState(null, "", location.pathname);
+    }
+  })();
+
+  // Already signed in? Straight to the panel (unless arriving on a recovery link).
+  const isRecovery = location.hash.includes("type=recovery");
+  sb.auth.getSession().then(({ data }) => {
+    if (data.session && !isRecovery) location.replace(PANEL);
+  });
+  sb.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") show("recovery");
+  });
+  if (isRecovery) show("recovery");
+
+  // ---- sign in ----
+  $("pwToggle").addEventListener("click", () => {
+    const inp = $("pwInput");
+    inp.type = inp.type === "password" ? "text" : "password";
+    $("pwToggle").textContent = inp.type === "password" ? "Show" : "Hide";
+  });
+
+  $("loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const btn = $("loginBtn");
+    btn.disabled = true; btn.textContent = "Signing in…";
+    const { error } = await sb.auth.signInWithPassword({
+      email: f.get("email"), password: f.get("password"),
+    });
+    if (error) {
+      msg("loginMsg",
+        /invalid/i.test(error.message)
+          ? "That email and password combination doesn't match."
+          : error.message, "err");
+      btn.disabled = false; btn.textContent = "Sign in";
+      return;
+    }
+    location.replace(PANEL);
+  });
+
+  // ---- Google ----
+  $("googleBtn").addEventListener("click", async () => {
+    const { error } = await sb.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: new URL(PANEL, location.href).href },
+    });
+    if (error) {
+      msg("loginMsg",
+        /provider is not enabled/i.test(error.message)
+          ? "Google sign-in isn't enabled yet — add Google credentials in Supabase Auth settings, then this button works as-is."
+          : error.message, "err");
+    }
+  });
+
+  // ---- forgot ----
+  $("toForgot").addEventListener("click", (e) => { e.preventDefault(); show("forgot"); });
+  $("backToLogin").addEventListener("click", () => show("login"));
+  $("forgotForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = $("forgotBtn");
+    btn.disabled = true; btn.textContent = "Sending…";
+    const email = new FormData(e.target).get("email");
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: location.origin + location.pathname,
+    });
+    // Same message either way — don't reveal which emails exist.
+    if (error && !/rate/i.test(error.message)) console.warn(error.message);
+    msg("forgotMsg", `If ${email} has admin access, a reset link is on its way. Check spam too.`, "ok");
+    btn.disabled = false; btn.textContent = "Send reset link";
+  });
+
+  // ---- recovery (from email link) ----
+  $("recoveryForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    if (f.get("password") !== f.get("confirm")) {
+      msg("recoveryMsg", "Passwords don't match.", "err"); return;
+    }
+    const btn = $("recoveryBtn");
+    btn.disabled = true; btn.textContent = "Updating…";
+    const { error } = await sb.auth.updateUser({ password: f.get("password") });
+    if (error) {
+      msg("recoveryMsg", error.message, "err");
+      btn.disabled = false; btn.textContent = "Update password";
+      return;
+    }
+    msg("recoveryMsg", "Password updated — taking you to the panel…", "ok");
+    setTimeout(() => location.replace(PANEL), 900);
+  });
+})();
+</script>
+</body>
+</html>

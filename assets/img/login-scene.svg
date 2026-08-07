@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 820" width="600" height="820" role="img" aria-label="Illustration of a Capitan quarry at dusk: terraced rock benches, a wheel loader, a haul truck and stockpiles of engineered sand">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#141F28"/>
+      <stop offset=".45" stop-color="#21303A"/>
+      <stop offset=".72" stop-color="#3E4148"/>
+      <stop offset="1" stop-color="#6E4A2E"/>
+    </linearGradient>
+    <radialGradient id="halo" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#F8962A" stop-opacity=".55"/>
+      <stop offset=".55" stop-color="#F8962A" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#F8962A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD08A"/>
+      <stop offset="1" stop-color="#F8962A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- sky -->
+  <rect width="600" height="820" fill="url(#sky)"/>
+
+  <!-- stars -->
+  <g fill="#FFFFFF">
+    <circle cx="72" cy="66" r="1.9" opacity=".7"/><circle cx="158" cy="126" r="1.4" opacity=".5"/>
+    <circle cx="252" cy="58" r="1.7" opacity=".65"/><circle cx="366" cy="112" r="1.3" opacity=".45"/>
+    <circle cx="472" cy="70" r="2" opacity=".7"/><circle cx="538" cy="152" r="1.4" opacity=".5"/>
+    <circle cx="106" cy="196" r="1.2" opacity=".4"/><circle cx="430" cy="200" r="1.5" opacity=".55"/>
+    <circle cx="300" cy="164" r="1.1" opacity=".38"/><circle cx="520" cy="262" r="1.3" opacity=".42"/>
+    <circle cx="58" cy="286" r="1.4" opacity=".45"/><circle cx="212" cy="236" r="1.2" opacity=".4"/>
+  </g>
+
+  <!-- sun, clear of the ridgeline -->
+  <circle cx="404" cy="268" r="176" fill="url(#halo)"/>
+  <circle cx="404" cy="268" r="62" fill="url(#sun)"/>
+
+  <!-- distant ridges, kept below the sun -->
+  <path d="M0 470 L84 404 L150 446 L232 388 L306 442 L378 400 L456 448 L524 410 L600 452 L600 500 L0 500 Z" fill="#1A2732"/>
+  <path d="M0 500 L70 464 L146 498 L226 458 L300 500 L368 466 L448 502 L520 470 L600 504 L600 540 L0 540 Z" fill="#22303B"/>
+
+  <!-- ============ terraced quarry benches (stepped, left to right) ============ -->
+  <!-- top bench -->
+  <path d="M0 540 H600 V566 H0 Z" fill="#3A4E5A"/>
+  <path d="M0 566 H600 V576 H0 Z" fill="#2C3D47"/>
+  <!-- second bench, inset -->
+  <path d="M0 576 H500 V608 H0 Z" fill="#425866"/>
+  <path d="M0 608 H500 V618 H0 Z" fill="#33454F"/>
+  <path d="M500 576 L540 618 H500 Z" fill="#33454F"/>
+  <!-- third bench -->
+  <path d="M0 618 H430 V654 H0 Z" fill="#4A6273"/>
+  <path d="M0 654 H430 V664 H0 Z" fill="#3A4E5C"/>
+  <path d="M430 618 L474 664 H430 Z" fill="#3A4E5C"/>
+  <!-- pit floor -->
+  <path d="M0 664 H600 V820 H0 Z" fill="#8A6A45"/>
+  <path d="M0 664 H600 V690 H0 Z" fill="#7B5C3A" opacity=".55"/>
+
+  <!-- haul ramp cut into the benches -->
+  <path d="M150 664 L214 618 H286 L214 664 Z" fill="#5E7A8B" opacity=".8"/>
+  <path d="M214 618 L286 618 L262 640 L206 640 Z" fill="#6B8899" opacity=".55"/>
+
+  <!-- ============ stockpiles of engineered sand ============ -->
+  <path d="M338 664 L410 570 L482 664 Z" fill="#E8C89A"/>
+  <path d="M410 570 L482 664 H410 Z" fill="#C29A6B"/>
+  <path d="M470 664 L526 596 L582 664 Z" fill="#E8C89A"/>
+  <path d="M526 596 L582 664 H526 Z" fill="#C29A6B"/>
+
+  <!-- conveyor rising to feed the near pile -->
+  <g stroke-linecap="round">
+    <path d="M320 708 L404 588" stroke="#26333C" stroke-width="12"/>
+    <path d="M320 708 L404 588" stroke="#F8962A" stroke-width="3.5" opacity=".85"/>
+  </g>
+  <rect x="332" y="668" width="9" height="44" rx="4.5" fill="#26333C"/>
+  <circle cx="404" cy="588" r="7" fill="#33454F"/>
+
+  <!-- ============ wheel loader on the second bench ============ -->
+  <g transform="translate(74 528)">
+    <path d="M62 24 L102 42 L98 52 L58 34 Z" fill="#D97910"/>
+    <path d="M98 36 q20 5 24 22 l-17 4 q-3 -10 -13 -13 Z" fill="#F8962A"/>
+    <path d="M100 58 h28 v15 h-28 z" fill="#5C6B73"/>
+    <rect x="4" y="20" width="60" height="29" rx="8" fill="#F8962A"/>
+    <rect x="18" y="4" width="33" height="21" rx="7" fill="#F8962A"/>
+    <rect x="24" y="9" width="21" height="11" rx="3.5" fill="#C6DAE4"/>
+    <circle cx="20" cy="52" r="12" fill="#182430"/><circle cx="20" cy="52" r="4.5" fill="#93A7B2"/>
+    <circle cx="55" cy="52" r="12" fill="#182430"/><circle cx="55" cy="52" r="4.5" fill="#93A7B2"/>
+  </g>
+
+  <!-- ============ haul truck on the pit floor ============ -->
+  <g transform="translate(120 700)">
+    <path d="M2 4 h78 l-9 28 h-78 Z" fill="#D97910"/>
+    <path d="M8 9 h66 l-6 19 h-66 Z" fill="#B4620C" opacity=".55"/>
+    <rect x="80" y="8" width="32" height="26" rx="6" fill="#F8962A"/>
+    <rect x="86" y="13" width="19" height="12" rx="3.5" fill="#C6DAE4"/>
+    <rect x="0" y="32" width="114" height="9" rx="4.5" fill="#26333C"/>
+    <circle cx="24" cy="46" r="11.5" fill="#182430"/><circle cx="24" cy="46" r="4.2" fill="#93A7B2"/>
+    <circle cx="53" cy="46" r="11.5" fill="#182430"/><circle cx="53" cy="46" r="4.2" fill="#93A7B2"/>
+    <circle cx="96" cy="46" r="11.5" fill="#182430"/><circle cx="96" cy="46" r="4.2" fill="#93A7B2"/>
+  </g>
+
+  <!-- scattered rock, foreground -->
+  <g fill="#6E5436">
+    <path d="M300 762 q22 -18 44 -3 q18 12 -4 19 h-38 Z"/>
+    <path d="M470 786 q18 -15 38 -3 q16 10 -3 16 h-34 Z"/>
+    <path d="M22 796 q20 -16 42 -3 q17 11 -3 17 H22 Z"/>
+  </g>
+</svg>

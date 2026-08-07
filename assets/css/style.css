@@ -255,19 +255,37 @@ body.menu-open .slide-menu{transform:none;visibility:visible}
 .nav-inner{
   max-width:1440px;margin:0 auto;height:100%;padding-inline:var(--pad);
   display:flex;align-items:center;justify-content:space-between;gap:20px;
-  transition:padding-left .5s var(--ease);
+  transition:padding .5s var(--ease),max-width .5s var(--ease);
 }
 /* clear the left rail while it is on screen */
 @media (min-width:761px){
   .nav-inner{padding-left:calc(var(--pad) + var(--rail-w) - 20px)}
   .nav.scrolled .nav-inner{padding-left:var(--pad)}
+  /* At rest the bar belongs to the hero, and the hero is full-bleed. Capping
+     it at the 1440 content column leaves a huge centring gutter on a wide
+     monitor and the lockup drifts away from the headline — so mirror the
+     hero's own inline padding until the page scrolls, then snap back. */
+  .nav:not(.scrolled) .nav-inner{
+    max-width:none;
+    padding-right:clamp(24px,8vw,150px);
+    padding-left:max(clamp(24px,8vw,150px), calc(var(--pad) + var(--rail-w) - 20px));
+  }
+  /* At rest the bar belongs to the hero, which is full-bleed. Capping it at
+     1440 leaves a big centring gutter on wide monitors and the lockup drifts
+     away from the headline — so mirror the hero's own inline padding until
+     the page scrolls, then snap back to the 1440 content column. */
+  .nav:not(.scrolled) .nav-inner{
+    max-width:none;
+    padding-right:clamp(24px,8vw,150px);
+    padding-left:max(clamp(24px,8vw,150px), calc(var(--pad) + var(--rail-w) - 20px));
+  }
   .hero-logo{display:none !important}   /* phone-only element */
 }
 /* Official artwork: full stacked lockup (with tagline) while the page is at
    rest; collapses to a compact horizontal mark + wordmark once scrolled. */
 .brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
 /* at rest: the full stacked lockup incl. the "Pursuit of Excellence" tagline */
-.brand-full{height:110px;width:auto;transition:opacity .3s}
+.brand-full{height:138px;width:auto;transition:opacity .3s}
 .brand-logo,.brand-word-img{display:none;width:auto}
 .brand-logo{height:38px;transition:transform .5s var(--ease-out)}
 .brand-word-img{height:17px;transition:opacity .3s}
@@ -580,9 +598,21 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   transition:transform 1s var(--ease-out);
 }
 .proj:hover img{transform:scale(1.05)}
+/* Gradient screen. The pill and title sit in the top-left, so the scrim is
+   weighted there rather than spread evenly — a light diagonal alone left
+   white type unreadable over bright subjects like glass facades. */
 .proj::after{
-  content:"";position:absolute;inset:0;z-index:1;
-  background:linear-gradient(140deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.12) 45%,rgba(0,0,0,.25) 100%);
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(180deg,
+      rgba(11,15,19,.74) 0%,
+      rgba(11,15,19,.46) 24%,
+      rgba(11,15,19,.10) 52%,
+      rgba(11,15,19,.34) 100%),
+    linear-gradient(105deg,
+      rgba(11,15,19,.44) 0%,
+      rgba(11,15,19,.06) 48%,
+      rgba(11,15,19,0) 70%);
 }
 .proj .pill{
   position:absolute;z-index:2;top:34px;left:38px;
@@ -725,8 +755,10 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 }
 .plate::before{left:0;bottom:100%}                      /* up the left edge */
 .plate::after{right:calc(-1 * var(--fillet));bottom:0}  /* along the bottom */
+
 .plate b{display:block;color:var(--ink);font-size:18.5px;font-weight:600;line-height:1.2}
 .plate small{color:var(--ink-2);font-size:14px;font-weight:300}
+
 
 /* ============================================================
    SUPPLY PROGRAMS — pricing cards
@@ -904,7 +936,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   padding-bottom:clamp(40px,5vw,70px);
 }
 /* footer uses the full lockup; override the nav's show/hide swap */
-.brand-lg .brand-logo{display:block;height:clamp(90px,11vw,140px)}
+.brand-lg .brand-logo{display:block;height:clamp(120px,14vw,190px)}
 .brand-lg .brand-word,.brand-lg .brand-word-img{display:none}
 .footer-tel{margin-top:14px;font-size:19px}
 .footer-tel:first-of-type{margin-top:26px}
@@ -922,7 +954,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   margin-top:22px;border-radius:var(--r-card);overflow:hidden;
   border:1px solid var(--line);background:#EDF0F1;
 }
-.map-embed{display:block;width:100%;height:clamp(260px,29vw,360px);border:0}
+/* Google anchors its info card top-left at a fixed size while the pin stays
+   at the map centre — at the old 360px the centre sat behind the card. */
+.map-embed{display:block;width:100%;height:clamp(460px,42vw,640px);border:0}
 .map-link{
   margin-top:14px;display:flex;align-items:center;gap:16px;
   border:1px solid var(--line);border-radius:18px;padding:16px 20px;background:#fff;
@@ -969,8 +1003,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   }
   /* video is stretched — get the burger out of the way */
   .nav.in-hero{opacity:0;transform:translateY(-130%);pointer-events:none}
-  .nav:not(.scrolled){background:transparent;height:auto;padding-top:16px}
-  .nav:not(.scrolled) .nav-inner{height:auto;padding-inline:20px;justify-content:flex-end}
+  .nav:not(.scrolled){background:transparent;height:auto;padding-top:12px}
+  .nav:not(.scrolled) .nav-inner{height:auto;padding-inline:14px;justify-content:flex-end}
   .nav:not(.scrolled) .brand{display:none}
   .nav:not(.scrolled) .nav-burger{background:#26292E;box-shadow:0 6px 18px rgba(0,0,0,.16)}
   .nav:not(.scrolled) .nav-burger span{background:#fff}
@@ -997,30 +1031,12 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .hero{height:250vh}
   #divisions{margin-top:-80vh}
   /* stacked mobile hero: logo + text on top, inset video card below */
-  .hero-sticky{background:#fff; height:100svh;}
-  /* hero-content is absolutely positioned inside the sticky viewport;
-     padding-top aligns the logo with the burger's vertical centre;
-     padding-inline matches the nav-inner padding so edges line up. */
-  .hero-content{
-    align-items:flex-start;
-    padding-top:16px;
-    padding-inline:20px;
-    z-index:2;          /* below video on mobile so video covers text */
-  }
-  /* video layer sits above text on mobile so it masks the copy as it rises */
-  .hero-media{z-index:4}
-  .hero-logo{
-    display:block;
-    height:76px;
-    width:auto;
-    margin-bottom:20px;
-  }
+  .hero-sticky{background:#fff}
+  .hero-content{align-items:flex-start;padding-top:34px}
+  .hero-logo{display:block;height:112px;width:auto;margin-bottom:20px}
   .hero-kicker{margin-bottom:4px}
-  .hero-kicker .star{display:none}
   .hero-sub{margin-top:16px;line-height:1.55}
-  /* card is flush left with gutters on the right and bottom;
-     the JS interpolates these gaps to 0 during expansion.
-     Only the right side is rounded (flush left edge). */
+  /* card is flush left, so square off that side */
   /* must match renderHero()'s first mobile frame, or it jumps once JS runs.
      The caption clip mirrors the frame, so it needs the same starting box. */
   .hero-media-frame,
@@ -1029,32 +1045,17 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
     border-radius:0 26px 26px 0;transform:none;
   }
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
-  /* Video fills the frame. A fixed viewport-sized box would be a purer reveal,
-     but with this 16:9 drone footage it crops ~3.8x on a portrait phone and
-     the quarry becomes unreadable — the mild rescale is the better trade. */
-  .hero-media-frame video{
-    position:static;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
-    transform:scale(1.14);      /* matches renderHero()'s first frame */
-    transform-origin:center;
-    will-change:transform;
-  }
-  /* panel sits inside the video card's right/bottom inset;
-     fillets give the smooth concave curves at the join */
-  /* the clip already carries the 14px inset — offsetting again pushed the
-     caption off the card's corner into the middle of the video */
-  .hero-panel{right:0;bottom:0;border-top-left-radius:20px}
-  .f-tl-of-panel{--fillet:20px;display:block}
-  .f-above-panel{--fillet:20px;display:block}
+  .hero-panel{right:14px}
+  /* card is inset 14px, so the caption sits on its corner, not the viewport's */
+  .hero-panel{right:14px;bottom:14px;border-top-left-radius:26px}
+  .f-tl-of-panel,.f-above-panel{display:none}
   /* pointer-driven affordances never apply on a phone */
   .cursor-dot,.cursor-view,.svc-preview{display:none !important}
   /* during the hero the bar is just the burger; the lockup is in the hero
      itself. Once the hero is done the bar takes the logo back. */
   .nav:not(.scrolled) .brand{opacity:0;visibility:hidden}
   .brand{transition:opacity .35s var(--ease),visibility .35s}
+  .hero-media-frame{border-radius:22px}
   .hero-right{display:none}
   .hero-left{width:100%;min-width:0}
   .hero-title{font-size:clamp(32px,13.5vw,238px)}
@@ -1077,4 +1078,1168 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .proj-meta{left:22px;bottom:20px}
   .step{gap:16px}
   .qa p{padding-right:0}
+}
+
+
+/* ============================================================
+   SUBPAGES (blogs / blog / careers) — shared chrome
+   ============================================================ */
+.subnav{
+  position:sticky;top:0;z-index:900;height:76px;
+  background:rgba(252,252,252,.86);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.subnav-inner{
+  max-width:1440px;margin:0 auto;height:100%;padding-inline:var(--pad);
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+}
+.subnav .brand-logo{display:block;height:38px;width:auto}
+.subnav .brand-word-img{display:block;height:16px;width:auto}
+.subnav-links{display:flex;gap:30px}
+.subnav-links a{font-size:15.5px;font-weight:500;color:var(--ink-2)}
+.subnav-links a:hover,.subnav-links a[aria-current]{color:var(--ink)}
+.subnav-burger{display:none}
+@media (max-width:860px){
+  .subnav{background:#26292E;border-color:transparent}
+  .subnav .brand-word-img{filter:brightness(0) invert(1)}
+  .subnav-links{
+    display:none;position:absolute;inset:76px 0 auto 0;flex-direction:column;
+    background:#26292E;padding:18px var(--pad) 26px;gap:16px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .subnav-links a{color:#E9EAEC}
+  .subnav.open .subnav-links{display:flex}
+  .subnav-burger{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    width:44px;height:44px;background:#fff;border-radius:50%;
+  }
+  .subnav-burger span{width:18px;height:2px;background:#26292E;border-radius:2px}
+  .subnav .btn-pill{display:none}
+}
+
+.page-hero{padding:clamp(48px,7vw,96px) 0 clamp(20px,3vw,36px)}
+.page-hero .h2{margin-bottom:10px}
+.page-hero p.lede{max-width:60ch;font-size:17.5px}
+
+/* ---------- blog cards / listing ---------- */
+.cat-row{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
+.cat-pill{
+  border:1px solid var(--line);border-radius:99px;padding:9px 18px;background:#fff;
+  font-size:14.5px;color:var(--ink);cursor:pointer;transition:all .25s;
+}
+.cat-pill:hover{border-color:var(--ink-2)}
+.cat-pill.on{background:var(--ink);border-color:var(--ink);color:#fff}
+
+.feature-card{
+  display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(20px,3vw,40px);
+  background:#fff;border:1px solid #E7E9EA;border-radius:var(--r-card);
+  overflow:hidden;margin:26px 0 8px;
+  transition:transform .45s var(--ease-out),box-shadow .45s;
+}
+.feature-card:hover{transform:translateY(-4px);box-shadow:0 26px 60px rgba(0,0,0,.09)}
+.feature-card figure{overflow:hidden}
+.feature-card img{width:100%;height:100%;min-height:320px;object-fit:cover;transition:transform .9s var(--ease-out)}
+.feature-card:hover img{transform:scale(1.04)}
+.feature-body{padding:clamp(22px,2.6vw,40px);display:flex;flex-direction:column;gap:14px;justify-content:center}
+.feature-body h2{font-size:clamp(24px,2.6vw,40px);font-weight:700;line-height:1.12}
+.feature-body p{font-size:16.5px}
+@media (max-width:860px){.feature-card{grid-template-columns:1fr}.feature-card img{min-height:220px}}
+
+.blog-list{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.6vw,36px);padding:26px 0 10px}
+@media (max-width:1080px){.blog-list{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:700px){.blog-list{grid-template-columns:1fr}}
+
+.skeleton{position:relative;overflow:hidden;background:#EEF0F1;border-radius:var(--r-card)}
+.skeleton::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.75) 50%,transparent 70%);
+  animation:shimmer 1.4s infinite;
+}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+.empty-note{padding:40px 0;color:var(--ink-2)}
+
+/* ---------- blog article ---------- */
+.article{max-width:820px;margin:0 auto}
+.article-meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px;color:var(--ink-2);font-size:15px}
+.article-meta .pill{position:static;background:var(--accent);color:#fff;border-radius:99px;padding:7px 16px;font-size:13.5px;font-weight:500}
+.article h1{font-size:clamp(30px,4.4vw,56px);font-weight:700;line-height:1.08;margin:16px 0 18px}
+.article-cover{border-radius:var(--r-card);overflow:hidden;margin:26px 0 10px}
+.article-cover img{width:100%;max-height:480px;object-fit:cover;display:block}
+.article-body{padding:18px 0 40px;font-size:17.5px;line-height:1.75;color:#3C4A52}
+.article-body h2,.article-body h3{margin:34px 0 12px;color:var(--ink);font-weight:700;line-height:1.2}
+.article-body h2{font-size:clamp(22px,2.4vw,30px)}
+.article-body h3{font-size:clamp(19px,2vw,24px)}
+.article-body p{margin:0 0 16px}
+.article-body ul,.article-body ol{margin:0 0 18px;padding-left:24px}
+.article-body li{margin-bottom:8px}
+.article-body blockquote{
+  border-left:3px solid var(--accent);padding:6px 0 6px 20px;margin:22px 0;
+  color:var(--ink);font-size:1.06em;
+}
+.article-body img{border-radius:16px;margin:10px 0}
+.article-body code{background:#EEF0F1;border-radius:6px;padding:2px 7px;font-size:.92em}
+.article-body hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+.more-row{border-top:1px solid var(--line);padding-top:clamp(30px,4vw,50px);margin-top:20px}
+
+/* ---------- careers ---------- */
+.job{
+  position:relative;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r-card);margin-bottom:16px;overflow:hidden;
+  transition:border-color .35s,box-shadow .45s,transform .45s var(--ease-out);
+}
+.job:hover{border-color:#D6DDE1;box-shadow:0 18px 44px rgba(16,22,28,.08);transform:translateY(-2px)}
+.job.open{border-color:#D6DDE1;box-shadow:0 20px 50px rgba(16,22,28,.09)}
+
+/* title left, Apply pill right, meta and teaser beneath */
+.job-top{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:10px clamp(16px,2vw,28px);align-items:start;
+  padding:clamp(22px,2.5vw,34px) clamp(22px,2.6vw,36px);cursor:pointer;
+}
+.job h3{
+  grid-column:1;font-size:clamp(20px,2vw,27px);font-weight:600;color:var(--ink);
+  line-height:1.2;letter-spacing:-.005em;
+}
+.job:hover h3{color:var(--accent)}
+/* the right-hand cluster: department, location, type — then Apply last, so
+   the button is always the right-most thing on the row */
+.job-side{
+  grid-column:2;grid-row:1;display:flex;align-items:center;justify-content:flex-end;
+  gap:clamp(14px,1.7vw,26px);flex-wrap:wrap;
+}
+.job-apply{
+  order:2;align-self:center;
+  background:var(--accent);color:#fff;border-radius:99px;
+  padding:11px 26px;font-size:15px;font-weight:600;white-space:nowrap;
+  transition:background .3s,transform .35s var(--ease-out),box-shadow .35s;
+}
+.job-apply:hover{background:var(--accent-deep,#E07F0F);transform:translateY(-2px);box-shadow:0 10px 24px rgba(248,150,42,.32)}
+.job-meta-row{
+  order:1;display:flex;flex-wrap:wrap;gap:8px 22px;
+  color:var(--slate);font-size:14.5px;margin:0;
+}
+.job-meta-row span{display:inline-flex;align-items:center;gap:7px}
+.job-meta-row svg{width:15px;height:15px;flex-shrink:0;opacity:.9}
+.job-teaser{
+  grid-column:1/-1;margin-top:8px;font-size:16px;line-height:1.6;
+  color:var(--ink-2);max-width:70ch;
+}
+.job-more{
+  grid-column:1/-1;justify-self:start;
+  display:inline-flex;align-items:center;gap:6px;margin-top:18px;
+  font-size:14px;font-weight:600;color:var(--slate);
+}
+.job-more svg{width:15px;height:15px;transition:transform .4s var(--ease)}
+.job.open .job-more svg{transform:rotate(180deg)}
+.job.open .job-more{color:var(--accent)}
+
+.job-fold{height:0;overflow:hidden;transition:height .45s var(--ease)}
+.job-body{padding:0 clamp(22px,2.6vw,36px) clamp(24px,2.6vw,34px)}
+.job-body > p:first-child{padding-top:6px;border-top:1px solid var(--line)}
+.job-body h4{
+  margin:20px 0 8px;font-size:13px;color:var(--slate);
+  text-transform:uppercase;letter-spacing:.09em;font-weight:600;
+}
+.job-body p,.job-body li{font-size:16px;line-height:1.7;color:var(--ink-2)}
+.job-body ul{padding-left:20px;margin:6px 0 10px;display:grid;gap:6px}
+.job-actions{display:flex;gap:12px;margin-top:22px}
+
+@media (max-width:640px){
+  .job-top{grid-template-columns:1fr}
+  .job-side{grid-column:1;grid-row:auto;justify-content:flex-start;gap:12px 18px}
+  .job-apply{order:2;margin-top:2px}
+}
+
+/* ============ APPLY DRAWER ============ */
+.ap-scrim{
+  position:fixed;inset:0;background:rgba(16,22,28,.42);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease);z-index:1400;
+}
+.ap-scrim.on{opacity:1;pointer-events:auto}
+.ap-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);z-index:1500;
+  background:#fff;display:flex;flex-direction:column;
+  transform:translateX(101%);transition:transform .48s var(--ease);
+  box-shadow:-30px 0 70px rgba(16,22,28,.18);
+}
+.ap-drawer.on{transform:none}
+.ap-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:18px;
+  padding:clamp(24px,3vw,34px) clamp(22px,3vw,34px) 18px;
+  border-bottom:1px solid var(--line);
+}
+.ap-kicker{
+  color:var(--accent);font-size:13px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.ap-head h3{font-size:clamp(22px,2.2vw,28px);font-weight:700;color:var(--ink);margin-top:6px}
+.ap-role{margin-top:6px;font-size:15px;color:var(--ink-2)}
+.ap-close{
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+  display:grid;place-items:center;color:var(--ink);flex-shrink:0;
+  transition:background .3s,color .3s,border-color .3s;
+}
+.ap-close svg{width:17px;height:17px}
+.ap-close:hover{background:var(--dark);border-color:var(--dark);color:#fff}
+
+.ap-form{
+  flex:1;overflow-y:auto;display:grid;gap:16px;align-content:start;
+  padding:clamp(20px,2.6vw,28px) clamp(22px,3vw,34px) 0;
+}
+.ap-group{
+  font-size:12.5px;font-weight:700;color:var(--slate);
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-top:8px;padding-bottom:2px;
+}
+.ap-group:first-of-type{margin-top:0}
+.ap-field{display:grid;gap:7px;font-size:14px;font-weight:500;color:var(--ink)}
+.ap-field > span{display:block}
+.ap-field i{font-style:normal;color:var(--accent)}
+.ap-field input,.ap-field select,.ap-field textarea{
+  font:inherit;font-weight:400;color:var(--ink);background:#FBFCFC;
+  border:1px solid #DCE2E5;border-radius:12px;padding:13px 15px;width:100%;
+  transition:border-color .25s,box-shadow .25s,background .25s;
+}
+.ap-field textarea{resize:vertical;line-height:1.6}
+.ap-field input:focus,.ap-field select:focus,.ap-field textarea:focus{
+  outline:none;border-color:var(--accent);background:#fff;
+  box-shadow:0 0 0 3px rgba(248,150,42,.15);
+}
+.ap-field small{font-size:12.5px;color:var(--slate);font-weight:400}
+.ap-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:460px){.ap-two{grid-template-columns:1fr}}
+
+.ap-foot{
+  position:sticky;bottom:0;background:#fff;margin-top:6px;
+  padding:16px 0 clamp(18px,2.4vw,26px);border-top:1px solid var(--line);
+}
+.ap-note{font-size:13px;color:var(--slate);margin-bottom:12px}
+.ap-actions{display:flex;gap:10px;justify-content:flex-end}
+.ap-actions .btn{flex:0 0 auto}
+
+
+@media (max-width:820px){
+  .job-top{grid-template-columns:minmax(0,1fr) auto;gap:14px}
+  .job-meta{grid-column:1/-1;justify-content:flex-start}
+  .job-teaser{display:none}
+}
+
+/* ---------- shared form / modal / toast ---------- */
+.modal-scrim{
+  position:fixed;inset:0;z-index:1300;background:rgba(15,20,23,.55);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.modal-scrim.on{display:flex}
+.modal{
+  width:min(560px,100%);background:#fff;border-radius:22px;
+  padding:clamp(22px,3vw,34px);max-height:90vh;overflow:auto;
+  box-shadow:0 40px 90px rgba(0,0,0,.25);
+}
+.modal h3{font-size:22px;margin-bottom:4px}
+.modal .sub{color:var(--ink-2);font-size:15px;margin-bottom:18px}
+.form-grid{display:grid;gap:14px}
+.form-grid label{display:grid;gap:7px;font-size:14px;color:var(--ink-2);font-weight:500}
+.form-grid input,.form-grid select,.form-grid textarea{
+  font:inherit;color:var(--ink);background:#FAFBFB;border:1px solid #DFE3E5;
+  border-radius:12px;padding:13px 15px;width:100%;
+  transition:border-color .25s,background .25s;
+}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{
+  outline:none;border-color:var(--accent);background:#fff;
+}
+.hp-field{position:absolute;left:-5000px;opacity:0;pointer-events:none}
+.modal-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:18px}
+.btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn-ghost:hover{background:#F1F3F4;transform:none}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);
+  background:#1E2A30;color:#fff;border-radius:14px;padding:14px 22px;
+  font-size:15px;z-index:1500;opacity:0;pointer-events:none;
+  transition:opacity .3s,transform .35s var(--ease-out);
+  max-width:min(480px,90vw);text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast.ok{background:#1F8A4C}
+.toast.err{background:#C0392B}
+
+.site-footer-simple{
+  border-top:1px solid var(--line);margin-top:clamp(40px,6vw,80px);
+  padding:26px 0;font-size:14.5px;color:var(--ink-2);
+}
+.site-footer-simple .subnav-inner{height:auto}
+
+
+
+
+
+
+/* ============================================================
+   BLOGS page — pinned reveal hero + Highlights listing
+   ============================================================ */
+/* 320vh = 220vh of pinned scrolling. The reveal finishes inside the first
+   ~40% of that; the remaining travel is the curtain (see .after-hero). */
+.bhero{height:320vh;position:relative;z-index:0;background:var(--bg)}
+.bhero-sticky{
+  position:sticky;top:0;height:100vh;overflow:hidden;background:var(--bg);
+  display:grid;place-items:center;
+  /* Explicit column. With an auto column the giant word's max-content width
+     (wider than the viewport at mid-range sizes) stretched the track, and the
+     centred frame was pushed right by half the excess — a white strip down
+     the left of the revealed image. */
+  grid-template-columns:minmax(0,1fr);
+}
+/* Lockup on the white board, the way the homepage hero carries it. It sits
+   under the reveal frame (z-index 0 vs 2) so the growing image passes over
+   it, and JS slides it out to the left as the reveal runs.
+   Phones don't get it — the pinned app bar already shows the logo. */
+.bhero-logo{
+  position:absolute;z-index:0;
+  top:clamp(26px,4.2vh,52px);
+  left:calc(var(--rail-w) + clamp(22px,3vw,52px));
+  height:clamp(70px,7.6vw,124px);width:auto;
+  will-change:transform,opacity;
+}
+@media (max-width:760px){.bhero-logo{display:none}}
+.bhero-word{
+  grid-area:1/1;z-index:1;
+  display:grid;place-items:center;
+  font-size:clamp(70px,16vw,250px);font-weight:800;letter-spacing:-.01em;
+  color:var(--ink);text-transform:uppercase;line-height:1;
+  font-variation-settings:"wdth" 104;user-select:none;
+}
+/* Two superimposed copies, each clipped to one half. The growing image
+   pushes them apart: left half rides the frame's left edge, right half the
+   right edge, so the picture appears to split the word open. */
+.bw-h{grid-area:1/1;white-space:nowrap;will-change:transform}
+.bw-l{clip-path:inset(0 50% 0 0)}
+.bw-r{clip-path:inset(0 0 0 50%)}
+.bw-sr{
+  position:absolute;width:1px;height:1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap;
+}
+/* growing window: centered frame clips a fixed viewport-sized image, so the
+   strip reveals the photo without stretching it */
+.bhero-frame{
+  grid-area:1/1;z-index:2;position:relative;
+  width:0;height:100vh;overflow:hidden;justify-self:center;
+  will-change:width;
+}
+/* --vw is the documentElement's clientWidth, set by JS. Plain `vw` units
+   INCLUDE the scrollbar, so on any scrollbar'd viewport a 100vw image is
+   wider than the visible area and lands off-centre — that produced a white
+   strip down one side of the revealed hero. translateX(-50%) then re-centres
+   against the image's own width instead of a vw guess. */
+.bhero-frame img{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:var(--vw,100vw);height:100vh;object-fit:cover;max-width:none;
+}
+.bhero-shade{position:absolute;inset:0;background:#10151A;opacity:0}
+.bhero-tag{
+  grid-area:1/1;z-index:3;
+  color:#fff;font-size:clamp(30px,4.4vw,62px);font-weight:600;text-align:center;
+  line-height:1.14;letter-spacing:-.015em;
+  /* ch scales with the font, so this wraps to 2–3 lines at every size */
+  max-width:15ch;margin-inline:auto;
+  padding-inline:24px;opacity:0;will-change:transform,opacity;
+  text-shadow:0 2px 30px rgba(0,0,0,.28);
+}
+
+/* rail belongs to the hero — same as home: present over it, gone after */
+.bpage .rail{opacity:0;transform:translateX(-30%);pointer-events:none;
+  transition:opacity .45s var(--ease),transform .5s var(--ease)}
+.bpage .rail.rail-live{opacity:1;transform:none;pointer-events:auto}
+/* Only the WORD clears the rail — the frame must stay full-viewport so the
+   growing image can run edge to edge. Padding the sticky box instead would
+   pin the image away from the left edge and push it off the right. */
+/* Symmetric padding, not left-only: it keeps the word's centre on the
+   viewport centre so the split seam lines up with the image's centre, while
+   still holding the text off the rail column. */
+.bpage .bhero-word{padding-inline:calc(var(--rail-w) + clamp(18px,2.2vw,44px))}
+@media (max-width:760px){.bpage .bhero-word{padding-inline:0}}
+
+/* The curtain: pulling the content block up by a full viewport makes it rise
+   OVER the still-pinned hero instead of waiting below it. It also means the
+   hero is fully covered by the time it unpins, which hides the jump you get
+   when a sticky element releases. */
+.after-hero{position:relative;z-index:2;background:var(--bg);margin-top:-100vh}
+/* On reveal-hero pages the nav is not part of the page flow: it stays off
+   screen until the hero is fully behind you AND you scroll back up. */
+.bpage .subnav{
+  position:fixed;top:0;left:0;right:0;z-index:950;
+  transform:translateY(-105%);transition:transform .42s var(--ease);
+  will-change:transform;
+}
+.bpage .subnav.show{transform:none}
+
+/* ---------- Highlights featured card ---------- */
+.feat2{display:block;margin:26px 0 8px}
+.feat2-media{
+  position:relative;border-radius:var(--r-card);overflow:hidden;
+  aspect-ratio:21/9;background:#EEF0F1;
+}
+@media (max-width:760px){.feat2-media{aspect-ratio:4/3}}
+.feat2-media img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .9s var(--ease-out);
+}
+.feat2:hover .feat2-media img{transform:scale(1.04)}
+.pill-hl{
+  position:absolute;top:24px;left:24px;display:inline-flex;align-items:center;gap:9px;
+  background:var(--accent);color:#fff;border-radius:99px;padding:11px 22px;
+  font-size:15.5px;font-weight:600;
+}
+.feat2-meta{
+  display:flex;align-items:center;gap:8px;margin:20px 0 8px;
+  font-size:14.5px;color:var(--ink-2);
+}
+.feat2-meta svg{width:16px;height:16px}
+.feat2-meta em{font-style:normal;opacity:.5}
+.feat2 h2{
+  font-size:clamp(22px,2.4vw,32px);font-weight:600;line-height:1.22;max-width:34ch;
+  transition:color .3s;
+}
+.feat2:hover h2{color:var(--accent)}
+
+/* ---------- blogs footer (compact site footer) ---------- */
+.bfooter{border-top:1px solid var(--line);margin-top:clamp(44px,6vw,84px)}
+.bfooter-grid{
+  display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:space-between;
+  padding:clamp(26px,4vw,44px) 0;
+}
+.bfooter .brand-logo{display:block;height:44px;width:auto}
+.bfooter-nav{display:flex;flex-wrap:wrap;gap:8px 22px}
+.bfooter-nav a{font-size:15px;color:var(--ink-2)}
+.bfooter-nav a:hover{color:var(--accent)}
+.bfooter-bottom{
+  border-top:1px solid var(--line);padding:20px 0;font-size:14px;color:var(--ink-2);
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;
+}
+
+
+
+/* ---------- blog detail: immersive cover hero ---------- */
+.dhero{padding:14px}
+.dhero-inner{
+  position:relative;border-radius:26px;overflow:hidden;
+  min-height:min(86vh,760px);display:flex;align-items:flex-end;
+  background:#1A2025;
+}
+.dhero-inner img.cover{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+}
+.dhero-inner::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(16,21,26,.25) 0%,rgba(16,21,26,.65) 100%);
+}
+.dhero-content{
+  position:relative;z-index:2;width:100%;
+  display:flex;flex-wrap:wrap;align-items:flex-end;gap:22px;
+  padding:clamp(22px,4vw,52px);color:#fff;
+}
+.dhero-left{flex:1.6;min-width:min(560px,100%)}
+.dhero-badges{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.dhero-cat{
+  border:1px solid rgba(255,255,255,.7);border-radius:99px;padding:8px 18px;
+  font-size:14px;font-weight:500;
+}
+.dhero-date{display:flex;align-items:center;gap:8px;font-size:14.5px;opacity:.92}
+.dhero-date svg{width:16px;height:16px}
+.dhero-left h1{
+  color:#fff;font-size:clamp(30px,4.6vw,62px);font-weight:700;line-height:1.08;
+  max-width:18ch;
+}
+.dhero-right{
+  flex:1;min-width:260px;max-width:460px;margin-left:auto;
+  font-size:15.5px;line-height:1.6;text-align:right;opacity:.94;
+}
+@media (max-width:860px){
+  .dhero{padding:10px}
+  .dhero-inner{min-height:70vh}
+  .dhero-right{text-align:left;margin-left:0}
+}
+
+/* ---------- article + sticky subscribe rail ---------- */
+.article-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) 340px;
+  gap:clamp(28px,4vw,64px);align-items:start;
+  padding-top:clamp(28px,4vw,56px);
+}
+@media (max-width:1000px){.article-grid{grid-template-columns:1fr}}
+.article-grid .article-body{padding-top:0}
+.article-body h2,.article-body h3{
+  text-transform:uppercase;letter-spacing:.01em;
+}
+.article-body h2{font-size:clamp(26px,3vw,42px)}
+.article-body h3{font-size:clamp(22px,2.4vw,32px)}
+
+.subscribe-card{
+  position:sticky;top:96px;
+  border:1.5px solid var(--accent);border-radius:22px;
+  padding:clamp(22px,2.4vw,30px);text-align:center;background:#fff;
+}
+.subscribe-card .bell{
+  display:inline-flex;align-items:center;gap:9px;color:var(--accent);
+  font-size:clamp(20px,1.8vw,25px);font-weight:600;
+}
+.subscribe-card .bell svg{width:22px;height:22px}
+.subscribe-card p{font-size:15.5px;margin:12px 0 18px;color:var(--ink-2)}
+.subscribe-card input{
+  font:inherit;width:100%;border:1px solid #DFE3E5;background:#FAFBFB;
+  border-radius:12px;padding:13px 15px;color:var(--ink);margin-bottom:10px;
+  transition:border-color .25s;
+}
+.subscribe-card input:focus{outline:none;border-color:var(--accent)}
+.subscribe-card .btn{width:100%}
+.subscribe-note{font-size:12.5px;color:#9AA6AD;margin-top:10px}
+@media (max-width:1000px){.subscribe-card{position:static;max-width:460px}}
+
+
+
+/* ============================================================
+   Inner pages — alternating rows, values,
+   projects grid, project detail fact rail
+   ============================================================ */
+
+@media (max-width:760px){
+}
+
+/* ---------- alternating feature rows (divisions) ---------- */
+.alt-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,90px);
+  align-items:center;padding:clamp(30px,4.5vw,70px) 0;
+}
+.alt-row:nth-child(even) .alt-media{order:-1}
+.alt-media{border-radius:var(--r-card);overflow:hidden;aspect-ratio:1/0.92}
+.alt-media img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-out)}
+.alt-row:hover .alt-media img{transform:scale(1.04)}
+.alt-copy h2{font-size:clamp(26px,3vw,42px);font-weight:700;margin-bottom:14px}
+.alt-copy p{font-size:16.5px;margin-bottom:16px;max-width:52ch}
+.alt-copy .chip-row{margin-bottom:20px}
+@media (max-width:860px){
+  .alt-row{grid-template-columns:1fr;gap:20px}
+  .alt-row:nth-child(even) .alt-media{order:0}
+}
+
+/* ---------- about page ---------- */
+.statement{
+  font-size:clamp(24px,3.2vw,44px);font-weight:600;line-height:1.25;color:var(--ink);
+  max-width:26ch;padding:clamp(34px,5vw,80px) 0 clamp(20px,3vw,40px);
+}
+.statement em{font-style:normal;color:var(--accent)}
+.values-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:clamp(16px,2vw,26px);padding:8px 0 30px;
+}
+.value-card{
+  background:#fff;border:1px solid #E7E9EA;border-radius:var(--r-card);
+  padding:clamp(22px,2.4vw,32px);
+  transition:transform .4s var(--ease-out),box-shadow .4s;
+}
+.value-card:hover{transform:translateY(-5px);box-shadow:0 22px 50px rgba(0,0,0,.08)}
+.value-card .vnum{color:var(--accent);font-weight:300;font-size:17px}
+.value-card h3{font-size:20px;font-weight:700;margin:10px 0 8px}
+.value-card p{font-size:15px}
+.quote-band{
+  background:#F1F4F5;border-radius:var(--r-card);
+  padding:clamp(28px,4vw,54px);margin:clamp(20px,3vw,44px) 0;
+  display:flex;gap:22px;align-items:flex-start;flex-wrap:wrap;
+}
+.quote-band img{width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:top center}
+.quote-band blockquote{flex:1;min-width:min(480px,100%)}
+.quote-band blockquote p{font-size:clamp(17px,1.8vw,22px);color:var(--ink);line-height:1.5}
+.quote-band cite{display:block;margin-top:14px;font-style:normal;font-size:14.5px;color:var(--ink-2)}
+.quote-band cite b{color:var(--ink)}
+
+/* ---------- projects listing grid ---------- */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(22px,3vw,40px);padding:10px 0 30px}
+@media (max-width:860px){.pgrid{grid-template-columns:1fr}}
+.pcard{display:block}
+.pcard-media{position:relative;border-radius:var(--r-card);overflow:hidden;aspect-ratio:16/10;background:#EEF0F1}
+.pcard-media img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease-out)}
+.pcard:hover .pcard-media img{transform:scale(1.05)}
+.pcard-media .pill{position:absolute;top:20px;left:20px}
+.pcard h3{font-size:clamp(21px,2.2vw,28px);font-weight:700;margin-top:16px;transition:color .3s}
+.pcard:hover h3{color:var(--accent)}
+.pcard .muted{color:var(--ink-2);font-size:14.5px;margin-top:4px}
+
+/* ============================================================
+   Inner pages on phones — BrightEdge mobile behaviour:
+   dark app bar pinned over the hero from the top, and a giant
+   word scaled to the viewport instead of overflowing it.
+   ============================================================ */
+@media (max-width:760px){
+  /* phones keep the app bar pinned over the hero from the very top */
+  .bpage .subnav{height:64px;transform:none}
+  .bpage .subnav-links{inset:64px 0 auto 0}
+  .bpage .subnav .brand-logo{height:32px}
+  .bpage .subnav .brand-word-img{height:14px}
+  .bpage .subnav-burger{width:40px;height:40px}
+  /* the bar left the flow — give its height back to the content */
+  .bpage .after-hero{padding-top:64px}
+
+  /* fit the word to the viewport: --chars is set per page */
+  .bhero-word{font-size:min(calc(140vw / var(--chars,7)),92px)}
+  .bhero-tag{font-size:32px;line-height:1.18;padding-inline:22px;max-width:14ch}
+}
+
+
+/* Rail branding — inner pages only; the homepage rail stays bare by request.
+   Real wordmark + mark assets, both rotated a quarter turn so they read up
+   the column together. A rotated element keeps its unrotated layout box, so
+   the wordmark sits in a wrapper sized to its POST-rotation footprint —
+   without it the 120px-wide image would blow out the 82px rail. */
+.bpage .rail-mid{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:26px;
+}
+.rail-wordwrap{position:relative;display:block;width:22px;height:132px}
+/* absolute + translate(-50%,-50%): grid/flex centring can't centre a child
+   wider than its cell, which threw the rotated wordmark outside the rail */
+.rail-word-img{
+  position:absolute;top:50%;left:50%;
+  height:15px;width:auto;max-width:none;
+  transform:translate(-50%,-50%) rotate(-90deg);
+  filter:brightness(0) invert(1);opacity:.96;
+}
+.rail-mark{width:30px;height:auto;transform:rotate(-90deg)}
+@media (max-width:760px){.rail-wordwrap,.rail-mark{display:none}}
+
+
+/* the phone app bar inverts the wordmark to white — the ® follows it */
+
+
+
+/* ============================================================
+   PROJECT DETAIL — full-screen pinned cover, content rises as a
+   sheet over it (the rail leaves as the sheet arrives).
+   ============================================================ */
+.pdhero{height:300vh;position:relative;z-index:0;background:var(--dark)}
+.pdhero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--dark)}
+.pdhero-media{position:absolute;inset:0}
+.pdhero-media img{width:100%;height:100%;object-fit:cover;display:block}
+.pdhero-shade{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(14,18,22,.86) 0%,rgba(14,18,22,.45) 38%,rgba(14,18,22,.18) 70%);
+}
+/* The veil: a translucent screen over the cover that retracts upward as you
+   scroll, uncovering the clean image beneath. Logo rides its top edge, the
+   title block rides its bottom edge, so both travel up together. */
+.pdhero-veil{
+  position:absolute;left:0;right:0;top:0;height:100%;
+  background:linear-gradient(180deg,rgba(14,18,22,.74) 0%,rgba(14,18,22,.58) 55%,rgba(14,18,22,.66) 100%);
+  will-change:height;overflow:hidden;
+}
+.pdhero-brand{
+  position:absolute;z-index:2;
+  top:clamp(22px,3.4vh,42px);
+  left:calc(var(--rail-w) + clamp(22px,3vw,52px));
+  gap:12px;will-change:transform,opacity;
+}
+.pdhero-brand .brand-logo{display:block;height:clamp(34px,3.4vw,46px);width:auto}
+.pdhero-brand .brand-word-img{
+  display:block;height:clamp(14px,1.35vw,18px);width:auto;
+  filter:brightness(0) invert(1);
+}
+@media (max-width:860px){.pdhero-brand{left:20px;top:16px}}
+.pdhero-content{
+  position:absolute;left:0;right:0;bottom:clamp(36px,6vh,84px);
+  padding-inline:calc(var(--rail-w) + clamp(24px,4vw,72px)) clamp(24px,4vw,72px);
+  display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;
+}
+.pdhero-left .pill{position:static;display:inline-block;margin-bottom:18px}
+.pdhero-content h1{
+  color:#fff;font-size:clamp(40px,6.4vw,104px);font-weight:800;line-height:.98;
+  letter-spacing:-.02em;text-transform:uppercase;
+}
+.pdhero-desc{color:#E6EAED;font-size:clamp(16px,1.35vw,20px);max-width:46ch;text-align:right}
+@media (max-width:860px){
+  .pdhero-content{padding-inline:22px;bottom:34px;display:block}
+  .pdhero-desc{text-align:left;margin-top:16px;font-size:16px}
+  .pdhero{height:260vh}
+}
+
+/* the sheet */
+.pd-sheet{
+  position:relative;z-index:2;margin-top:-100vh;background:var(--bg);
+  border-radius:var(--r-big) var(--r-big) 0 0;
+  padding-top:clamp(44px,6vw,86px);
+  box-shadow:0 -30px 60px rgba(16,22,28,.18);
+}
+.pd-sheet .container{max-width:1440px}
+
+/* left fact column + right body */
+.pd-grid{
+  display:grid;grid-template-columns:270px minmax(0,1fr);
+  gap:clamp(30px,5vw,86px);align-items:start;
+}
+.fact-rail{position:sticky;top:96px;display:grid}
+.fact{padding:20px 0;border-bottom:1px solid var(--line)}
+.fact:first-child{padding-top:0}
+.fact small{display:block;color:var(--slate);font-size:14.5px;margin-bottom:6px}
+.fact b{font-size:19px;font-weight:600;color:var(--ink);line-height:1.3}
+.fact-cta{
+  display:inline-flex;align-items:center;gap:12px;margin-top:26px;
+  background:var(--dark);color:#fff;border-radius:99px;padding:14px 22px;
+  font-weight:600;font-size:15.5px;transition:transform .3s var(--ease),filter .3s;
+}
+.fact-cta:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.fact-cta .live-dot{
+  width:9px;height:9px;border-radius:50%;background:#37C46A;flex-shrink:0;
+  box-shadow:0 0 0 3px rgba(55,196,106,.22);
+}
+.fact-cta svg{width:15px;height:15px}
+
+.pd-h{font-size:clamp(26px,2.6vw,38px);font-weight:700;color:var(--ink);margin-bottom:16px}
+.pd-lede{font-size:clamp(17px,1.5vw,19.5px);line-height:1.65;color:#3C4A52;max-width:64ch}
+/* Section rows read heading-left / copy-right, with any imagery spanning
+   the full width beneath them — the reference's rhythm. */
+.pd-section{
+  display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);
+  gap:clamp(20px,3.5vw,56px);align-items:start;
+  margin-top:clamp(40px,5.5vw,78px);
+}
+.pd-section .pd-h{margin:0}
+.pd-section p{font-size:16.8px;line-height:1.72;color:var(--ink-2)}
+.pd-figure,.pd-duo{grid-column:1/-1;margin:clamp(22px,3vw,40px) 0 0}
+/* cap the wide figure: without a ratio a tall source rendered at full
+   natural height and swamped the section */
+.pd-figure img,.pd-duo img{
+  width:100%;border-radius:var(--r-card);display:block;
+  aspect-ratio:16/9;object-fit:cover;background:#E8ECEE;
+}
+.pd-duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,24px)}
+.pd-duo figure{margin:0}
+.pd-duo img{aspect-ratio:4/3;object-fit:cover}
+@media (max-width:760px){
+  .pd-section{grid-template-columns:1fr;gap:12px}
+  .pd-duo{grid-template-columns:1fr}
+}
+
+/* LATEST PROJECTS — heading with a rule running off to the right */
+.latest{margin-top:clamp(56px,8vw,110px)}
+.latest-head{display:flex;align-items:center;gap:26px;margin-bottom:clamp(24px,3vw,42px)}
+.latest-head h2{
+  font-size:clamp(24px,3vw,44px);font-weight:800;letter-spacing:-.01em;
+  text-transform:uppercase;color:var(--ink);white-space:nowrap;
+}
+.latest-head::after{content:"";flex:1;height:1px;background:var(--line)}
+.latest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2vw,30px)}
+@media (max-width:900px){.latest-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.latest-grid{grid-template-columns:1fr}}
+.lcard-media{
+  position:relative;border-radius:var(--r-card);overflow:hidden;
+  aspect-ratio:1/1;background:#E8ECEE;
+}
+.lcard-media img{
+  width:100%;height:100%;object-fit:cover;display:block;
+  transition:transform .7s var(--ease);
+}
+.lcard:hover .lcard-media img{transform:scale(1.05)}
+.lcard-meta{
+  display:flex;align-items:center;gap:9px;margin:16px 0 8px;
+  color:var(--ink-2);font-size:15px;
+}
+.lcard-meta svg{width:16px;height:16px;flex-shrink:0}
+.lcard-meta i{font-style:normal;color:var(--line)}
+.lcard h3{font-size:clamp(19px,1.7vw,25px);font-weight:600;color:var(--ink)}
+.lcard:hover h3{color:var(--accent)}
+
+@media (max-width:860px){
+  .pd-grid{grid-template-columns:1fr;gap:32px}
+  .fact-rail{position:static}
+  .pd-sheet{border-radius:26px 26px 0 0}
+}
+
+
+/* Base pill. Only `.proj .pill` was ever styled, so the project-card and
+   detail-hero pills were rendering as bare low-contrast text. */
+.pill{
+  display:inline-block;background:var(--accent);color:#fff;border-radius:99px;
+  padding:9px 18px;font-size:14.5px;font-weight:500;line-height:1;white-space:nowrap;
+}
+.pcard-media .pill{z-index:2}
+
+/* keep the detail hero on one row: title left, description bottom-right */
+.pdhero-content{flex-wrap:nowrap}
+.pdhero-left{min-width:0;flex:1 1 auto}
+.pdhero-content h1{font-size:clamp(38px,5vw,76px)}
+.pdhero-desc{flex:0 1 auto}
+@media (max-width:860px){
+  .pdhero-content{flex-wrap:wrap}
+  .pdhero-content h1{font-size:clamp(32px,8vw,52px)}
+}
+
+
+/* Latest-projects row: titles wrap to two lines on longer names, which left
+   the row bottoms ragged. Reserve the second line so every card matches. */
+.lcard{display:flex;flex-direction:column}
+.lcard h3{line-height:1.24;min-height:2.48em}
+.latest-grid{align-items:start}
+
+
+/* the sheet ended flush against the footer rule */
+.pd-sheet{padding-bottom:clamp(64px,9vw,130px)}
+
+
+/* Detail hero title sits closer to the reference scale — smaller, wrapping
+   inside a narrow column rather than spanning the viewport. */
+.pdhero-content h1{font-size:clamp(30px,3.6vw,58px);max-width:13ch}
+@media (max-width:860px){.pdhero-content h1{font-size:clamp(28px,7vw,44px);max-width:none}}
+
+/* sheet meets the hero with a straight full-width edge */
+.pd-sheet{border-radius:0;box-shadow:none}
+
+
+/* The sheet was inheriting the site container (1440 max, 96px gutters), so
+   its inner width froze at ~1248px on every screen and the three cards were
+   stuck at 283px — leaving titles like "Residential Development" only ~9px
+   of slack, which is why they broke to a second line despite looking roomy.
+   Give the sheet its own wider measure and a tighter fact column. */
+.pd-sheet .container{max-width:1560px;padding-inline:clamp(20px,4vw,72px)}
+.pd-grid{grid-template-columns:240px minmax(0,1fr);gap:clamp(28px,3.6vw,64px)}
+.lcard h3{text-wrap:balance}
+@media (max-width:860px){.pd-grid{grid-template-columns:1fr}}
+
+
+/* ============================================================
+   ABOUT — milestone timeline. Sticky date on the left, a rule
+   down the middle that fills with brand colour as you pass each
+   marker, content on the right.
+   ============================================================ */
+.tl-wrap{padding-block:clamp(60px,8vw,110px)}
+.tl{margin-top:clamp(30px,4vw,58px)}
+.tl-row{
+  display:grid;grid-template-columns:minmax(0,1fr) 72px minmax(0,1.15fr);
+  align-items:start;
+}
+.tl-date{
+  position:sticky;top:38vh;text-align:right;padding-right:clamp(10px,2vw,30px);
+  padding-bottom:60px;
+}
+.tl-date span{
+  display:block;font-size:clamp(30px,4.2vw,62px);font-weight:700;
+  color:var(--ink);line-height:1;letter-spacing:-.02em;
+}
+.tl-date small{
+  display:block;margin-top:10px;font-size:14.5px;color:var(--slate);
+  letter-spacing:.02em;
+}
+.tl-mid{position:relative;justify-self:center;width:72px;align-self:stretch}
+.tl-mid::before{                       /* the rule itself */
+  content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:var(--line);transform:translateX(-50%);
+}
+.tl-fill{                              /* accent progress, driven by scroll */
+  position:absolute;left:50%;top:0;width:2px;height:0;
+  background:var(--accent);transform:translateX(-50%);
+}
+.tl-dot{
+  position:absolute;left:50%;top:6px;transform:translate(-50%,0);
+  width:13px;height:13px;border-radius:50%;background:#CBD3D8;z-index:2;
+  transition:background .35s var(--ease),box-shadow .35s var(--ease);
+}
+.tl-row.on .tl-dot{
+  background:var(--ink);
+  box-shadow:0 0 0 5px var(--bg),0 0 0 6px var(--ink);
+}
+.tl-body{padding-bottom:clamp(56px,8vw,110px)}
+.tl-body h3{
+  font-size:clamp(20px,2vw,29px);font-weight:600;color:var(--ink);
+  line-height:1.22;max-width:22ch;
+}
+.tl-body p{
+  margin-top:12px;font-size:16.5px;line-height:1.7;color:var(--ink-2);
+  max-width:52ch;
+}
+.tl-body img{
+  width:100%;margin-top:clamp(20px,2.4vw,32px);
+  border-radius:var(--r-card);display:block;aspect-ratio:16/10;object-fit:cover;
+}
+@media (max-width:860px){
+  .tl-row{grid-template-columns:52px minmax(0,1fr)}
+  .tl-date{
+    grid-column:2;position:static;text-align:left;padding:0 0 10px;
+  }
+  .tl-date span{font-size:30px}
+  .tl-mid{grid-row:1/3;grid-column:1;width:52px}
+  .tl-body{grid-column:2;padding-bottom:52px}
+}
+
+
+/* Story imagery and the chairman's quote take the homepage card treatment:
+   big radius with a notch cut from one corner. The timeline photos stay
+   plain-rounded — the notch competes with the rule running beside them. */
+.alt-media{position:relative;overflow:visible}
+.alt-media img{border-radius:var(--r-big);display:block;width:100%}
+.quote-band{position:relative;overflow:visible;border-radius:var(--r-big)}
+.quote-band .media-notch{background:var(--bg)}
+
+
+/* ============================================================
+   ABOUT — Director's Message. Portrait uses the same card
+   treatment as the homepage components: big radius with a notch
+   cut from the bottom-left, the name sitting in the cut.
+   ============================================================ */
+.dir-msg{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(28px,5vw,80px);align-items:center;
+  padding-block:clamp(40px,6vw,86px);
+}
+.dir-photo{position:relative;margin:0}
+.dir-photo img{
+  width:100%;height:auto;display:block;
+  border-radius:var(--r-big);background:#E8ECEE;
+}
+.dir-photo figcaption{
+  position:absolute;left:0;bottom:0;z-index:3;
+  width:44%;padding:12px 16px 2px 2px;
+}
+.dir-photo figcaption b{
+  display:block;font-size:clamp(15px,1.2vw,17.5px);font-weight:600;color:var(--ink);
+  line-height:1.25;white-space:nowrap;
+}
+.dir-photo figcaption small{
+  display:block;margin-top:4px;font-size:13.5px;color:var(--ink-2);line-height:1.3;
+}
+/* notch cut from the bottom-left, mirroring .notch-br */
+.notch-bl{
+  left:0;bottom:0;width:44%;height:25%;
+  border-top-right-radius:var(--fillet);
+  border-bottom-left-radius:calc(var(--r-big) - 5px);
+}
+.notch-bl::before{           /* above the notch, hugging the left edge */
+  left:0;bottom:100%;
+  background:radial-gradient(circle at 100% 0,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+.notch-bl::after{            /* right of the notch, along the bottom edge */
+  right:calc(-1 * var(--fillet));bottom:0;
+  background:radial-gradient(circle at 100% 0,
+    transparent calc(var(--fillet) - .5px), var(--bg) var(--fillet));
+}
+/* .dir-copy p is later and more specific than .tag, so it would grey the
+   kicker out — restate the accent here */
+.dir-copy .tag{margin-bottom:8px;color:var(--accent)}
+.dir-copy p{font-size:16.8px;line-height:1.75;color:var(--ink-2);margin-top:16px;max-width:60ch}
+.dir-copy .h2{margin-bottom:4px}
+.dir-sign{margin-top:26px !important}
+.dir-sign b{display:block;color:var(--ink);font-weight:600;font-size:17px}
+.dir-sign em{display:block;font-style:italic;font-size:15px;color:var(--ink-2);margin-top:2px}
+@media (max-width:860px){
+  .dir-msg{grid-template-columns:1fr;gap:26px}
+  .dir-photo{max-width:440px}
+}
+
+
+/* ============================================================
+   WHY CHOOSE US — card pinned centre, copy alternating left and
+   right, images swapped with the slot-roll used on the homepage
+   division reel (outgoing exits up, incoming enters from below).
+   ============================================================ */
+.why{padding-top:clamp(50px,7vw,96px)}
+.why-stage{position:relative}
+.why-sticky{
+  position:sticky;top:0;height:100vh;
+  display:grid;place-items:center;overflow:hidden;
+}
+.why-card{
+  position:relative;z-index:2;
+  width:min(440px,26vw);aspect-ratio:5/7;
+  border-radius:var(--r-big);overflow:hidden;background:#E8ECEE;
+}
+/* One column of frames sliding as a unit. No CSS transition: the scroll
+   position drives the transform directly, so you see the incoming frame
+   physically pushing the previous one out mid-gesture. */
+.why-track{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  will-change:transform;
+}
+.why-img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;display:block}
+
+/* copy is also scrubbed — rises in, holds, leaves upward */
+.why-copy{
+  position:absolute;top:50%;width:min(340px,23vw);
+  opacity:0;pointer-events:none;will-change:transform,opacity;
+}
+.why-copy.on{pointer-events:auto}
+.why-left{left:clamp(24px,6vw,130px)}
+.why-right{right:clamp(24px,6vw,130px)}
+.why-copy h3{
+  font-size:clamp(24px,2.5vw,36px);font-weight:700;color:var(--ink);
+  line-height:1.14;letter-spacing:-.01em;
+}
+.why-copy p{margin-top:12px;font-size:16.5px;line-height:1.7;color:var(--ink-2)}
+.why-m-img{display:none}
+
+@media (max-width:900px){
+  /* Phones get the BrightEdge treatment: no pinning, no overlay — each item
+     is just a rounded picture with its heading and copy beneath, stacked in
+     normal flow. The reel JS bails out at this width, so nothing here has to
+     fight an inline transform. */
+  .why-stage{height:auto !important}
+  .why-sticky{
+    position:static;height:auto;display:flex;flex-direction:column;
+    gap:clamp(38px,9vw,60px);overflow:visible;place-items:stretch;
+  }
+  .why-card{display:none}
+  .why-copy{
+    position:static;width:auto;opacity:1 !important;transform:none !important;
+    text-align:left;pointer-events:auto;
+  }
+  .why-m-img{
+    display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
+    border-radius:var(--r-card);margin-bottom:clamp(14px,3.5vw,22px);background:#E8ECEE;
+  }
+  .why-copy h3{font-size:clamp(22px,6vw,30px)}
+  .why-copy p{font-size:15.5px;line-height:1.68}
+}
+
+
+/* ============================================================
+   Article imagery — a lone image runs full width, two on one
+   line sit side by side. Authors just write markdown; the
+   :has() test does the layout.
+   ============================================================ */
+.article-body p:has(> img){
+  display:grid;gap:clamp(12px,1.4vw,20px);
+  margin:clamp(26px,3.4vw,46px) 0;
+}
+.article-body p:has(> img + img){grid-template-columns:1fr 1fr}
+@media (max-width:700px){.article-body p:has(> img + img){grid-template-columns:1fr}}
+.article-body img{
+  width:100%;display:block;border-radius:var(--r-card);
+  aspect-ratio:16/10;object-fit:cover;background:#E8ECEE;
+}
+.article-body p:has(> img + img) img{aspect-ratio:4/3}
+
+/* blog hero: category pill + date row, matching the reference rhythm */
+.post-badges{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:20px}
+.post-date{
+  display:inline-flex;align-items:center;gap:8px;
+  color:#E4E9EC;font-size:15px;
+}
+.post-date svg{width:16px;height:16px;opacity:.9}
+
+
+/* blog titles run longer than project names — give them a wider measure
+   so they break over two or three lines, not five */
+#postTitle{font-size:clamp(27px,3.1vw,50px);max-width:21ch}
+@media (max-width:860px){#postTitle{max-width:none}}
+
+/* registered entity sits above the street address in the footer block */
+.footer-entity{display:block;color:var(--ink);font-weight:600;margin-bottom:6px}
+
+
+/* product detail — applications list */
+.use-list{list-style:none;display:grid;gap:10px;margin:0}
+.use-list li{
+  position:relative;padding-left:26px;font-size:16.5px;line-height:1.6;color:var(--ink-2);
+}
+.use-list li::before{
+  content:"";position:absolute;left:0;top:9px;width:9px;height:9px;border-radius:50%;
+  background:var(--accent);
+}
+.lede{font-size:clamp(16.5px,1.4vw,19px);line-height:1.7;color:var(--ink-2);max-width:62ch;margin-top:14px}
+
+
+/* Breathing room before the footer. Listing pages ended flush against the
+   footer rule because the section carried no bottom padding of its own. */
+.footer{margin-top:clamp(28px,4vw,64px)}
+.products-lede{margin-bottom:clamp(26px,3.4vw,48px)}
+#prodGrid{margin-top:clamp(20px,2.6vw,38px)}
+
+/* Footer brand column had a large dead area under the nav — push the nav
+   down off the phone numbers and close the column with a social row. */
+.footer-nav-label{margin-top:clamp(46px,5.6vw,80px)}
+.footer-social-label{margin-top:clamp(34px,4.2vw,54px)}
+.footer-social{list-style:none;display:flex;gap:12px;margin:0;padding:0}
+.footer-social a{
+  display:grid;place-items:center;width:44px;height:44px;border-radius:50%;
+  border:1px solid var(--line);color:var(--ink-2);background:#fff;
+  transition:background .3s,color .3s,border-color .3s,transform .35s var(--ease-out);
+}
+.footer-social svg{width:18px;height:18px}
+.footer-social a:hover{
+  background:var(--accent);border-color:var(--accent);color:#fff;transform:translateY(-3px);
+}
+
+/* Résumé: upload from the machine, with a link as the fallback */
+.ap-upload{
+  display:grid;place-items:center;gap:4px;text-align:center;
+  border:1.5px dashed #CBD5DA;border-radius:14px;background:#FBFCFC;
+  padding:22px 18px;cursor:pointer;
+  transition:border-color .25s,background .25s;
+}
+.ap-upload:hover,.ap-upload.drag{border-color:var(--accent);background:rgba(248,150,42,.05)}
+.ap-upload svg{width:24px;height:24px;color:var(--slate);margin-bottom:2px}
+.ap-upload b{font-size:14.5px;font-weight:600;color:var(--ink);word-break:break-all}
+.ap-upload small{font-size:12.5px;color:var(--slate);font-weight:400}
+.ap-upload.has-file{border-style:solid;border-color:var(--accent);background:rgba(248,150,42,.06)}
+.ap-upload.has-file svg{color:var(--accent)}
+.ap-or{
+  display:flex;align-items:center;gap:12px;
+  font-size:12.5px;color:var(--slate);text-transform:uppercase;letter-spacing:.08em;
+  margin:2px 0;
+}
+.ap-or::before,.ap-or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+
+/* email sits with the phone numbers but reads a touch smaller */
+.footer-mail{font-size:17px}
+.footer-mail a{word-break:break-all}
+
+/* mobile: vertical reveal */
+@media (max-width:760px){
+  .bhero-frame{width:100vw;height:0}                /* JS drives height here */
+  .bhero-frame img{
+    top:50%;left:0;transform:translateY(-50%);
+    width:var(--vw,100vw);height:100vh;
+  }
+  .bw-l{clip-path:inset(0 0 50% 0)}                 /* upper half rides up   */
+  .bw-r{clip-path:inset(50% 0 0 0)}                 /* lower half rides down */
+}
+
+/* burger -> X while the shared menu is open */
+.subnav-burger span{transition:transform .35s var(--ease)}
+body.menu-open .subnav-burger span:first-child{transform:translateY(3.5px) rotate(45deg)}
+body.menu-open .subnav-burger span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+/* the menu must clear the fixed inner-page app bar */
+body.menu-open .subnav{z-index:1100}
+
+
+/* Touch parity: pressing a menu item fires the same treatment as the
+   desktop hover — orange wipe, white text, dot and arrow — so a tap
+   flashes the effect while the page navigates. */
+.menu-item:active::before{transform:scaleX(1);transition-duration:.18s}
+.menu-item:active{color:#fff}
+.menu-item:active .m-label{transform:translateX(4px)}
+.menu-item:active .m-dot{opacity:1;transition-delay:0s}
+.menu-item:active .m-arrow{opacity:1;transform:none;transition-duration:.18s}
+
+/* Director's portrait uses the shared .plate geometry, so the corner fillet
+   and caption type match the product cards exactly. */
+.dir-media{
+  display:block;overflow:hidden;border-radius:var(--r-card);background:#E8ECEE;
+}
+.dir-media img{width:100%;height:auto;display:block}
+
+.pd-body h2{font-size:clamp(24px,2.6vw,36px);font-weight:700;margin:0 0 14px}
+.pd-body .lede-row{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);margin-bottom:22px}
+@media (max-width:700px){.pd-body .lede-row{grid-template-columns:1fr}}
+.pd-body .article-body{padding:0}
+
+/* ============================================================
+   hero lockup / kicker clearance — the bar is 178px tall and the
+   hero copy is vertically centred, so on a short laptop screen the
+   lockup's tagline lands on top of the kicker. Shrink the lockup
+   and give the copy the bar's height as clearance.
+   ============================================================ */
+@media (min-width:761px) and (max-height:1000px){
+  .nav:not(.scrolled) .brand-full{height:86px}
+  .hero-content{padding-top:var(--nav-h)}
+}
+@media (min-width:761px) and (max-height:820px){
+  .nav:not(.scrolled) .brand-full{height:70px}
 }

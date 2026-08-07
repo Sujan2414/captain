@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — CAPITAN</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/img/capitan-favicon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;100,500;100,600;100,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/admin/admin.css?v=36">
+</head>
+<body>
+
+<div class="sb-scrim" id="sbScrim"></div>
+
+<div class="shell">
+  <!-- ============ sidebar ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <img class="mark" src="/assets/img/capitan-mark.webp?v=5" alt="">
+      <span class="sb-co">
+        <img class="word" src="/assets/img/capitan-wordmark.webp?v=5" alt="Capitan">
+        <i>Admin panel</i>
+      </span>
+    </div>
+
+    <nav class="sb-nav" id="sbNav">
+      <a class="sb-link on" data-view="dashboard" href="#dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="5" rx="2"/><rect x="13" y="10" width="8" height="11" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/></svg>
+        Dashboard
+      </a>
+      <a class="sb-link" data-view="posts" href="#posts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+        Insights
+      </a>
+      <a class="sb-link" data-view="projects" href="#projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m3 9 9-6 9 6-9 6-9-6Z"/><path d="m3 15 9 6 9-6"/></svg>
+        Projects
+      </a>
+      <a class="sb-link" data-view="products" href="#products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>
+        Products
+      </a>
+      <a class="sb-link" data-view="careers" href="#careers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
+        Careers
+      </a>
+      <a class="sb-link" data-view="enquiries" href="#enquiries">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.6L3 21l1.5-5.4A8.5 8.5 0 1 1 21 12Z"/></svg>
+        Enquiries <span class="sb-count" id="cntEnq" hidden>0</span>
+      </a>
+      <a class="sb-link" data-view="applications" href="#applications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+        Applications <span class="sb-count" id="cntApp" hidden>0</span>
+      </a>
+      <a class="sb-link" data-view="users" href="#users" id="navUsers" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="9" cy="8" r="3.6"/><path d="M2.5 20c0-3.6 3-5.8 6.5-5.8s6.5 2.2 6.5 5.8"/><path d="M16.5 5.2a3.4 3.4 0 0 1 0 6.6M18 20c0-2.6-.9-4.4-2.4-5.5"/></svg>
+        Users
+      </a>
+      <a class="sb-link" data-view="subscribers" href="#subscribers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z"/><path d="m3 7 9 6 9-6"/></svg>
+        Subscribers
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ============ main ============ -->
+  <main class="main">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="grow"></div>
+      <button class="btn btn-accent" id="primaryAction" hidden>＋ New</button>
+      <div class="tb-profile">
+        <button class="tb-bell" id="notifBell" aria-label="Notifications" aria-haspopup="menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></svg><span class="dot" id="notifDot" hidden></span>
+        </button>
+        <div class="tb-menu tb-notif" id="notifMenu" role="menu" hidden>
+          <div class="tb-notif-head">Notifications</div>
+          <div id="notifList"><div class="tb-notif-empty">Nothing new right now.</div></div>
+        </div>
+        <span class="tb-sep"></span>
+        <button class="tb-user" id="profileBtn" aria-haspopup="menu" aria-expanded="false">
+          <span class="tb-hi">Hi, <b data-name>there</b></span>
+          <span class="tb-avatar" data-avatar>A</span>
+        </button>
+        <div class="tb-menu" id="profileMenu" role="menu" hidden>
+          <div class="tb-menu-head">
+            <span class="tb-avatar sm" data-avatar>A</span>
+            <div class="tb-menu-id"><b data-name>there</b><small id="userEmail">—</small></div>
+          </div>
+          <button role="menuitem" id="editProfile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/></svg>Edit profile</button>
+          <button role="menuitem" id="menuPhoto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8Z"/><circle cx="12" cy="13" r="3.2"/></svg>Change photo</button>
+          <button role="menuitem" class="danger" id="signOut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3M16 17l5-5-5-5M21 12H9"/></svg>Sign out</button>
+        </div>
+      </div>
+    </div>
+    <div id="viewRoot"><!-- views render here --></div>
+  </main>
+</div>
+
+<!-- drawer -->
+<div class="drawer-scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h2 id="drawerTitle">Edit</h2>
+    <button class="icon-btn" id="drawerClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+
+<!-- confirm -->
+<div class="confirm-scrim" id="confirmScrim">
+  <div class="confirm">
+    <h3 id="confirmTitle">Delete?</h3>
+    <p id="confirmText">This cannot be undone.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" id="confirmNo">Cancel</button>
+      <button class="btn btn-danger" id="confirmYes">Delete</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="avatarFile" accept="image/*" hidden>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/js/sb.js?v=20"></script>
+<script src="/admin/admin.js?v=35"></script>
+</body>
+</html>
