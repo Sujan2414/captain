@@ -448,7 +448,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 .hero-panel{
   position:absolute;right:0;bottom:0;
   background:var(--bg);padding:20px 24px 12px 38px;
-  border-top-left-radius:24px;will-change:transform;
+  border-top-left-radius:40px;will-change:transform;
 }
 .hero-panel h2{
   font-size:clamp(19px,2.19vw,42px);font-weight:600;text-transform:uppercase;
@@ -1101,7 +1101,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   }
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
   /* the clip already insets to the card, so 0 is the card's own corner */
-  .hero-panel{right:0;bottom:0;border-top-left-radius:26px}
+  .hero-panel{right:0;bottom:0;border-top-left-radius:40px}
   /* without these the plate meets the video at a hard right angle */
   .f-tl-of-panel,.f-above-panel{display:block}
   /* pointer-driven affordances never apply on a phone */
