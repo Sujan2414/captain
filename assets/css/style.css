@@ -231,14 +231,27 @@ body.menu-open .slide-menu{transform:none;visibility:visible}
 }
 @keyframes live{70%{box-shadow:0 0 0 9px rgba(40,180,99,0)}100%{box-shadow:0 0 0 0 rgba(40,180,99,0)}}
 .menu-contact:hover .m-live{background:#fff;animation:none}
-/* the menu's own app bar — phones only; desktop menus sit beside the rail */
+/* the home menu's own app bar — phones only. Inner pages already show the
+   fixed subnav above their menu, so this exists on the homepage alone. */
 .menu-brand{
-  display:none;align-items:center;gap:12px;background:var(--dark);
-  padding:calc(16px + env(safe-area-inset-top, 0px)) 22px 16px;
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--dark);
+  padding:calc(14px + env(safe-area-inset-top, 0px)) 20px 14px 22px;
 }
+.mb-lockup{display:flex;align-items:center;gap:12px}
 .menu-brand .mark{height:30px;width:auto}
 .menu-brand .word{height:13px;width:auto;filter:brightness(0) invert(1)}
-@media (max-width:760px){.menu-brand{display:flex}}
+.menu-x{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.12);color:#fff;display:grid;place-items:center;
+}
+.menu-x svg{width:18px;height:18px}
+@media (max-width:760px){
+  .menu-brand{display:flex}
+  /* full-bleed from the very top: the page's transparent bar (and the hero
+     lockup behind it) must not peek above the open menu */
+  .slide-menu{top:0;left:0;width:100%;transform:translateX(-100%)}
+}
 .menu-social{display:none;list-style:none;justify-content:center;gap:16px;padding:30px 0 34px}
 .menu-social a{
   width:44px;height:44px;border-radius:50%;background:#26292E;color:#fff;
@@ -1053,7 +1066,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 
   /* full-width dropdown menu, template style */
   .slide-menu{
-    left:0;right:0;width:100%;top:var(--nav-h);bottom:auto;max-height:calc(100vh - var(--nav-h));
+    /* full sheet from the very top — the menu carries its own app bar, so
+       nothing of the page may peek above it */
+    left:0;right:0;width:100%;top:0;bottom:0;max-height:none;
     transform:translateY(-104%);box-shadow:0 22px 50px rgba(0,0,0,.18);
   }
   body.menu-open .slide-menu{transform:none;visibility:visible}
