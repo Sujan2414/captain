@@ -285,7 +285,7 @@ body.menu-open .slide-menu{transform:none;visibility:visible}
    rest; collapses to a compact horizontal mark + wordmark once scrolled. */
 .brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
 /* at rest: the full stacked lockup incl. the "Pursuit of Excellence" tagline */
-.brand-full{height:138px;width:auto;transition:opacity .3s}
+.brand-full{height:172px;width:auto;transition:opacity .3s}
 .brand-logo,.brand-word-img{display:none;width:auto}
 .brand-logo{height:38px;transition:transform .5s var(--ease-out)}
 .brand-word-img{height:17px;transition:opacity .3s}
@@ -877,17 +877,32 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
    ============================================================ */
 /* Figma 6:2185 — site photo under a flat Cod Gray 80% overlay */
 .section-dark{
-  position:relative;isolation:isolate;color:#C9D2D8;
-  /* `fixed` attachment repaints the whole layer on every scroll frame and is
-     the classic mobile jank source — scroll it with the page instead */
+  position:relative;isolation:isolate;overflow:hidden;color:#C9D2D8;
+  background:#1C1C1C;
+}
+/* The parallax plate. Taller than the section so it can travel without
+   exposing an edge, and moved with translate3d only — `fixed` attachment
+   repaints the whole layer every frame and is the classic mobile jank
+   source, which is why the effect was dropped the first time. */
+.sd-par{
+  position:absolute;left:0;right:0;top:-18%;bottom:-18%;z-index:-2;
   background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1400")
-    center/cover no-repeat scroll;
+    center/cover no-repeat;
+  will-change:transform;transform:translate3d(0,0,0);
+  pointer-events:none;
+}
+@media (max-width:760px){
+  .sd-par{
+    top:-14%;bottom:-14%;
+    background-image:url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=800");
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .sd-par{top:0;bottom:0;transform:none !important}
 }
 @media (max-width:760px){
   /* phones only ever see ~430 CSS px of it */
-  .section-dark{
-    background-image:url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=800");
-  }
+  .section-dark{background-image:none}
 }
 .section-dark::before{
   content:"";position:absolute;inset:0;z-index:-1;
@@ -1045,9 +1060,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
     border-radius:0 26px 26px 0;transform:none;
   }
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
-  .hero-panel{right:14px}
-  /* card is inset 14px, so the caption sits on its corner, not the viewport's */
-  .hero-panel{right:14px;bottom:14px;border-top-left-radius:26px}
+  /* the clip already insets to the card, so 0 is the card's own corner */
+  .hero-panel{right:0;bottom:0;border-top-left-radius:26px}
   .f-tl-of-panel,.f-above-panel{display:none}
   /* pointer-driven affordances never apply on a phone */
   .cursor-dot,.cursor-view,.svc-preview{display:none !important}
@@ -1055,7 +1069,6 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
      itself. Once the hero is done the bar takes the logo back. */
   .nav:not(.scrolled) .brand{opacity:0;visibility:hidden}
   .brand{transition:opacity .35s var(--ease),visibility .35s}
-  .hero-media-frame{border-radius:22px}
   .hero-right{display:none}
   .hero-left{width:100%;min-width:0}
   .hero-title{font-size:clamp(32px,13.5vw,238px)}
@@ -2081,7 +2094,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .why-stage{height:auto !important}
   .why-sticky{
     position:static;height:auto;display:flex;flex-direction:column;
-    gap:clamp(38px,9vw,60px);overflow:visible;place-items:stretch;
+    gap:clamp(30px,7vw,48px);overflow:visible;place-items:stretch;
+    padding-inline:clamp(18px,5vw,30px);
   }
   .why-card{display:none}
   .why-copy{
@@ -2089,8 +2103,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
     text-align:left;pointer-events:auto;
   }
   .why-m-img{
-    display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
-    border-radius:var(--r-card);margin-bottom:clamp(14px,3.5vw,22px);background:#E8ECEE;
+    display:block;width:100%;aspect-ratio:16/10;object-fit:cover;
+    border-radius:var(--r-card);margin-bottom:clamp(12px,3vw,18px);background:#E8ECEE;
   }
   .why-copy h3{font-size:clamp(22px,6vw,30px)}
   .why-copy p{font-size:15.5px;line-height:1.68}
@@ -2241,6 +2255,6 @@ body.menu-open .subnav{z-index:1100}
   .hero-content{padding-top:var(--nav-h)}
 }
 @media (min-width:761px) and (max-height:820px){
-  .nav:not(.scrolled) .brand-full{height:96px}
+  .nav:not(.scrolled) .brand-full{height:126px}
   .hero-content{padding-top:var(--nav-tall)}
 }

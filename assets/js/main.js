@@ -88,17 +88,15 @@
   if (fine) {
     addEventListener("mousemove", (e) => {
       mx = e.clientX; my = e.clientY;
-      document.body.classList.add("cursor-on");
+      const cls = document.body.classList;
+      cls.add("cursor-on");
+      /* Read off the pointer's target rather than binding each card: the blog
+         rail, the product grid and "more materials" are all injected after
+         this runs, so a one-shot querySelectorAll would miss them. */
+      cls.toggle("cursor-viewing", !!e.target.closest?.("[data-cursor-view]"));
+      cls.toggle("cursor-hover", !!e.target.closest?.("[data-cursor]"));
     }, { passive: true });
 
-    document.querySelectorAll("[data-cursor]").forEach((el) => {
-      el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
-      el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
-    });
-    document.querySelectorAll("[data-cursor-view]").forEach((el) => {
-      el.addEventListener("mouseenter", () => document.body.classList.add("cursor-viewing"));
-      el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-viewing"));
-    });
   }
 
   /* ---------------- HERO : curtain reveal ----------------
@@ -184,6 +182,8 @@
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
       heroContent.style.transform = `translateY(${-e * innerHeight * 0.48}px)`;
+      // the clip is already inset by the card gap, so the card edge is right:0
+      heroPanel.style.right = "0px";
     } else {
       // curtains: video edge sweeps left over the bottom strip, text exits left
       const x = seam * (1 - e);
@@ -198,6 +198,9 @@
       heroVideo.style.transform = `translateX(${-x}px)`;
       heroContent.style.transform = `translateX(${-e * innerWidth * 0.92}px)`;
       heroPanel.style.borderTopLeftRadius = "";
+      // the clip carries the frame's +x shift, so pull the caption back by the
+      // same amount to keep it on the viewport's right edge
+      heroPanel.style.right = `${x}px`;
     }
 
     // keep the clip welded to the card so the caption is cut at its edge
@@ -567,4 +570,34 @@
   addEventListener("load", measureAll, { once: true });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureAll);
   requestAnimationFrame(frame);
+
+  /* ---------- parallax on the dark contact band ----------
+     Offset is a fraction of how far the band's centre sits from the
+     viewport's, so the plate drifts against the page. Composited transform
+     only, and it runs on phones as well — the reason it was removed before
+     was background-attachment, not the effect itself. */
+  const parLayers = [...document.querySelectorAll(".sd-par")];
+  if (parLayers.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let parQueued = false;
+    const paintPar = () => {
+      parQueued = false;
+      const mid = innerHeight / 2;
+      for (const el of parLayers) {
+        const host = el.parentElement;
+        const r = host.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > innerHeight + 200) continue;
+        const off = (r.top + r.height / 2 - mid) / (innerHeight + r.height);
+        el.style.transform = `translate3d(0, ${(off * 22).toFixed(2)}%, 0)`;
+      }
+    };
+    const queuePar = () => {
+      if (parQueued) return;
+      parQueued = true;
+      requestAnimationFrame(paintPar);
+    };
+    addEventListener("scroll", queuePar, { passive: true });
+    addEventListener("resize", queuePar, { passive: true });
+    paintPar();
+  }
+
 })();
