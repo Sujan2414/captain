@@ -14,7 +14,7 @@
 <!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=225">
+<link rel="stylesheet" href="/assets/css/style.css?v=226">
 </head>
 <body>
 
@@ -44,7 +44,7 @@
       <img class="word" src="/assets/img/capitan-wordmark.webp?v=5" alt="Capitan">
     </span>
     <button class="menu-x" type="button" aria-label="Close menu"
-      onclick="document.getElementById('navBurger')?.click();document.getElementById('railBtn')?.click()">
+      onclick="(document.getElementById(&quot;subBurger&quot;)||document.getElementById(&quot;navBurger&quot;)||document.getElementById(&quot;railBtn&quot;)).click()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button>
   </div>
