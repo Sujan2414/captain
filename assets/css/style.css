@@ -340,6 +340,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 /* Parallax reveal: the video stays pinned while the next section slides up
    over it, rather than the whole hero scrolling away. */
 #divisions{position:relative;z-index:2;background:var(--bg);margin-top:-100vh}
+/* every flow section over the hero's scroll range must paint its own ground —
+   a transparent one lets the pinned video show (and play) through it */
+.section{position:relative;z-index:2;background:var(--bg)}
 
 .hero-content{
   position:absolute;inset:0;z-index:3;display:flex;align-items:center;
@@ -2272,4 +2275,26 @@ body.menu-open .subnav{z-index:1100}
 @media (min-width:761px) and (max-height:820px){
   .nav:not(.scrolled) .brand-full{height:126px}
   .hero-content{padding-top:var(--nav-tall)}
+}
+
+/* ============================================================
+   iPhone seams: every pinned hero and its overlay pull must use
+   the same viewport unit. svh everywhere on phones.
+   ============================================================ */
+@media (max-width:760px){
+  .bhero{height:320svh}
+  .bhero-sticky{height:100svh}
+  .after-hero{margin-top:-100svh}
+  .pdhero{height:260svh}
+  .pdhero-sticky{height:100svh}
+  .pd-sheet{margin-top:-100svh}
+  /* detail-hero title block: keep it above the browser chrome */
+  .pdhero-content{bottom:max(34px, env(safe-area-inset-bottom, 0px) + 30px)}
+
+  /* the slide menu must scroll on short screens instead of cutting the
+     social row, and the icons clear the home-indicator */
+  .slide-menu{overflow-y:auto;overscroll-behavior:contain}
+  .menu-social{padding-bottom:calc(30px + env(safe-area-inset-bottom, 0px))}
+  .menu-social a{width:40px;height:40px}
+  .menu-social svg{width:18px;height:18px}
 }
