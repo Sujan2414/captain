@@ -579,25 +579,20 @@
      was background-attachment, not the effect itself. */
   const parLayers = [...document.querySelectorAll(".sd-par")];
   if (parLayers.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    let parQueued = false;
     const paintPar = () => {
-      parQueued = false;
+      /* desktop uses real background-attachment:fixed — nothing to drive */
+      if (innerWidth > 760) return;
       for (const el of parLayers) {
         const host = el.parentElement;
         const r = host.getBoundingClientRect();
         if (r.bottom < -200 || r.top > innerHeight + 200) continue;
-        /* pin the plate to the viewport: shifting it by -top is exactly what
-           background-attachment:fixed does, without the repaint */
         el.style.transform = `translate3d(0, ${(-r.top).toFixed(1)}px, 0)`;
       }
     };
-    const queuePar = () => {
-      if (parQueued) return;
-      parQueued = true;
-      requestAnimationFrame(paintPar);
-    };
-    addEventListener("scroll", queuePar, { passive: true });
-    addEventListener("resize", queuePar, { passive: true });
+    /* synchronous on purpose: queueing through rAF paints one frame behind
+       the scroller, which reads as shake */
+    addEventListener("scroll", paintPar, { passive: true });
+    addEventListener("resize", paintPar, { passive: true });
     paintPar();
   }
 

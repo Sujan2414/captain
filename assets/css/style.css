@@ -900,6 +900,16 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   /* no motion: fall back to a plain cover of the band itself */
   .sd-par{height:100%;transform:none !important}
 }
+@media (min-width:761px){
+  /* the original effect: viewport-anchored background, compositor-driven.
+     JS emulation lags a frame behind the scroller and reads as shake —
+     desktop gets the real thing, the JS pin is for phones only. */
+  .sd-par{display:none}
+  .section-dark{
+    background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1400")
+      center/cover no-repeat fixed;
+  }
+}
 @media (max-width:760px){
   /* phones only ever see ~430 CSS px of it */
   .section-dark{background-image:none}
@@ -1046,7 +1056,11 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .hero{height:250vh}
   #divisions{margin-top:-80vh}
   /* stacked mobile hero: logo + text on top, inset video card below */
-  .hero-sticky{background:#fff}
+  /* svh throughout: with vh, the sticky layer runs under the collapsing
+     URL bar and a bar-height strip of it shows at the divisions seam */
+  .hero-sticky{background:#fff;height:100svh}
+  .hero{height:300svh}
+  #divisions{margin-top:-100svh}
   .hero-content{align-items:flex-start;padding-top:34px}
   .hero-logo{display:block;height:112px;width:auto;margin-bottom:20px}
   .hero-kicker{margin-bottom:4px}
