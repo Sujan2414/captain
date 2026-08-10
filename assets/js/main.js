@@ -211,8 +211,9 @@
       c.transform = f.transform;   // radius stays square — see the CSS note
       // the caption draws the card's outer corner itself, so there is exactly
       // one antialiased edge there instead of two stacked ones
-      heroPanel.style.borderBottomRightRadius =
-        `${desktop ? lerp(40, 0, tail) : rad}px`;
+      // desktop: the plate meets the screen edge, so square it. mobile: the
+      // plate really is in the card's rounded corner, so it keeps the radius.
+      heroPanel.style.borderBottomRightRadius = desktop ? "0px" : `${rad}px`;
     }
     // desktop: caption exits sideways with the curtain.
     // mobile:  it stays nested in the video's corner and rides the expansion,
@@ -581,13 +582,13 @@
     let parQueued = false;
     const paintPar = () => {
       parQueued = false;
-      const mid = innerHeight / 2;
       for (const el of parLayers) {
         const host = el.parentElement;
         const r = host.getBoundingClientRect();
         if (r.bottom < -200 || r.top > innerHeight + 200) continue;
-        const off = (r.top + r.height / 2 - mid) / (innerHeight + r.height);
-        el.style.transform = `translate3d(0, ${(off * 22).toFixed(2)}%, 0)`;
+        /* pin the plate to the viewport: shifting it by -top is exactly what
+           background-attachment:fixed does, without the repaint */
+        el.style.transform = `translate3d(0, ${(-r.top).toFixed(1)}px, 0)`;
       }
     };
     const queuePar = () => {

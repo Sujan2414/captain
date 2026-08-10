@@ -112,110 +112,131 @@
   });
 
 
-  /* ---------------- markdown formatting bar ----------------
-     Everything works on the textarea's own selection, so the caret decides
-     where a heading, a list or an image lands — the way a CMS block editor
-     behaves, without swapping the storage format for HTML. */
-  const mdArea = () => $("drawerBody").querySelector('textarea[name="content"]');
-
-  function mdApply(fn) {
-    const ta = mdArea();
-    if (!ta) return;
-    const { selectionStart: s, selectionEnd: e, value: v } = ta;
-    const out = fn({ before: v.slice(0, s), sel: v.slice(s, e), after: v.slice(e), s, e, v });
-    ta.value = out.value;
-    ta.focus();
-    ta.setSelectionRange(out.start, out.end ?? out.start);
-    ta.dispatchEvent(new Event("input", { bubbles: true }));
-  }
-
-  /* line-level marks replace whatever prefix the line already carries, so
-     H2 -> H3 -> paragraph is a toggle rather than a pile-up */
-  const LINE_MARK = { h1: "# ", h2: "## ", h3: "### ", ul: "- ", ol: "1. ", quote: "> ", p: "" };
-  function mdLine(kind) {
-    mdApply(({ v, s, e }) => {
-      const from = v.lastIndexOf("\n", s - 1) + 1;
-      let to = v.indexOf("\n", e);
-      if (to < 0) to = v.length;
-      const mark = LINE_MARK[kind];
-      const lines = v.slice(from, to).split("\n").map((ln, i) => {
-        const bare = ln.replace(/^\s*(?:#{1,6}\s+|[-*]\s+|\d+\.\s+|>\s+)/, "");
-        if (kind === "ol") return `${i + 1}. ${bare}`;
-        return mark + bare;
+  /* ---------------- visual block editor ----------------
+     What you see in the box is the article: real headings, lists, images.
+     Markdown remains the storage format — rendered in on open, serialised
+     back out on every edit — so the site renderer and old posts are safe. */
+  function htmlToMd(root) {
+    const inl = (n) => {
+      let s = "";
+      n.childNodes.forEach((c) => {
+        if (c.nodeType === 3) { s += c.nodeValue; return; }
+        if (c.nodeType !== 1) return;
+        const t = c.tagName;
+        if (t === "BR") { s += "\n"; return; }
+        if (t === "STRONG" || t === "B") { s += "**" + inl(c) + "**"; return; }
+        if (t === "EM" || t === "I") { s += "*" + inl(c) + "*"; return; }
+        if (t === "CODE") { s += "`" + c.textContent + "`"; return; }
+        if (t === "A") { s += "[" + inl(c) + "](" + (c.getAttribute("href") || "") + ")"; return; }
+        if (t === "IMG") { s += "![" + (c.getAttribute("alt") || "") + "](" + (c.getAttribute("src") || "") + ")"; return; }
+        s += inl(c);
       });
-      const block = lines.join("\n");
-      return { value: v.slice(0, from) + block + v.slice(to), start: from, end: from + block.length };
+      return s;
+    };
+    const H = { H1: "# ", H2: "# ", H3: "## ", H4: "### " };
+    const out = [];
+    root.childNodes.forEach((el) => {
+      if (el.nodeType === 3) { const t = el.nodeValue.trim(); if (t) out.push(t); return; }
+      if (el.nodeType !== 1) return;
+      const t = el.tagName;
+      if (H[t]) { const s = inl(el).trim(); if (s) out.push(H[t] + s); return; }
+      if (t === "UL") { out.push([...el.children].map((li) => "- " + inl(li).trim()).join("\n")); return; }
+      if (t === "OL") { out.push([...el.children].map((li, i) => (i + 1) + ". " + inl(li).trim()).join("\n")); return; }
+      if (t === "BLOCKQUOTE") { const s = inl(el).trim(); if (s) out.push(s.split("\n").map((l) => "> " + l).join("\n")); return; }
+      if (t === "HR") { out.push("---"); return; }
+      const s = inl(el).trim();
+      if (s) out.push(s);
     });
+    return out.filter(Boolean).join("\n\n");
   }
 
-  function mdWrap(mark, placeholder) {
-    mdApply(({ before, sel, after }) => {
-      const body = sel || placeholder;
-      return {
-        value: before + mark + body + mark + after,
-        start: before.length + mark.length,
-        end: before.length + mark.length + body.length,
-      };
-    });
-  }
+  function initBlockEditor() {
+    const body = $("drawerBody");
+    const area = body.querySelector(".ed-area");
+    const store = body.querySelector('textarea[name="content"]');
+    if (!area || !store) return;
+    area.innerHTML = MD.renderMarkdown(store.value) || "<p><br></p>";
+    const sync = () => { store.value = htmlToMd(area); };
+    area.addEventListener("input", sync);
 
-  /* images and links go in on their own line so markdown treats them as blocks */
-  function mdInsertBlock(text) {
-    mdApply(({ v, s }) => {
-      const pad = s === 0 || v[s - 1] === "\n" ? "" : "\n\n";
-      const tail = v[s] === "\n" ? "" : "\n\n";
-      const block = pad + text + tail;
-      return { value: v.slice(0, s) + block + v.slice(s), start: s + block.length };
-    });
-  }
-
-  $("drawerBody").addEventListener("click", (e) => {
-    const b = e.target.closest("[data-md]");
-    if (!b) return;
-    e.preventDefault();
-    const kind = b.dataset.md;
-    if (kind in LINE_MARK) return mdLine(kind);
-    if (kind === "bold") return mdWrap("**", "bold text");
-    if (kind === "italic") return mdWrap("*", "italic text");
-    if (kind === "link") {
-      const url = prompt("Link URL");
-      if (!url) return;
-      return mdApply(({ before, sel, after }) => {
-        const label = sel || "link text";
-        const md = `[${label}](${url})`;
-        return { value: before + md + after, start: before.length + md.length };
+    const exec = (cmd, val) => { area.focus(); document.execCommand(cmd, false, val); sync(); };
+    body.querySelectorAll("[data-ed]").forEach((b) => {
+      b.addEventListener("click", (e) => {
+        e.preventDefault();
+        const k = b.dataset.ed;
+        if (k === "h1") return exec("formatBlock", "<h2>");
+        if (k === "h2") return exec("formatBlock", "<h3>");
+        if (k === "h3") return exec("formatBlock", "<h4>");
+        if (k === "p") return exec("formatBlock", "<p>");
+        if (k === "quote") return exec("formatBlock", "<blockquote>");
+        if (k === "bold") return exec("bold");
+        if (k === "italic") return exec("italic");
+        if (k === "ul") return exec("insertUnorderedList");
+        if (k === "ol") return exec("insertOrderedList");
+        if (k === "link") { const u = prompt("Link URL"); if (u) exec("createLink", u); return; }
       });
-    }
-    if (kind === "imgurl") {
-      const url = prompt("Image URL");
-      if (!url) return;
-      const alt = prompt("Describe the image (for screen readers)") || "";
-      return mdInsertBlock(`![${alt}](${url})`);
-    }
-    if (kind === "img") $("mdImgFile").click();
-  });
+    });
 
-  $("drawerBody").addEventListener("change", async (e) => {
-    if (e.target.id !== "mdImgFile") return;
-    const file = e.target.files[0];
-    e.target.value = "";
-    if (!file) return;
-    if (!/^image\//.test(file.type)) return toast("Choose an image file.", "err");
-    if (file.size > 8 * 1024 * 1024) return toast("Keep images under 8 MB.", "err");
-    const btn = $("drawerBody").querySelector('[data-md="img"]');
-    if (btn) { btn.disabled = true; btn.textContent = "Uploading…"; }
-    try {
-      const url = await uploadTo(file, "content");
-      const alt = prompt("Describe the image (for screen readers)") || "";
-      mdInsertBlock(`![${alt}](${url})`);
-      toast("Image inserted", "ok");
-    } catch (err) {
-      toast("Upload failed: " + (err.message || err), "err");
-    } finally {
-      if (btn) { btn.disabled = false; btn.textContent = "↑ Image"; }
-    }
-  });
+    /* ---- the Framer-style gutter "+" ---- */
+    const wrap = body.querySelector(".ed-wrap");
+    const plus = body.querySelector(".ed-plus");
+    const menu = body.querySelector(".ed-menu");
+    const file = body.querySelector("#edImgFile");
+    let anchorBlock = null;
 
+    area.addEventListener("mousemove", (e) => {
+      let el = e.target;
+      while (el && el.parentElement !== area) el = el.parentElement;
+      if (!el) return;
+      anchorBlock = el;
+      const wr = wrap.getBoundingClientRect(), br = el.getBoundingClientRect();
+      plus.style.top = (br.bottom - wr.top - 13) + "px";
+      plus.hidden = false;
+    });
+    wrap.addEventListener("mouseleave", () => { plus.hidden = true; menu.hidden = true; });
+
+    plus.addEventListener("click", (e) => {
+      e.stopPropagation();
+      menu.style.top = plus.style.top;
+      menu.hidden = !menu.hidden;
+    });
+    document.addEventListener("click", (e) => {
+      if (!menu.hidden && !menu.contains(e.target) && e.target !== plus) menu.hidden = true;
+    });
+
+    const insertImage = (url, alt) => {
+      const p = document.createElement("p");
+      const img = document.createElement("img");
+      img.src = url; img.alt = alt || "";
+      p.appendChild(img);
+      if (anchorBlock && anchorBlock.parentElement === area) anchorBlock.after(p);
+      else area.appendChild(p);
+      sync();
+      toast("Image added", "ok");
+    };
+
+    menu.querySelector("[data-ins=upload]").addEventListener("click", () => { menu.hidden = true; file.click(); });
+    menu.querySelector("[data-ins=url]").addEventListener("click", () => {
+      menu.hidden = true;
+      const u = prompt("Image URL");
+      if (!u) return;
+      insertImage(u, prompt("Describe the image (for screen readers)") || "");
+    });
+    file.addEventListener("change", async () => {
+      const f = file.files[0];
+      file.value = "";
+      if (!f) return;
+      if (!/^image\//.test(f.type)) return toast("Choose an image file.", "err");
+      if (f.size > 8 * 1024 * 1024) return toast("Keep images under 8 MB.", "err");
+      toast("Uploading image…");
+      try {
+        const url = await uploadTo(f, "content");
+        insertImage(url, prompt("Describe the image (for screen readers)") || "");
+      } catch (err) {
+        toast("Upload failed: " + (err.message || err), "err");
+      }
+    });
+  }
   const slugify = (s) =>
     s.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 
@@ -731,31 +752,32 @@
         </div>
         ${fieldHTML("Excerpt", `<textarea name="excerpt" rows="2" placeholder="One–two lines shown on cards">${esc(row.excerpt || "")}</textarea>`)}
         ${imageF("cover_url", row.cover_url, "Card and hero image")}
-        <div>
-          <div class="md-tabs">
-            <button type="button" class="md-tab on" data-tab="write">Write</button>
-            <button type="button" class="md-tab" data-tab="preview">Preview</button>
+        <div class="field">Content
+          <div class="ed-wrap">
+            <div class="md-bar">
+              <button type="button" data-ed="h1" title="Heading">H1</button>
+              <button type="button" data-ed="h2" title="Subheading">H2</button>
+              <button type="button" data-ed="h3" title="Small heading">H3</button>
+              <button type="button" data-ed="p" title="Paragraph">P</button>
+              <i class="md-sep"></i>
+              <button type="button" data-ed="bold" title="Bold"><b>B</b></button>
+              <button type="button" data-ed="italic" title="Italic"><em>I</em></button>
+              <i class="md-sep"></i>
+              <button type="button" data-ed="ul" title="Bullet list">• List</button>
+              <button type="button" data-ed="ol" title="Numbered list">1. List</button>
+              <button type="button" data-ed="quote" title="Quote">❝</button>
+              <i class="md-sep"></i>
+              <button type="button" data-ed="link" title="Link">Link</button>
+            </div>
+            <div class="ed-area" contenteditable="true" spellcheck="true"></div>
+            <button type="button" class="ed-plus" hidden title="Insert an image here">＋</button>
+            <div class="ed-menu" hidden>
+              <button type="button" data-ins="upload">Upload image…</button>
+              <button type="button" data-ins="url">Image by URL…</button>
+            </div>
+            <input type="file" id="edImgFile" accept="image/*" hidden>
           </div>
-          <div class="md-bar" id="mdBar">
-            <button type="button" data-md="h1" title="Heading 1">H1</button>
-            <button type="button" data-md="h2" title="Heading 2">H2</button>
-            <button type="button" data-md="h3" title="Heading 3">H3</button>
-            <button type="button" data-md="p" title="Paragraph">P</button>
-            <i class="md-sep"></i>
-            <button type="button" data-md="bold" title="Bold"><b>B</b></button>
-            <button type="button" data-md="italic" title="Italic"><em>I</em></button>
-            <i class="md-sep"></i>
-            <button type="button" data-md="ul" title="Bullet list">• List</button>
-            <button type="button" data-md="ol" title="Numbered list">1. List</button>
-            <button type="button" data-md="quote" title="Quote">❝</button>
-            <i class="md-sep"></i>
-            <button type="button" data-md="link" title="Link">Link</button>
-            <button type="button" data-md="imgurl" title="Image by URL">Image URL</button>
-            <button type="button" data-md="img" title="Upload an image here">↑ Image</button>
-            <input type="file" id="mdImgFile" accept="image/*" hidden>
-          </div>
-          <textarea name="content" rows="14" style="width:100%;border:1px solid #DCE2E5;border-radius:0 11px 11px 11px;padding:14px;font:13.5px/1.6 ui-monospace,Consolas,monospace;color:var(--ink)" placeholder="Markdown — ## headings, **bold**, - lists, > quotes, [links](https://…)">${esc(row.content || "")}</textarea>
-          <div class="md-preview" id="mdPreview" hidden></div>
+          <textarea name="content" hidden>${esc(row.content || "")}</textarea>
         </div>
         <label class="switch"><input type="checkbox" name="published" ${row.published ? "checked" : ""}><span class="track"></span> Published (visible on the site)</label>`;
       $("drawerFoot").innerHTML = `
@@ -771,15 +793,7 @@
       slugInp.addEventListener("input", () => (slugTouched = true));
       titleInp.addEventListener("input", () => { if (!slugTouched) slugInp.value = slugify(titleInp.value); });
 
-      body.querySelectorAll(".md-tab").forEach((t) =>
-        t.addEventListener("click", () => {
-          body.querySelectorAll(".md-tab").forEach((x) => x.classList.toggle("on", x === t));
-          const preview = t.dataset.tab === "preview";
-          body.querySelector("[name=content]").hidden = preview;
-          const pv = $("mdPreview");
-          pv.hidden = !preview;
-          if (preview) pv.innerHTML = MD.renderMarkdown(body.querySelector("[name=content]").value);
-        }));
+      initBlockEditor();
 
       $("dCancel").onclick = closeDrawer;
       if (!isNew) $("dDel").onclick = () => { closeDrawer(); this.del(row); };

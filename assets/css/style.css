@@ -885,7 +885,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
    repaints the whole layer every frame and is the classic mobile jank
    source, which is why the effect was dropped the first time. */
 .sd-par{
-  position:absolute;left:0;right:0;top:-18%;bottom:-18%;z-index:-2;
+  position:absolute;left:0;right:0;top:0;height:100vh;z-index:-2;
   background:#1C1C1C url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=1400")
     center/cover no-repeat;
   will-change:transform;transform:translate3d(0,0,0);
@@ -893,12 +893,12 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 }
 @media (max-width:760px){
   .sd-par{
-    top:-14%;bottom:-14%;
     background-image:url("https://images.pexels.com/photos/4513940/pexels-photo-4513940.jpeg?auto=compress&cs=tinysrgb&w=800");
   }
 }
 @media (prefers-reduced-motion:reduce){
-  .sd-par{top:0;bottom:0;transform:none !important}
+  /* no motion: fall back to a plain cover of the band itself */
+  .sd-par{height:100%;transform:none !important}
 }
 @media (max-width:760px){
   /* phones only ever see ~430 CSS px of it */
@@ -1062,7 +1062,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
   /* the clip already insets to the card, so 0 is the card's own corner */
   .hero-panel{right:0;bottom:0;border-top-left-radius:26px}
-  .f-tl-of-panel,.f-above-panel{display:none}
+  /* without these the plate meets the video at a hard right angle */
+  .f-tl-of-panel,.f-above-panel{display:block}
   /* pointer-driven affordances never apply on a phone */
   .cursor-dot,.cursor-view,.svc-preview{display:none !important}
   /* during the hero the bar is just the burger; the lockup is in the hero

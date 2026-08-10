@@ -593,6 +593,42 @@ table.grid{width:100%;border-collapse:collapse;font-size:14px}
 .md-tabs{display:flex;gap:6px;margin-bottom:-8px}
 /* formatting bar — sits between the tabs and the editor */
 .md-tabs + .md-bar{margin-top:8px}
+
+/* ---- visual block editor ---- */
+.ed-wrap{position:relative}
+.ed-area{
+  border:1px solid #DCE2E5;border-radius:0 0 11px 11px;background:#fff;
+  min-height:340px;max-height:520px;overflow-y:auto;
+  padding:18px 22px 22px 44px;
+  font-size:15px;line-height:1.7;color:#3C4A52;outline:none;
+}
+.ed-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(248,150,42,.12)}
+.ed-area h2{font-size:22px;font-weight:700;color:var(--ink);margin:18px 0 8px}
+.ed-area h3{font-size:18px;font-weight:700;color:var(--ink);margin:16px 0 6px}
+.ed-area h4{font-size:15.5px;font-weight:700;color:var(--ink);margin:14px 0 5px;text-transform:uppercase;letter-spacing:.03em}
+.ed-area p{margin:0 0 12px}
+.ed-area ul,.ed-area ol{margin:0 0 12px;padding-left:22px}
+.ed-area blockquote{border-left:3px solid var(--accent);padding:2px 0 2px 14px;color:var(--ink);margin:0 0 12px}
+.ed-area img{max-width:100%;border-radius:12px;margin:4px 0}
+.ed-area a{color:var(--accent-deep);text-decoration:underline}
+.ed-area code{background:#EEF0F1;border-radius:6px;padding:2px 7px;font-size:.92em}
+
+/* the gutter "+" and its little menu */
+.ed-plus{
+  position:absolute;left:9px;width:26px;height:26px;border-radius:50%;
+  background:var(--dark);color:#fff;font-size:15px;line-height:1;
+  display:grid;place-items:center;z-index:6;
+  box-shadow:0 4px 10px rgba(16,24,32,.25);
+  transition:background .18s,transform .18s;
+}
+.ed-plus:hover{background:var(--accent);transform:scale(1.08)}
+.ed-menu{
+  position:absolute;left:42px;z-index:7;min-width:190px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 14px 34px rgba(16,24,32,.16);padding:6px;display:grid;gap:2px;
+}
+.ed-menu button{padding:9px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--ink);text-align:left}
+.ed-menu button:hover{background:#F3F5F6}
 .md-bar{
   display:flex;flex-wrap:wrap;align-items:center;gap:4px;
   border:1px solid #DCE2E5;border-bottom:0;border-radius:11px 11px 0 0;
