@@ -14,7 +14,7 @@
 <!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=220">
+<link rel="stylesheet" href="/assets/css/style.css?v=223">
 </head>
 <body>
 
@@ -38,6 +38,10 @@
 
 <div class="menu-scrim" id="menuScrim" hidden></div>
 <nav class="slide-menu" id="slideMenu" aria-label="Overlay menu" inert>
+  <div class="menu-brand" aria-hidden="true">
+    <img class="mark" src="/assets/img/capitan-mark.webp?v=5" alt="">
+    <img class="word" src="/assets/img/capitan-wordmark.webp?v=5" alt="">
+  </div>
   <a class="menu-item" href="#home"><span class="m-label">Home</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
   <a class="menu-item" href="/about"><span class="m-label">About</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
   <a class="menu-item" href="/divisions"><span class="m-label">Divisions</span><span class="m-dot"></span><span class="m-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
@@ -605,7 +609,7 @@
 
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/js/sb.js?v=4"></script>
-<script src="/assets/js/main.js?v=219"></script>
+<script src="/assets/js/main.js?v=222"></script>
 <script src="/assets/js/home-data.js?v=2" defer></script>
 </body>
 </html>

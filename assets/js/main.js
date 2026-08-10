@@ -209,11 +209,16 @@
       const c = heroPanelClip.style;
       c.left = f.left; c.right = f.right; c.top = f.top; c.bottom = f.bottom;
       c.transform = f.transform;   // radius stays square — see the CSS note
+      if (!desktop) {
+        // same composition as desktop: the plate sits in the viewport's own
+        // corner and hangs over the card's inset strip, fillets welding it in
+        c.right = "0px"; c.bottom = "0px";
+      }
       // the caption draws the card's outer corner itself, so there is exactly
       // one antialiased edge there instead of two stacked ones
       // desktop: the plate meets the screen edge, so square it. mobile: the
       // plate really is in the card's rounded corner, so it keeps the radius.
-      heroPanel.style.borderBottomRightRadius = desktop ? "0px" : `${rad}px`;
+      heroPanel.style.borderBottomRightRadius = "0px";
     }
     // desktop: caption exits sideways with the curtain.
     // mobile:  it stays nested in the video's corner and rides the expansion,
