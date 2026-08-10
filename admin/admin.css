@@ -591,6 +591,24 @@ table.grid{width:100%;border-collapse:collapse;font-size:14px}
 .switch input:checked + .track::after{transform:translateX(18px)}
 
 .md-tabs{display:flex;gap:6px;margin-bottom:-8px}
+/* formatting bar — sits between the tabs and the editor */
+.md-tabs + .md-bar{margin-top:8px}
+.md-bar{
+  display:flex;flex-wrap:wrap;align-items:center;gap:4px;
+  border:1px solid #DCE2E5;border-bottom:0;border-radius:11px 11px 0 0;
+  background:#FBFCFC;padding:7px 9px;
+}
+.md-bar button{
+  min-width:30px;height:28px;padding:0 8px;border-radius:7px;
+  font-size:12.5px;font-weight:600;color:var(--ink-2);
+  transition:background .18s,color .18s;
+}
+.md-bar button:hover{background:#EDF0F2;color:var(--ink)}
+.md-bar button:disabled{opacity:.5}
+.md-bar button[data-md="img"]{color:var(--accent-deep)}
+.md-sep{width:1px;height:18px;background:var(--line);margin:0 3px}
+/* the editor tucks under the bar */
+.md-bar + textarea{border-radius:0 0 11px 11px !important;border-top-color:#DCE2E5 !important}
 .md-tab{
   font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:9px 9px 0 0;color:var(--ink-2);
 }

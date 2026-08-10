@@ -65,26 +65,156 @@
     if (error) throw error;
     return sb.storage.from("media").getPublicUrl(path).data.publicUrl;
   }
-  function wireUpload(btnId, fileId, urlInputName, previewId) {
-    $(btnId).addEventListener("click", () => $(fileId).click());
-    $(fileId).addEventListener("change", async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const btn = $(btnId);
-      btn.disabled = true; btn.textContent = "Uploading…";
-      try {
-        const url = await uploadTo(file, "covers");
-        const inp = document.querySelector(`#drawerBody [name="${urlInputName}"]`);
-        inp.value = url;
-        $(previewId).src = url;
-        toast("Image uploaded", "ok");
-      } catch (err) {
-        toast("Upload failed: " + err.message, "err");
-      } finally {
-        btn.disabled = false; btn.textContent = "Upload";
-      }
+  /* An image field: preview, the URL itself, and an Upload button that puts a
+     file from the machine into the media bucket and writes the URL back. */
+  function imageF(name, val = "", ph = "") {
+    const label = name.replace(/_url$/, "").replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase()) + " image";
+    return fieldHTML(label, `
+      <div class="upload-row">
+        <img data-up-prev="${name}" src="${esc(String(val || ""))}" alt="" onerror="this.style.visibility='hidden'">
+        <input name="${name}" value="${esc(String(val || ""))}" placeholder="${ph || "https://… or upload →"}" style="flex:1">
+        <button type="button" class="btn btn-ghost btn-sm" data-up-btn="${name}">Upload</button>
+        <input type="file" data-up-file="${name}" accept="image/*" hidden>
+      </div>`);
+  }
+
+  /* Delegated on the drawer, so every drawer built later is covered without
+     having to remember to wire each field up. */
+  $("drawerBody").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-up-btn]");
+    if (!btn) return;
+    const file = $("drawerBody").querySelector(`[data-up-file="${btn.dataset.upBtn}"]`);
+    if (file) file.click();
+  });
+  $("drawerBody").addEventListener("change", async (e) => {
+    const input = e.target.closest("[data-up-file]");
+    if (!input || !input.files[0]) return;
+    const key = input.dataset.upFile;
+    const body = $("drawerBody");
+    const btn = body.querySelector(`[data-up-btn="${key}"]`);
+    const field = body.querySelector(`[name="${key}"]`);
+    const prev = body.querySelector(`[data-up-prev="${key}"]`);
+    const file = input.files[0];
+    input.value = "";
+    if (!/^image\//.test(file.type)) return toast("Choose an image file.", "err");
+    if (file.size > 8 * 1024 * 1024) return toast("Keep images under 8 MB.", "err");
+    if (btn) { btn.disabled = true; btn.textContent = "Uploading…"; }
+    try {
+      const url = await uploadTo(file, "covers");
+      if (field) field.value = url;
+      if (prev) { prev.src = url; prev.style.visibility = ""; }
+      toast("Image uploaded", "ok");
+    } catch (err) {
+      toast("Upload failed: " + (err.message || err), "err");
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "Upload"; }
+    }
+  });
+
+
+  /* ---------------- markdown formatting bar ----------------
+     Everything works on the textarea's own selection, so the caret decides
+     where a heading, a list or an image lands — the way a CMS block editor
+     behaves, without swapping the storage format for HTML. */
+  const mdArea = () => $("drawerBody").querySelector('textarea[name="content"]');
+
+  function mdApply(fn) {
+    const ta = mdArea();
+    if (!ta) return;
+    const { selectionStart: s, selectionEnd: e, value: v } = ta;
+    const out = fn({ before: v.slice(0, s), sel: v.slice(s, e), after: v.slice(e), s, e, v });
+    ta.value = out.value;
+    ta.focus();
+    ta.setSelectionRange(out.start, out.end ?? out.start);
+    ta.dispatchEvent(new Event("input", { bubbles: true }));
+  }
+
+  /* line-level marks replace whatever prefix the line already carries, so
+     H2 -> H3 -> paragraph is a toggle rather than a pile-up */
+  const LINE_MARK = { h1: "# ", h2: "## ", h3: "### ", ul: "- ", ol: "1. ", quote: "> ", p: "" };
+  function mdLine(kind) {
+    mdApply(({ v, s, e }) => {
+      const from = v.lastIndexOf("\n", s - 1) + 1;
+      let to = v.indexOf("\n", e);
+      if (to < 0) to = v.length;
+      const mark = LINE_MARK[kind];
+      const lines = v.slice(from, to).split("\n").map((ln, i) => {
+        const bare = ln.replace(/^\s*(?:#{1,6}\s+|[-*]\s+|\d+\.\s+|>\s+)/, "");
+        if (kind === "ol") return `${i + 1}. ${bare}`;
+        return mark + bare;
+      });
+      const block = lines.join("\n");
+      return { value: v.slice(0, from) + block + v.slice(to), start: from, end: from + block.length };
     });
   }
+
+  function mdWrap(mark, placeholder) {
+    mdApply(({ before, sel, after }) => {
+      const body = sel || placeholder;
+      return {
+        value: before + mark + body + mark + after,
+        start: before.length + mark.length,
+        end: before.length + mark.length + body.length,
+      };
+    });
+  }
+
+  /* images and links go in on their own line so markdown treats them as blocks */
+  function mdInsertBlock(text) {
+    mdApply(({ v, s }) => {
+      const pad = s === 0 || v[s - 1] === "\n" ? "" : "\n\n";
+      const tail = v[s] === "\n" ? "" : "\n\n";
+      const block = pad + text + tail;
+      return { value: v.slice(0, s) + block + v.slice(s), start: s + block.length };
+    });
+  }
+
+  $("drawerBody").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-md]");
+    if (!b) return;
+    e.preventDefault();
+    const kind = b.dataset.md;
+    if (kind in LINE_MARK) return mdLine(kind);
+    if (kind === "bold") return mdWrap("**", "bold text");
+    if (kind === "italic") return mdWrap("*", "italic text");
+    if (kind === "link") {
+      const url = prompt("Link URL");
+      if (!url) return;
+      return mdApply(({ before, sel, after }) => {
+        const label = sel || "link text";
+        const md = `[${label}](${url})`;
+        return { value: before + md + after, start: before.length + md.length };
+      });
+    }
+    if (kind === "imgurl") {
+      const url = prompt("Image URL");
+      if (!url) return;
+      const alt = prompt("Describe the image (for screen readers)") || "";
+      return mdInsertBlock(`![${alt}](${url})`);
+    }
+    if (kind === "img") $("mdImgFile").click();
+  });
+
+  $("drawerBody").addEventListener("change", async (e) => {
+    if (e.target.id !== "mdImgFile") return;
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!/^image\//.test(file.type)) return toast("Choose an image file.", "err");
+    if (file.size > 8 * 1024 * 1024) return toast("Keep images under 8 MB.", "err");
+    const btn = $("drawerBody").querySelector('[data-md="img"]');
+    if (btn) { btn.disabled = true; btn.textContent = "Uploading…"; }
+    try {
+      const url = await uploadTo(file, "content");
+      const alt = prompt("Describe the image (for screen readers)") || "";
+      mdInsertBlock(`![${alt}](${url})`);
+      toast("Image inserted", "ok");
+    } catch (err) {
+      toast("Upload failed: " + (err.message || err), "err");
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = "↑ Image"; }
+    }
+  });
 
   const slugify = (s) =>
     s.toLowerCase().replace(/['’]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
@@ -600,17 +730,29 @@
           ${inputF("category", row.category, "Materials / Industry / Operations")}
         </div>
         ${fieldHTML("Excerpt", `<textarea name="excerpt" rows="2" placeholder="One–two lines shown on cards">${esc(row.excerpt || "")}</textarea>`)}
-        ${fieldHTML("Cover image", `
-          <div class="upload-row">
-            <img id="coverPreview" src="${row.cover_url || ""}" alt="" onerror="this.style.visibility='hidden'">
-            <input name="cover_url" value="${esc(row.cover_url || "")}" placeholder="https://… or upload →" style="flex:1">
-            <button type="button" class="btn btn-ghost btn-sm" id="coverUpBtn">Upload</button>
-            <input type="file" id="coverFile" accept="image/*" hidden>
-          </div>`)}
+        ${imageF("cover_url", row.cover_url, "Card and hero image")}
         <div>
           <div class="md-tabs">
             <button type="button" class="md-tab on" data-tab="write">Write</button>
             <button type="button" class="md-tab" data-tab="preview">Preview</button>
+          </div>
+          <div class="md-bar" id="mdBar">
+            <button type="button" data-md="h1" title="Heading 1">H1</button>
+            <button type="button" data-md="h2" title="Heading 2">H2</button>
+            <button type="button" data-md="h3" title="Heading 3">H3</button>
+            <button type="button" data-md="p" title="Paragraph">P</button>
+            <i class="md-sep"></i>
+            <button type="button" data-md="bold" title="Bold"><b>B</b></button>
+            <button type="button" data-md="italic" title="Italic"><em>I</em></button>
+            <i class="md-sep"></i>
+            <button type="button" data-md="ul" title="Bullet list">• List</button>
+            <button type="button" data-md="ol" title="Numbered list">1. List</button>
+            <button type="button" data-md="quote" title="Quote">❝</button>
+            <i class="md-sep"></i>
+            <button type="button" data-md="link" title="Link">Link</button>
+            <button type="button" data-md="imgurl" title="Image by URL">Image URL</button>
+            <button type="button" data-md="img" title="Upload an image here">↑ Image</button>
+            <input type="file" id="mdImgFile" accept="image/*" hidden>
           </div>
           <textarea name="content" rows="14" style="width:100%;border:1px solid #DCE2E5;border-radius:0 11px 11px 11px;padding:14px;font:13.5px/1.6 ui-monospace,Consolas,monospace;color:var(--ink)" placeholder="Markdown — ## headings, **bold**, - lists, > quotes, [links](https://…)">${esc(row.content || "")}</textarea>
           <div class="md-preview" id="mdPreview" hidden></div>
@@ -638,7 +780,6 @@
           pv.hidden = !preview;
           if (preview) pv.innerHTML = MD.renderMarkdown(body.querySelector("[name=content]").value);
         }));
-      wireUpload("coverUpBtn", "coverFile", "cover_url", "coverPreview");
 
       $("dCancel").onclick = closeDrawer;
       if (!isNew) $("dDel").onclick = () => { closeDrawer(); this.del(row); };
@@ -733,13 +874,7 @@
           ${inputF("tag", row.tag, "Mining / C'Square / Infrastructure / Realty")}
           ${inputF("meta", row.meta, "Short subtitle line")}
         </div>
-        ${fieldHTML("Image", `
-          <div class="upload-row">
-            <img id="coverPreview" src="${row.image_url || ""}" alt="" onerror="this.style.visibility='hidden'">
-            <input name="image_url" value="${esc(row.image_url || "")}" placeholder="https://… or upload →" style="flex:1">
-            <button type="button" class="btn btn-ghost btn-sm" id="coverUpBtn">Upload</button>
-            <input type="file" id="coverFile" accept="image/*" hidden>
-          </div>`)}
+        imageF("image_url", row.image_url, "Card and hero image")}
         ${fieldHTML("Summary (one line, shown on the project hero)", `<textarea name="summary" rows="2">${esc(row.summary || "")}</textarea>`)}
         <div class="two-col">
           ${inputF("year", row.year || "", "e.g. 2021 — 2024")}
@@ -760,10 +895,10 @@
         ${fieldHTML("Objective", `<textarea name="objective" rows="3">${esc(row.objective || "")}</textarea>`)}
         ${fieldHTML("Challenge", `<textarea name="challenge" rows="3">${esc(row.challenge || "")}</textarea>`)}
         ${fieldHTML("Result", `<textarea name="result" rows="3">${esc(row.result || "")}</textarea>`)}
-        ${inputF("gallery_url", row.gallery_url || "", "Wide image under the Intro")}
+        ${imageF("gallery_url", row.gallery_url, "Wide image under the Intro")}
         <div class="two-col">
-          ${inputF("gallery2_url", row.gallery2_url || "", "Paired image A")}
-          ${inputF("gallery3_url", row.gallery3_url || "", "Paired image B")}
+          ${imageF("gallery2_url", row.gallery2_url, "Paired image A")}
+          ${imageF("gallery3_url", row.gallery3_url, "Paired image B")}
         </div>
         ${fieldHTML("Extra body (markdown, optional)", `<textarea name="body" rows="6" style="font:13px/1.6 ui-monospace,Consolas,monospace">${esc(row.body || "")}</textarea>`)}
         <div class="two-col">
@@ -775,7 +910,6 @@
         <div class="grow"></div>
         <button class="btn btn-ghost" id="dCancel">Cancel</button>
         <button class="btn btn-accent" id="dSave">${isNew ? "Create" : "Save"}</button>`;
-      wireUpload("coverUpBtn", "coverFile", "image_url", "coverPreview");
       $("dCancel").onclick = closeDrawer;
       $("dSave").onclick = async () => {
         const body = $("drawerBody");
@@ -1105,8 +1239,8 @@
         ${inputF("slug", row.slug, "plaster-sand")}
         ${inputF("tag", row.tag || "", "Fine · Silt-free")}
         ${fieldHTML("Summary (one line, shown on the hero and cards)", `<textarea name="summary" rows="2">${esc(row.summary || "")}</textarea>`)}
-        ${inputF("cover_url", row.cover_url || "", "Card and hero image")}
-        ${inputF("gallery_url", row.gallery_url || "", "Wide image under the overview")}
+        ${imageF("cover_url", row.cover_url, "Card and hero image")}
+        ${imageF("gallery_url", row.gallery_url, "Wide image under the overview")}
         ${fieldHTML("Overview", `<textarea name="intro" rows="3">${esc(row.intro || "")}</textarea>`)}
         ${fieldHTML("Specifications — one per line, <b>Label: Value</b>", `<textarea name="specs" rows="5" style="font:13px/1.7 ui-monospace,Consolas,monospace">${esc(specsToText(row.specs))}</textarea>`)}
         ${fieldHTML("Where it's used — one per line", `<textarea name="uses" rows="4">${esc(listToText(row.uses))}</textarea>`)}
