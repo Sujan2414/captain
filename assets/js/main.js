@@ -178,7 +178,9 @@
       heroVideo.style.transform = `scale(${lerp(1.14, 1, e)})`;
       // keep the caption glued to the card's corner as the gap closes, so its
       // concave fillets stay welded to the video edge on the way down
-      heroPanel.style.borderTopLeftRadius = `${lerp(38, 42, tail)}px`;
+      // the corner is tied to --fillet in CSS so it stays in step with the
+      // concave fillets either side of it — don't override it from here
+      heroPanel.style.borderTopLeftRadius = "";
       // text moves up by exactly the same pixels the frame-top drops,
       // so they travel together like Bright Edge
       heroContent.style.transform = `translateY(${-e * innerHeight * 0.48}px)`;

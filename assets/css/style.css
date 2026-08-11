@@ -459,8 +459,11 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 .hero-panel .panel-clip{display:block;overflow:hidden}
 .hero-panel .panel-clip h2{will-change:transform}
 .hero-panel .fillet{--c:var(--bg)}
-.f-tl-of-panel{left:calc(-1 * var(--fillet) + 1px);bottom:0;background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
-.f-above-panel{right:0;top:calc(-1 * var(--fillet) + 1px);background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+/* Positioned exactly on the corner, like .plate does — the old +1px nudge
+   pushed each quarter-disc off tangent, and the join showed as a small spike
+   where the concave curve met the plate corner instead of flowing into it. */
+.f-tl-of-panel{left:calc(-1 * var(--fillet));bottom:0;background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
+.f-above-panel{right:0;top:calc(-1 * var(--fillet));background:radial-gradient(circle at 0 0,transparent calc(var(--fillet) - .5px),var(--c) var(--fillet))}
 
 /* ============================================================
    DIVISIONS — numbered rows, accordion, cursor-follow preview
@@ -1112,7 +1115,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   }
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
   /* the clip already insets to the card, so 0 is the card's own corner */
-  .hero-panel{right:0;bottom:0;border-top-left-radius:40px}
+  /* same rule as .plate: the convex corner matches the concave fillets
+     beside it, or the curve breaks where they meet */
+  .hero-panel{right:0;bottom:0;border-top-left-radius:var(--fillet)}
   /* without these the plate meets the video at a hard right angle */
   .f-tl-of-panel,.f-above-panel{display:block}
   /* pointer-driven affordances never apply on a phone */
@@ -1748,8 +1753,8 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   /* phones keep the app bar pinned over the hero from the very top */
   .bpage .subnav{height:var(--nav-h);transform:none}
   .bpage .subnav-links{inset:64px 0 auto 0}
-  .bpage .subnav .brand-logo{height:38px}
-  .bpage .subnav .brand-word-img{height:17px}
+  .bpage .subnav .brand-logo{height:32px}
+  .bpage .subnav .brand-word-img{height:15px}
   .bpage .subnav-burger{width:40px;height:40px}
   /* the bar left the flow — give its height back to the content */
   /* sections carry their own spacing — white padding here showed as a
@@ -2366,9 +2371,9 @@ body.menu-open .subnav{z-index:1100}
   body.menu-open .nav .nav-inner{height:100%;padding-block:0;justify-content:space-between}
   body.menu-open .nav .brand{display:flex;opacity:1;visibility:visible}
   body.menu-open .nav .brand-full{display:none}
-  body.menu-open .nav .brand-logo{display:block;height:38px;width:auto}
+  body.menu-open .nav .brand-logo{display:block;height:32px;width:auto}
   body.menu-open .nav .brand-word-img{
-    display:block;height:17px;width:auto;filter:brightness(0) invert(1);
+    display:block;height:15px;width:auto;filter:brightness(0) invert(1);
   }
   body.menu-open .nav-burger{
     background:#fff;border-radius:50%;width:44px;height:44px;
@@ -2457,4 +2462,16 @@ body.menu-open .subnav{z-index:1100}
   body.menu-open .nav, body.menu-open .subnav, .bpage .subnav{z-index:1300}
   .slide-menu{z-index:1200}
   .menu-scrim{z-index:1150}
+}
+
+@media (max-width:760px){
+  /* The homepage bar when scrolled is the reference for every app bar on a
+     phone — 32px mark, 15px wordmark, --nav-h tall. Anything that sets its
+     own size drifts out of step the moment one of them changes. */
+  .nav.scrolled .brand-logo,
+  .bpage .subnav .brand-logo,
+  body.menu-open .nav .brand-logo{height:32px}
+  .nav.scrolled .brand-word-img,
+  .bpage .subnav .brand-word-img,
+  body.menu-open .nav .brand-word-img{height:15px}
 }
