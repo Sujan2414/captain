@@ -150,7 +150,7 @@
     const desktop = innerWidth > 760;
     // hoisted: the caption-clip sync below reads these after the branch
     const gap = lerp(14, 0, tail);
-    const rad = lerp(26, 0, tail);
+    const rad = lerp(46, 0, tail);
     const edgeX = desktop ? seam * (1 - e) : innerWidth;
     const heroDone = p > 0.985;
     if (!desktop) {
@@ -174,8 +174,10 @@
          as the card grows, which reads as an accidental zoom-in, so ease a
          counter push-out over it — the motion then feels deliberate and the
          end state settles on the natural framing. */
+      // the video is pinned to the viewport in CSS and must not be touched
+      // here — scaling it was what turned the reveal into a zoom
       heroVideo.style.top = "";
-      heroVideo.style.transform = `scale(${lerp(1.14, 1, e)})`;
+      heroVideo.style.transform = "";
       // keep the caption glued to the card's corner as the gap closes, so its
       // concave fillets stay welded to the video edge on the way down
       // the corner is tied to --fillet in CSS so it stays in step with the

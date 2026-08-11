@@ -1121,10 +1121,23 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   .hero-media-frame,
   .hero-panel-clip{
     top:48%;left:0;right:14px;bottom:14px;
-    border-radius:0 26px 26px 0;transform:none;
+    border-radius:0 46px 46px 0;transform:none;
+  }
+  /* Fixed to the viewport, pinned to the frame's foot: the frame's top edge
+     rises over a video that never moves or scales — the desktop curtain,
+     turned vertical. Sizing it to the frame instead is what forced the old
+     counter-scale and made it read as a zoom. */
+  .hero-media-frame video{
+    position:absolute;left:0;bottom:0;
+    width:100vw;height:100svh;max-width:none;
+    object-fit:cover;transform:none !important;
   }
   .hero-panel-clip{border-radius:0}   /* caption draws its own corner */
   /* the clip already insets to the card, so 0 is the card's own corner */
+  /* The hero carries a bigger curve than the cards do — closer to the
+     desktop hero's 40px — so scope --fillet to it rather than raising the
+     global value the product plates depend on. */
+  .hero-panel,.hero-panel .fillet{--fillet:46px}
   /* same rule as .plate: the convex corner matches the concave fillets
      beside it, or the curve breaks where they meet */
   .hero-panel{right:0;bottom:0;border-top-left-radius:var(--fillet)}
