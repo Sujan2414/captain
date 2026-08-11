@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://iybbkkwffusypyavmmvd.supabase.co">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=251">
+<link rel="stylesheet" href="/assets/css/style.css?v=252">
 </head>
 <body class="bpage">
 
@@ -196,7 +196,7 @@
       const specs = Array.isArray(p.specs) ? p.specs : [];
       $("specRail").innerHTML =
         specs.map((s) => `<div class="fact"><small>${esc(s[0])}</small><b>${esc(s[1])}</b></div>`).join("") +
-        `<div><a class="fact-cta" href="/contact"><span class="live-dot"></span> Request a quote ${ARROW}</a></div>`;
+        `<div><a class="fact-cta" href="/contact" data-enquire><span class="live-dot"></span> Request a quote ${ARROW}</a></div>`;
 
       $("pdIntro").textContent = p.intro || p.summary || "";
       if (p.gallery_url) { $("pdFigure").hidden = false; $("pdFigureImg").src = p.gallery_url; }
@@ -231,6 +231,129 @@
         </a>`).join("");
     })
     .catch((e) => { console.error(e); fail("Something went wrong loading this product."); });
+})();
+</script>
+
+<div class="ap-scrim" id="enqScrim"></div>
+<aside class="ap-drawer" id="enqDrawer" role="dialog" aria-modal="true" aria-labelledby="enqTitle" aria-hidden="true">
+  <div class="ap-head">
+    <div>
+      <p class="ap-kicker">Quote request</p>
+      <h3 id="enqTitle">Enquire</h3>
+      <p class="ap-role" id="enqSubject"></p>
+    </div>
+    <button class="ap-close" id="enqCancel" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+
+  <form class="ap-form" id="enqForm">
+    <input class="hp-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+    <p class="ap-group">About you</p>
+    <label class="ap-field"><span>Full name <i>*</i></span>
+      <input name="name" required maxlength="120" placeholder="Your full name" autocomplete="name">
+    </label>
+    <div class="ap-two">
+      <label class="ap-field"><span>Email <i>*</i></span>
+        <input type="email" name="email" required maxlength="200" placeholder="you@example.com" autocomplete="email">
+      </label>
+      <label class="ap-field"><span>Phone <i>*</i></span>
+        <input type="tel" name="phone" required maxlength="40" placeholder="+91…" autocomplete="tel">
+      </label>
+    </div>
+    <label class="ap-field"><span>Company</span>
+      <input name="company" maxlength="140" placeholder="Organisation" autocomplete="organization">
+    </label>
+
+    <p class="ap-group">What you need</p>
+    <div class="ap-two">
+      <label class="ap-field"><span>Quantity</span>
+        <input name="quantity" maxlength="60" placeholder="e.g. 200 MT / month">
+      </label>
+      <label class="ap-field"><span>Delivery site</span>
+        <input name="site" maxlength="140" placeholder="Where it's going">
+      </label>
+    </div>
+    <label class="ap-field"><span>Message</span>
+      <textarea name="message" rows="4" maxlength="1200" placeholder="Timelines, specification, anything else we should know"></textarea>
+    </label>
+
+    <div class="ap-actions">
+      <button class="btn btn-ghost" type="button" id="enqCancel2">Cancel</button>
+      <button class="btn btn-accent" type="submit" id="enqSubmit">Send enquiry</button>
+    </div>
+    <p class="ap-note">We reply on the same working day wherever possible.</p>
+  </form>
+</aside>
+
+<script>
+/* ---- enquiry drawer ---- */
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const drawer = $("enqDrawer"), scrim = $("enqScrim"), form = $("enqForm");
+  if (!drawer) return;
+  const toast = $("toast");
+  let toastTimer;
+  const say = (m, k) => {
+    if (!toast) return;
+    toast.textContent = m; toast.className = "toast on " + (k || "");
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("on"), 4200);
+  };
+
+  const open = () => {
+    $("enqSubject").textContent = window.__enqSubject || "";
+    scrim.classList.add("on"); drawer.classList.add("on");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    setTimeout(() => form.querySelector("[name=name]").focus(), 320);
+  };
+  const close = () => {
+    scrim.classList.remove("on"); drawer.classList.remove("on");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  };
+
+  /* the CTA is rendered after this runs, so catch it by delegation */
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest("[data-enquire]");
+    if (!t) return;
+    e.preventDefault();
+    open();
+  });
+  scrim.addEventListener("click", close);
+  $("enqCancel").addEventListener("click", close);
+  $("enqCancel2").addEventListener("click", close);
+  addEventListener("keydown", (e) => { if (e.key === "Escape" && drawer.classList.contains("on")) close(); });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (form.website.value) return;            // honeypot
+    const btn = $("enqSubmit");
+    btn.disabled = true; btn.textContent = "Sending…";
+    const f = new FormData(form);
+    const subject = window.__enqSubject || "";
+    const detail = [
+      f.get("company") && ("Company: " + f.get("company")),
+      f.get("quantity") && ("Quantity: " + f.get("quantity")),
+      f.get("site") && ("Site: " + f.get("site")),
+      f.get("message"),
+    ].filter(Boolean).join("\n");
+    try {
+      await window.CapitanDB.submitEnquiry({
+        name: f.get("name"),
+        contact: f.get("email") + " · " + f.get("phone"),
+        division: subject ? "Product: " + subject : "Product",
+        message: detail,
+      });
+      say("Thanks — your enquiry is with our team.", "ok");
+      form.reset(); close();
+    } catch (err) {
+      say("Couldn't send that. Please try again or call us.", "err");
+    } finally {
+      btn.disabled = false; btn.textContent = "Send enquiry";
+    }
+  });
 })();
 </script>
 </body>
