@@ -1067,11 +1067,22 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   /* full-width dropdown menu, template style */
   .slide-menu{
     /* the page's own app bar stays put — the tabs slide in beneath it and
-       the burger in the bar morphs into the cross */
-    left:0;right:0;width:100%;top:76px;bottom:0;max-height:none;
-    transform:translateY(-104%);box-shadow:0 22px 50px rgba(0,0,0,.18);
+       the burger in the bar morphs into the cross. The top edge tucks a
+       couple of px behind the bar so sub-pixel rounding can't open a seam. */
+    left:0;right:0;width:100%;top:calc(var(--nav-h) - 2px);bottom:0;max-height:none;
+    transform:translate3d(0,-104%,0);
+    will-change:transform;backface-visibility:hidden;
+    /* a 50px blur across a full-screen panel is repainted every frame on a
+       phone — the lighter shadow is what keeps the slide smooth */
+    box-shadow:0 14px 30px rgba(0,0,0,.13);
+    -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+    /* visibility steps at the end of the close rather than being eased */
+    transition:transform .5s var(--ease),visibility 0s linear .5s;
   }
-  body.menu-open .slide-menu{transform:none;visibility:visible}
+  body.menu-open .slide-menu{
+    transform:translate3d(0,0,0);visibility:visible;
+    transition:transform .5s var(--ease),visibility 0s;
+  }
   .menu-item{padding:22px 24px;font-size:19px}
   .menu-gap{display:none}
   .menu-contact{border-bottom:1px solid #E7E9EA}
@@ -2432,8 +2443,11 @@ body.menu-open .subnav{z-index:1100}
 .cl-strength p{font-size:16.5px;line-height:1.75;color:var(--ink-2);max-width:80ch}
 
 @media (max-width:760px){
-  /* Safari blanks blended images inside the animated track */
-  .ribbon-logos img{mix-blend-mode:normal}
+  /* Safari can drop images that carry a blend or a filter inside an
+     animated, clipped track — it composites them to nothing. Phones get the
+     logos plain: no blend, no greyscale, full opacity. */
+  .ribbon-logos img{mix-blend-mode:normal;filter:none;opacity:1}
+  .ribbon-logos li:hover img{filter:none;opacity:1}
 
   /* The sheet drops out from behind the app bar: the bar has to outrank it,
      or the white panel travels across the bar and the burger's cross
