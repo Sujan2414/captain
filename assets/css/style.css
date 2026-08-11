@@ -2361,7 +2361,8 @@ body.menu-open .subnav{z-index:1100}
   color:var(--slate);text-align:center;
   margin:clamp(48px,6vw,88px) 0 clamp(16px,2vw,24px);
 }
-.ribbon-logos{margin-top:0;padding-block:clamp(18px,2.2vw,30px)}
+.ribbon-logos .ribbon-track{animation-duration:78s}
+.ribbon-logos{margin-top:0;padding-block:clamp(28px,3.2vw,46px)}
 .ribbon-logos .belt{
   list-style:none;display:flex;align-items:center;
   gap:clamp(38px,5vw,84px);padding-right:clamp(38px,5vw,84px);
@@ -2374,12 +2375,12 @@ body.menu-open .subnav{z-index:1100}
   transition:filter .3s,opacity .3s;
   /* per-logo heights: these marks have very different proportions, so one
      height makes the wide-short ones shout and the square ones vanish */
-  height:clamp(24px,2.4vw,34px);
+  height:clamp(30px,3vw,44px);
 }
-.ribbon-logos img[src*="l-t"]{height:clamp(30px,3vw,44px)}
-.ribbon-logos img[src*="apco"]{height:clamp(28px,2.9vw,42px)}
-.ribbon-logos img[src*="swastik"]{height:clamp(26px,2.7vw,39px)}
-.ribbon-logos img[src*="godrej"]{height:clamp(17px,1.7vw,25px)}
+.ribbon-logos img[src*="l-t"]{height:clamp(38px,3.8vw,56px)}
+.ribbon-logos img[src*="apco"]{height:clamp(36px,3.6vw,54px)}
+.ribbon-logos img[src*="swastik"]{height:clamp(34px,3.4vw,50px)}
+.ribbon-logos img[src*="godrej"]{height:clamp(22px,2.2vw,32px)}
 .ribbon-logos li:hover img{filter:grayscale(0);opacity:1}
 @media (prefers-reduced-motion:reduce){
   .ribbon-logos .ribbon-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}
