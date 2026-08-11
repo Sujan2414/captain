@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://iybbkkwffusypyavmmvd.supabase.co">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=252">
+<link rel="stylesheet" href="/assets/css/style.css?v=253">
 </head>
 <body class="bpage">
 
@@ -238,9 +238,8 @@
 <aside class="ap-drawer" id="enqDrawer" role="dialog" aria-modal="true" aria-labelledby="enqTitle" aria-hidden="true">
   <div class="ap-head">
     <div>
-      <p class="ap-kicker">Quote request</p>
+      <p class="ap-kicker">Enquiry</p>
       <h3 id="enqTitle">Enquire</h3>
-      <p class="ap-role" id="enqSubject"></p>
     </div>
     <button class="ap-close" id="enqCancel" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M6 6l12 12M18 6 6 18"/></svg>
@@ -302,7 +301,6 @@
   };
 
   const open = () => {
-    $("enqSubject").textContent = window.__enqSubject || "";
     scrim.classList.add("on"); drawer.classList.add("on");
     drawer.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";

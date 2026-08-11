@@ -2410,13 +2410,13 @@ body.menu-open .subnav{z-index:1100}
 .ribbon-logos .belt li{display:flex;align-items:center}
 .ribbon-logos img{
   width:auto;display:block;
-  /* multiply hides the sources' white ground, but inside this clipped and
-     animated track iOS Safari composites it to nothing — so the belt came out
-     blank on phones. Desktop keeps the blend; phones drop it (see below), and
-     the near-white page makes the difference hard to spot. */
-  mix-blend-mode:multiply;
-  filter:grayscale(1);opacity:.68;
-  transition:filter .3s,opacity .3s;
+  /* No blend and no filter, deliberately. Both are known to composite to
+     nothing inside a clipped, animated track on mobile WebKit and Blink, and
+     the belt came out blank on real phones while measuring fine everywhere I
+     could test. The sources are flat art on white and the page is #FCFCFC, so
+     they cost nothing to drop. Opacity alone carries the resting state. */
+  opacity:.72;
+  transition:opacity .3s;
   /* per-logo heights: these marks have very different proportions, so one
      height makes the wide-short ones shout and the square ones vanish */
   height:clamp(36px,3.6vw,52px);
@@ -2425,7 +2425,7 @@ body.menu-open .subnav{z-index:1100}
 .ribbon-logos img[src*="apco"]{height:clamp(42px,4.2vw,62px)}
 .ribbon-logos img[src*="swastik"]{height:clamp(48px,4.8vw,70px)}
 .ribbon-logos img[src*="godrej"]{height:clamp(39px,3.9vw,57px)}
-.ribbon-logos li:hover img{filter:grayscale(0);opacity:1}
+.ribbon-logos li:hover img{opacity:1}
 @media (prefers-reduced-motion:reduce){
   .ribbon-logos .ribbon-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}
   .ribbon-logos .belt:last-child{display:none}
@@ -2458,11 +2458,7 @@ body.menu-open .subnav{z-index:1100}
 .cl-strength p{font-size:16.5px;line-height:1.75;color:var(--ink-2);max-width:80ch}
 
 @media (max-width:760px){
-  /* Safari can drop images that carry a blend or a filter inside an
-     animated, clipped track — it composites them to nothing. Phones get the
-     logos plain: no blend, no greyscale, full opacity. */
-  .ribbon-logos img{mix-blend-mode:normal;filter:none;opacity:1}
-  .ribbon-logos li:hover img{filter:none;opacity:1}
+  .ribbon-logos img{opacity:1}
 
   /* The sheet drops out from behind the app bar: the bar has to outrank it,
      or the white panel travels across the bar and the burger's cross
