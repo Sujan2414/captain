@@ -2350,3 +2350,53 @@ body.menu-open .subnav{z-index:1100}
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
   }
 }
+
+/* ============================================================
+   Client strip + clientele block. The wordmark is the fallback:
+   an <img> in /assets/img/clients/ removes itself when absent,
+   so real logo files take over the moment they are added.
+   ============================================================ */
+.clients{margin-top:clamp(34px,4.5vw,60px)}
+.clients-label{
+  font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--slate);text-align:center;margin-bottom:clamp(18px,2.4vw,28px);
+}
+.client-row{
+  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:clamp(22px,4vw,64px);
+}
+.client{display:flex;align-items:center;justify-content:center}
+.client-logo{height:clamp(26px,2.6vw,38px);width:auto;filter:grayscale(1);opacity:.62;transition:opacity .3s,filter .3s}
+.client:hover .client-logo{filter:grayscale(0);opacity:1}
+.client-name{
+  font-size:clamp(15px,1.5vw,20px);font-weight:700;letter-spacing:.02em;
+  color:var(--slate);white-space:nowrap;transition:color .3s;
+}
+.client-logo + .client-name{display:none}   /* a real logo wins */
+.client:hover .client-name{color:var(--ink)}
+
+.clientele .lede{
+  font-size:clamp(16px,1.5vw,19px);line-height:1.7;color:var(--ink-2);
+  max-width:70ch;margin-bottom:clamp(28px,3.4vw,48px);
+}
+.cl-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:clamp(26px,4vw,64px);
+}
+.cl-col h3,.cl-strength h3{
+  font-size:clamp(17px,1.5vw,21px);font-weight:700;color:var(--ink);margin-bottom:14px;
+}
+.cl-note{font-size:15.5px;line-height:1.65;color:var(--ink-2);margin-bottom:12px}
+.cl-list{list-style:none;display:grid;gap:10px}
+.cl-list li{
+  position:relative;padding-left:22px;font-size:16px;line-height:1.6;color:var(--ink-2);
+}
+.cl-list li::before{
+  content:"";position:absolute;left:0;top:.62em;
+  width:7px;height:7px;border-radius:50%;background:var(--accent);
+}
+.cl-strength{
+  margin-top:clamp(28px,3.6vw,52px);padding-top:clamp(24px,3vw,38px);
+  border-top:1px solid var(--line);
+}
+.cl-strength p{font-size:16.5px;line-height:1.75;color:var(--ink-2);max-width:80ch}

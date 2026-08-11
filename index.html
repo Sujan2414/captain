@@ -14,7 +14,7 @@
 <!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=228">
+<link rel="stylesheet" href="/assets/css/style.css?v=229">
 </head>
 <body>
 
@@ -241,6 +241,38 @@
       <div class="stat"><span class="stat-num" data-count="50" data-suffix="+">0</span><span class="stat-label">Team Members</span></div>
       <div class="stat"><span class="stat-num" data-count="250" data-suffix="+">0</span><span class="stat-label">Happy Clients</span></div>
       <div class="stat"><span class="stat-num" data-count="98" data-suffix="%">0</span><span class="stat-label">On-time Dispatch</span></div>
+    </div>
+
+    <!-- Clients we supply. Logo files drop into /assets/img/clients/ and take
+         over from the wordmark automatically. -->
+    <div class="clients rv">
+      <p class="clients-label">Trusted by the companies building Mumbai</p>
+      <ul class="client-row">
+        <li class="client" title="HCC Construction Ltd.">
+          <img class="client-logo" alt="HCC Construction Ltd." src="/assets/img/clients/hcc.svg?v=1"
+               onerror="this.remove()" loading="lazy">
+          <span class="client-name">HCC</span>
+        </li>
+        <li class="client" title="Apco Infratech Pvt. Ltd.">
+          <span class="client-name">APCO Infratech</span>
+        </li>
+        <li class="client" title="L&amp;T Ltd.">
+          <img class="client-logo" alt="L&amp;T Ltd." src="/assets/img/clients/l-t.svg?v=1"
+               onerror="this.remove()" loading="lazy">
+          <span class="client-name">L&amp;T</span>
+        </li>
+        <li class="client" title="Swastik Infra-Logic">
+          <span class="client-name">Swastik Infra-Logic</span>
+        </li>
+        <li class="client" title="Godrej &amp; Boyce Mfg. Co. Ltd.">
+          <span class="client-name">Godrej &amp; Boyce</span>
+        </li>
+        <li class="client" title="ACC Limited">
+          <img class="client-logo" alt="ACC Limited" src="/assets/img/clients/acc.svg?v=1"
+               onerror="this.remove()" loading="lazy">
+          <span class="client-name">ACC</span>
+        </li>
+      </ul>
     </div>
   </div>
 
