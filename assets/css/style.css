@@ -1006,9 +1006,13 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   margin-top:22px;border-radius:var(--r-card);overflow:hidden;
   border:1px solid var(--line);background:#EDF0F1;
 }
-/* Google anchors its info card top-left at a fixed size while the pin stays
-   at the map centre — at the old 360px the centre sat behind the card. */
-.map-embed{display:block;width:100%;height:clamp(460px,42vw,640px);border:0}
+/* Google anchors its info card top-left while the pin stays at the map
+   centre, and in this footer column the embed is only ~470px wide, so the
+   address wraps and the card runs ~250px tall. Below about 500px the centre
+   — and therefore the pin — sits behind the card. The 460px floor is that
+   limit, not a preference: shrink it and the marker vanishes. Only the cap
+   and the growth rate came down. */
+.map-embed{display:block;width:100%;height:clamp(460px,36vw,540px);border:0}
 .map-link{
   margin-top:14px;display:flex;align-items:center;gap:16px;
   border:1px solid var(--line);border-radius:18px;padding:16px 20px;background:#fff;
