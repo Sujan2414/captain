@@ -1746,10 +1746,10 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
    ============================================================ */
 @media (max-width:760px){
   /* phones keep the app bar pinned over the hero from the very top */
-  .bpage .subnav{height:64px;transform:none}
+  .bpage .subnav{height:var(--nav-h);transform:none}
   .bpage .subnav-links{inset:64px 0 auto 0}
-  .bpage .subnav .brand-logo{height:32px}
-  .bpage .subnav .brand-word-img{height:14px}
+  .bpage .subnav .brand-logo{height:38px}
+  .bpage .subnav .brand-word-img{height:17px}
   .bpage .subnav-burger{width:40px;height:40px}
   /* the bar left the flow — give its height back to the content */
   /* sections carry their own spacing — white padding here showed as a
@@ -2361,14 +2361,14 @@ body.menu-open .subnav{z-index:1100}
 
 @media (max-width:760px){
   body.menu-open .nav{
-    background:#26292E;height:76px;transform:none;pointer-events:auto;
+    background:#26292E;height:var(--nav-h);transform:none;pointer-events:auto;
   }
   body.menu-open .nav .nav-inner{height:100%;padding-block:0;justify-content:space-between}
   body.menu-open .nav .brand{display:flex;opacity:1;visibility:visible}
   body.menu-open .nav .brand-full{display:none}
-  body.menu-open .nav .brand-logo{display:block;height:30px;width:auto}
+  body.menu-open .nav .brand-logo{display:block;height:38px;width:auto}
   body.menu-open .nav .brand-word-img{
-    display:block;height:13px;width:auto;filter:brightness(0) invert(1);
+    display:block;height:17px;width:auto;filter:brightness(0) invert(1);
   }
   body.menu-open .nav-burger{
     background:#fff;border-radius:50%;width:44px;height:44px;
