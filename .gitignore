@@ -1,3 +1,10 @@
 .vercel
 lighthouse*.json
 lh-*.json
+
+# scratch contact sheets used to eyeball stock photos
+_sheet*.html
+_review.html
+_rev2.html
+_z*.html
+_p*.html
