@@ -1887,7 +1887,7 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   aspect-ratio:auto;object-fit:contain;background:transparent;
   border-radius:var(--r-card);
 }
-@media (max-width:760px){.pd-figure.is-pack img{max-width:min(240px,68%)}}
+@media (max-width:760px){.pd-figure.is-pack img{max-width:100%}}
 
 .pd-duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,24px)}
 .pd-duo figure{margin:0}
@@ -2384,7 +2384,11 @@ body.menu-open .subnav{z-index:1100}
 .ribbon-logos .belt li{display:flex;align-items:center}
 .ribbon-logos img{
   width:auto;display:block;
-  mix-blend-mode:multiply;                 /* kills the white JPEG ground */
+  /* multiply hides the sources' white ground, but inside this clipped and
+     animated track iOS Safari composites it to nothing — so the belt came out
+     blank on phones. Desktop keeps the blend; phones drop it (see below), and
+     the near-white page makes the difference hard to spot. */
+  mix-blend-mode:multiply;
   filter:grayscale(1);opacity:.68;
   transition:filter .3s,opacity .3s;
   /* per-logo heights: these marks have very different proportions, so one
@@ -2426,3 +2430,17 @@ body.menu-open .subnav{z-index:1100}
   border-top:1px solid var(--line);
 }
 .cl-strength p{font-size:16.5px;line-height:1.75;color:var(--ink-2);max-width:80ch}
+
+@media (max-width:760px){
+  /* Safari blanks blended images inside the animated track */
+  .ribbon-logos img{mix-blend-mode:normal}
+
+  /* The sheet drops out from behind the app bar: the bar has to outrank it,
+     or the white panel travels across the bar and the burger's cross
+     animation is hidden behind it on the way down. */
+  /* beat body.menu-open .subnav (line ~2290) and .bpage .subnav on
+     specificity, or the bar drops back under the sheet */
+  body.menu-open .nav, body.menu-open .subnav, .bpage .subnav{z-index:1300}
+  .slide-menu{z-index:1200}
+  .menu-scrim{z-index:1150}
+}
