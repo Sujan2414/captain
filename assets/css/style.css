@@ -250,7 +250,7 @@ body.menu-open .slide-menu{transform:none;visibility:visible}
   .menu-brand{display:flex}
   /* full-bleed from the very top: the page's transparent bar (and the hero
      lockup behind it) must not peek above the open menu */
-  .slide-menu{top:0;left:0;width:100%;transform:translateX(-100%)}
+  .slide-menu{left:0;width:100%;transform:translateX(-100%)}
 }
 .menu-social{display:none;list-style:none;justify-content:center;gap:16px;padding:30px 0 34px}
 .menu-social a{
@@ -1066,9 +1066,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
 
   /* full-width dropdown menu, template style */
   .slide-menu{
-    /* full sheet from the very top — the menu carries its own app bar, so
-       nothing of the page may peek above it */
-    left:0;right:0;width:100%;top:0;bottom:0;max-height:none;
+    /* the page's own app bar stays put — the tabs slide in beneath it and
+       the burger in the bar morphs into the cross */
+    left:0;right:0;width:100%;top:76px;bottom:0;max-height:none;
     transform:translateY(-104%);box-shadow:0 22px 50px rgba(0,0,0,.18);
   }
   body.menu-open .slide-menu{transform:none;visibility:visible}
@@ -1172,7 +1172,12 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
     width:44px;height:44px;background:#fff;border-radius:50%;
   }
-  .subnav-burger span{width:18px;height:2px;background:#26292E;border-radius:2px}
+  .subnav-burger span{
+    width:18px;height:2px;background:#26292E;border-radius:2px;
+    transition:transform .35s var(--ease);
+  }
+  body.menu-open .subnav-burger span:first-child{transform:translateY(3.5px) rotate(45deg)}
+  body.menu-open .subnav-burger span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
   .subnav .btn-pill{display:none}
 }
 
@@ -2327,4 +2332,21 @@ body.menu-open .subnav{z-index:1100}
   .menu-social{padding-bottom:calc(30px + env(safe-area-inset-bottom, 0px))}
   .menu-social a{width:40px;height:40px}
   .menu-social svg{width:18px;height:18px}
+}
+
+@media (max-width:760px){
+  body.menu-open .nav{
+    background:#26292E;height:76px;transform:none;pointer-events:auto;
+  }
+  body.menu-open .nav .nav-inner{height:100%;padding-block:0;justify-content:space-between}
+  body.menu-open .nav .brand{display:flex;opacity:1;visibility:visible}
+  body.menu-open .nav .brand-full{display:none}
+  body.menu-open .nav .brand-logo{display:block;height:30px;width:auto}
+  body.menu-open .nav .brand-word-img{
+    display:block;height:13px;width:auto;filter:brightness(0) invert(1);
+  }
+  body.menu-open .nav-burger{
+    background:#fff;border-radius:50%;width:44px;height:44px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  }
 }
