@@ -2352,28 +2352,39 @@ body.menu-open .subnav{z-index:1100}
 }
 
 /* ============================================================
-   Client strip + clientele block. The wordmark is the fallback:
-   an <img> in /assets/img/clients/ removes itself when absent,
-   so real logo files take over the moment they are added.
+   Client belt — the marquee carries real client logos. Sources are
+   flat JPEG/WebP on white, so multiply blends their ground into the
+   page instead of showing six pale rectangles.
    ============================================================ */
-.clients{margin-top:clamp(34px,4.5vw,60px)}
 .clients-label{
   font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--slate);text-align:center;margin-bottom:clamp(18px,2.4vw,28px);
+  color:var(--slate);text-align:center;
+  margin:clamp(48px,6vw,88px) 0 clamp(16px,2vw,24px);
 }
-.client-row{
-  list-style:none;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
-  gap:clamp(22px,4vw,64px);
+.ribbon-logos{margin-top:0;padding-block:clamp(18px,2.2vw,30px)}
+.ribbon-logos .belt{
+  list-style:none;display:flex;align-items:center;
+  gap:clamp(38px,5vw,84px);padding-right:clamp(38px,5vw,84px);
 }
-.client{display:flex;align-items:center;justify-content:center}
-.client-logo{height:clamp(26px,2.6vw,38px);width:auto;filter:grayscale(1);opacity:.62;transition:opacity .3s,filter .3s}
-.client:hover .client-logo{filter:grayscale(0);opacity:1}
-.client-name{
-  font-size:clamp(15px,1.5vw,20px);font-weight:700;letter-spacing:.02em;
-  color:var(--slate);white-space:nowrap;transition:color .3s;
+.ribbon-logos .belt li{display:flex;align-items:center}
+.ribbon-logos img{
+  width:auto;display:block;
+  mix-blend-mode:multiply;                 /* kills the white JPEG ground */
+  filter:grayscale(1);opacity:.68;
+  transition:filter .3s,opacity .3s;
+  /* per-logo heights: these marks have very different proportions, so one
+     height makes the wide-short ones shout and the square ones vanish */
+  height:clamp(24px,2.4vw,34px);
 }
-.client-logo + .client-name{display:none}   /* a real logo wins */
-.client:hover .client-name{color:var(--ink)}
+.ribbon-logos img[src*="l-t"]{height:clamp(30px,3vw,44px)}
+.ribbon-logos img[src*="apco"]{height:clamp(28px,2.9vw,42px)}
+.ribbon-logos img[src*="swastik"]{height:clamp(26px,2.7vw,39px)}
+.ribbon-logos img[src*="godrej"]{height:clamp(17px,1.7vw,25px)}
+.ribbon-logos li:hover img{filter:grayscale(0);opacity:1}
+@media (prefers-reduced-motion:reduce){
+  .ribbon-logos .ribbon-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}
+  .ribbon-logos .belt:last-child{display:none}
+}
 
 .clientele .lede{
   font-size:clamp(16px,1.5vw,19px);line-height:1.7;color:var(--ink-2);

@@ -14,7 +14,7 @@
 <!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=229">
+<link rel="stylesheet" href="/assets/css/style.css?v=231">
 </head>
 <body>
 
@@ -243,44 +243,15 @@
       <div class="stat"><span class="stat-num" data-count="98" data-suffix="%">0</span><span class="stat-label">On-time Dispatch</span></div>
     </div>
 
-    <!-- Clients we supply. Logo files drop into /assets/img/clients/ and take
-         over from the wordmark automatically. -->
-    <div class="clients rv">
-      <p class="clients-label">Trusted by the companies building Mumbai</p>
-      <ul class="client-row">
-        <li class="client" title="HCC Construction Ltd.">
-          <img class="client-logo" alt="HCC Construction Ltd." src="/assets/img/clients/hcc.svg?v=1"
-               onerror="this.remove()" loading="lazy">
-          <span class="client-name">HCC</span>
-        </li>
-        <li class="client" title="Apco Infratech Pvt. Ltd.">
-          <span class="client-name">APCO Infratech</span>
-        </li>
-        <li class="client" title="L&amp;T Ltd.">
-          <img class="client-logo" alt="L&amp;T Ltd." src="/assets/img/clients/l-t.svg?v=1"
-               onerror="this.remove()" loading="lazy">
-          <span class="client-name">L&amp;T</span>
-        </li>
-        <li class="client" title="Swastik Infra-Logic">
-          <span class="client-name">Swastik Infra-Logic</span>
-        </li>
-        <li class="client" title="Godrej &amp; Boyce Mfg. Co. Ltd.">
-          <span class="client-name">Godrej &amp; Boyce</span>
-        </li>
-        <li class="client" title="ACC Limited">
-          <img class="client-logo" alt="ACC Limited" src="/assets/img/clients/acc.svg?v=1"
-               onerror="this.remove()" loading="lazy">
-          <span class="client-name">ACC</span>
-        </li>
-      </ul>
-    </div>
   </div>
 
-  <div class="ribbon" aria-hidden="true">
+  <p class="clients-label">Trusted by the companies building Mumbai</p>
+  <div class="ribbon ribbon-logos" role="img" aria-label="Clients we supply: HCC, Apco Infratech, L&amp;T, Swastik Infra-Logic, Godrej &amp; Boyce, ACC">
     <div class="ribbon-track">
-      <span>MINE ✳ CONSTRUCT ✳ EVOLVE ✳ ENGINEERED SAND ✳ AGGREGATES ✳ INFRASTRUCTURE ✳ REALTY ✳&nbsp;</span>
-      <span>MINE ✳ CONSTRUCT ✳ EVOLVE ✳ ENGINEERED SAND ✳ AGGREGATES ✳ INFRASTRUCTURE ✳ REALTY ✳&nbsp;</span>
+        <ul class="belt"><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li></ul>
+        <ul class="belt" aria-hidden="true"><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li><li><img src="/assets/img/clients/hcc.svg?v=3" alt="HCC Construction Ltd." title="HCC Construction Ltd." loading="lazy"></li><li><img src="/assets/img/clients/apco-infratech.webp?v=3" alt="Apco Infratech Pvt. Ltd." title="Apco Infratech Pvt. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/l-t.svg?v=3" alt="L&amp;T Ltd." title="L&amp;T Ltd." loading="lazy"></li><li><img src="/assets/img/clients/swastik-infra-logic.webp?v=3" alt="Swastik Infra-Logic" title="Swastik Infra-Logic" loading="lazy"></li><li><img src="/assets/img/clients/godrej-boyce.webp?v=3" alt="Godrej &amp; Boyce Mfg. Co. Ltd." title="Godrej &amp; Boyce Mfg. Co. Ltd." loading="lazy"></li><li><img src="/assets/img/clients/acc.svg?v=3" alt="ACC Limited" title="ACC Limited" loading="lazy"></li></ul>
     </div>
+  </div>
   </div>
 </section>
 
@@ -638,6 +609,6 @@
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/js/sb.js?v=4"></script>
 <script src="/assets/js/main.js?v=227"></script>
-<script src="/assets/js/home-data.js?v=2" defer></script>
+<script src="/assets/js/home-data.js?v=3" defer></script>
 </body>
 </html>
