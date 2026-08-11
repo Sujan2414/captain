@@ -67,7 +67,7 @@
       })}`),
     product: (slug) =>
       rest(`products?${q({
-        select: "slug,title,tag,summary,cover_url,gallery_url,intro,body,specs,uses",
+        select: "slug,title,tag,summary,cover_url,gallery_url,gallery2_url,gallery3_url,intro,body,specs,uses",
         published: "eq.true",
         slug: `eq.${slug}`,
         limit: 1,

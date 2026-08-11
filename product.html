@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://iybbkkwffusypyavmmvd.supabase.co">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=240">
+<link rel="stylesheet" href="/assets/css/style.css?v=241">
 </head>
 <body class="bpage">
 
@@ -110,8 +110,11 @@
             <h2 class="pd-h">Where it's used</h2>
             <ul class="use-list" id="pdUses"></ul>
           </section>
-          <section class="pd-section" id="secBody" hidden>
-            <span></span>
+          <div class="pd-duo" id="pdDuo" hidden>
+            <figure><img id="pdDuo1" alt="" loading="lazy"></figure>
+            <figure><img id="pdDuo2" alt="" loading="lazy"></figure>
+          </div>
+          <section class="pd-section pd-section--full" id="secBody" hidden>
             <div class="article-body" id="pdBody"></div>
           </section>
 
@@ -164,7 +167,7 @@
 
 <div class="toast" id="toast" role="status"></div>
 
-<script src="/assets/js/sb.js?v=4"></script>
+<script src="/assets/js/sb.js?v=8"></script>
 <script src="/assets/js/word-hero.js?v=212"></script>
 <script>
 (() => {
@@ -197,6 +200,12 @@
 
       $("pdIntro").textContent = p.intro || p.summary || "";
       if (p.gallery_url) { $("pdFigure").hidden = false; $("pdFigureImg").src = p.gallery_url; }
+      if (p.gallery2_url || p.gallery3_url) {
+        $("pdDuo").hidden = false;
+        const a = $("pdDuo1"), b = $("pdDuo2");
+        if (p.gallery2_url) a.src = p.gallery2_url; else a.closest("figure").remove();
+        if (p.gallery3_url) b.src = p.gallery3_url; else b.closest("figure").remove();
+      }
 
       const uses = Array.isArray(p.uses) ? p.uses : [];
       if (uses.length) {

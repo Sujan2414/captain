@@ -1866,6 +1866,10 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   gap:clamp(20px,3.5vw,56px);align-items:start;
   margin-top:clamp(40px,5.5vw,78px);
 }
+/* a section whose only child is prose runs full width — the two-column
+   rhythm is for heading-left / copy-right pairs, and applying it here left an
+   empty column with every article heading pushed to the right of it */
+.pd-section--full{grid-template-columns:minmax(0,1fr)}
 .pd-section .pd-h{margin:0}
 .pd-section p{font-size:16.8px;line-height:1.72;color:var(--ink-2)}
 .pd-figure,.pd-duo{grid-column:1/-1;margin:clamp(22px,3vw,40px) 0 0}
@@ -1879,8 +1883,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
    let it run the full column width */
 .pd-figure.is-pack{display:flex;justify-content:center}
 .pd-figure.is-pack img{
-  width:auto;max-width:min(300px,52%);height:auto;
-  aspect-ratio:auto;object-fit:contain;background:transparent;border-radius:0;
+  width:100%;max-width:none;height:auto;
+  aspect-ratio:auto;object-fit:contain;background:transparent;
+  border-radius:var(--r-card);
 }
 @media (max-width:760px){.pd-figure.is-pack img{max-width:min(240px,68%)}}
 
