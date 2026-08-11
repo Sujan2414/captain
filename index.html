@@ -14,7 +14,7 @@
 <!-- fonts load async: as a blocking <link> this cost ~1.3s of render time -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap" onload="this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,300;100,400;100,500;100,600;100,700;100,800;100,900&display=swap"></noscript>
-<link rel="stylesheet" href="/assets/css/style.css?v=262">
+<link rel="stylesheet" href="/assets/css/style.css?v=263">
 </head>
 <body>
 
@@ -341,10 +341,11 @@
 <section class="section" id="products">
   <div class="container">
     <p class="tag rv"><i>{</i> Capitan Products <i>}</i></p>
-    <h2 class="h2 rv">Materials engineered to perform</h2>
-
-    <p class="rv" style="margin:-14px 0 30px"><a class="link-underline" href="/products" data-cursor>View all products ↗</a></p>
-    <div class="prod-grid">
+    <div class="sec-head-row">
+      <h2 class="h2 rv">Materials engineered to perform</h2>
+      <p class="rv sec-head-link"><a class="link-underline" href="/products" data-cursor>View all products ↗</a></p>
+    </div>
+    <div class="prod-grid" id="homeProdGrid">
       <a class="prod rv" href="/product?p=engineered-concrete-sand" data-cursor-view>
         <span class="prod-media"><img loading="lazy" src="/assets/img/products/concrete-sand-hero.webp?v=1" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Capitan engineered concrete sand, 40 kg and 20 kg bags"></span>
         <span class="plate"><b>Engineered Concrete Sand</b><small>VSI · Zone II</small></span>
@@ -353,24 +354,23 @@
         <span class="prod-media"><img loading="lazy" src="/assets/img/products/plaster-sand-hero.webp?v=1" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Capitan engineered plaster sand, 40 kg and 20 kg bags"></span>
         <span class="plate"><b>Plaster Sand</b><small>Fine · Silt-free</small></span>
       </a>
-      <a class="prod rv" style="--d:.12s" href="/product?p=black-basalt-rock" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/17385945/pexels-photo-17385945.jpeg?auto=compress&cs=tinysrgb&w=1000"  sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Cut black basalt blocks at the quarry face"></span>
-        <span class="plate"><b>Black Basalt Rock</b><small>Boulder · Rubble</small></span>
+      <a class="prod rv" style="--d:.12s" href="/product?p=vsi-m-sand" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/38862399/pexels-photo-38862399.jpeg?auto=compress&cs=tinysrgb&w=1000" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Stockpiles of manufactured sand beside the plant conveyor"></span>
+        <span class="plate"><b>VSI Grade M-Sand</b><small>Manufactured · IS 383</small></span>
       </a>
-      <a class="prod rv" href="/product?p=aggregates-10-20mm" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/12044663/pexels-photo-12044663.jpeg?auto=compress&cs=tinysrgb&w=1000"  sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Graded 10 and 20 mm crushed aggregate"></span>
-        <span class="plate"><b>Aggregates 10 / 20 mm</b><small>Cubical · Graded</small></span>
+      <a class="prod rv" href="/product?p=dry-mortar-sand" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/38561968/pexels-photo-38561968.jpeg?auto=compress&cs=tinysrgb&w=1000" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Mortar on a trowel against a rendered wall"></span>
+        <span class="plate"><b>Dry Mortar Sand</b><small>Dried · Graded</small></span>
       </a>
-      <a class="prod rv" style="--d:.06s" href="/product?p=gsb-and-wmm" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/33563535/pexels-photo-33563535.jpeg?auto=compress&cs=tinysrgb&w=1000"  sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Aerial view of road base under construction"></span>
-        <span class="plate"><b>GSB &amp; WMM Mixes</b><small>Road base</small></span>
+      <a class="prod rv" style="--d:.06s" href="/product?p=vsi-aggregates" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/29024548/pexels-photo-29024548.jpeg?auto=compress&cs=tinysrgb&w=1000" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Graded dark basalt aggregate"></span>
+        <span class="plate"><b>VSI Aggregates 10–40 mm</b><small>Cubical · Graded</small></span>
       </a>
-      <a class="prod rv" style="--d:.12s" href="/product?p=crushed-stone-dust" data-cursor-view>
-        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/5799727/pexels-photo-5799727.jpeg?auto=compress&cs=tinysrgb&w=1000"  sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Fine crushed stone dust"></span>
-        <span class="plate"><b>Crushed Stone Dust</b><small>Filling · Bedding</small></span>
+      <a class="prod rv" style="--d:.12s" href="/product?p=grit" data-cursor-view>
+        <span class="prod-media"><img loading="lazy" src="https://images.pexels.com/photos/5576797/pexels-photo-5576797.jpeg?auto=compress&cs=tinysrgb&w=1000" sizes="(max-width:760px) 100vw, (max-width:1080px) 50vw, 33vw" alt="Angular basalt chippings"></span>
+        <span class="plate"><b>Grit</b><small>6–10 mm · Angular</small></span>
       </a>
     </div>
-  </div>
 </section>
 
 <!-- ============ TESTIMONIALS (two-row marquee) ============ -->
@@ -609,7 +609,7 @@
 
 <div class="toast" id="toast" role="status"></div>
 <script src="/assets/js/sb.js?v=8"></script>
-<script src="/assets/js/main.js?v=262"></script>
-<script src="/assets/js/home-data.js?v=5" defer></script>
+<script src="/assets/js/main.js?v=263"></script>
+<script src="/assets/js/home-data.js?v=263" defer></script>
 </body>
 </html>

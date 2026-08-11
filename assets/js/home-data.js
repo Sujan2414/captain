@@ -22,6 +22,29 @@
     }).catch(() => {});
   }
 
+  // ---- product strip ----
+  // These cards are the fallback, but for a while they were the only thing
+  // here — so the homepage went on showing retired products after the
+  // catalogue changed. Swap their contents from the database.
+  const pgrid = document.getElementById("homeProdGrid");
+  if (pgrid) {
+    window.CapitanDB.products().then((rows) => {
+      if (!rows.length) return;                  // keep the static fallback
+      const cards = [...pgrid.querySelectorAll(".prod")];
+      rows.slice(0, cards.length).forEach((r, i) => {
+        const card = cards[i];
+        const img = card.querySelector("img");
+        if (img && r.cover_url && img.getAttribute("src") !== r.cover_url) {
+          img.removeAttribute("srcset"); img.removeAttribute("sizes");
+          img.src = r.cover_url;
+        }
+        card.querySelector(".plate b").textContent = r.title;
+        card.querySelector(".plate small").textContent = r.tag || "";
+        card.href = `/product?p=${encodeURIComponent(r.slug)}`;
+      });
+    }).catch(() => {});
+  }
+
   // ---- projects stack ----
   const stack = document.querySelector(".proj-stack");
   if (stack) {

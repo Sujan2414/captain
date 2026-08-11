@@ -2511,3 +2511,14 @@ body.menu-open .subnav{z-index:1100}
   .bpage .subnav .brand-word-img,
   body.menu-open .nav .brand-word-img{height:15px}
 }
+
+/* section heading with a trailing link on the same baseline — the link
+   used to sit under the heading on the left, adrift of both. */
+.sec-head-row{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;margin-bottom:30px}
+.sec-head-row .h2{margin-bottom:0}
+.sec-head-row .sec-head-link{margin:0;padding-bottom:6px}
+@media (max-width:760px){
+  .sec-head-row{display:block}
+  .sec-head-row .sec-head-link{margin-top:14px}
+}
