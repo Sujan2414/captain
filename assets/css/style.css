@@ -1073,19 +1073,29 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
        the burger in the bar morphs into the cross. The top edge tucks a
        couple of px behind the bar so sub-pixel rounding can't open a seam. */
     left:0;right:0;width:100%;top:calc(var(--nav-h) - 2px);bottom:0;max-height:none;
-    transform:translate3d(0,-104%,0);
-    will-change:transform;backface-visibility:hidden;
+    transform:none;
+    clip-path:inset(0 0 100% 0);
+    will-change:clip-path;backface-visibility:hidden;
     /* a 50px blur across a full-screen panel is repainted every frame on a
        phone — the lighter shadow is what keeps the slide smooth */
     box-shadow:0 14px 30px rgba(0,0,0,.13);
     -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
     /* visibility steps at the end of the close rather than being eased */
-    transition:transform .5s var(--ease),visibility 0s linear .5s;
+    transition:clip-path .46s var(--ease),visibility 0s linear .46s;
   }
   body.menu-open .slide-menu{
-    transform:translate3d(0,0,0);visibility:visible;
-    transition:transform .5s var(--ease),visibility 0s;
+    clip-path:inset(0 0 0 0);visibility:visible;
+    transition:clip-path .46s var(--ease),visibility 0s;
   }
+  /* the rows ride down a little behind the clip so it reads as a drawer
+     opening rather than a curtain being wiped */
+  .slide-menu .menu-item,
+  .slide-menu .menu-social{
+    transform:translateY(-14px);
+    transition:transform .46s var(--ease);
+  }
+  body.menu-open .slide-menu .menu-item,
+  body.menu-open .slide-menu .menu-social{transform:translateY(0)}
   .menu-item{padding:22px 24px;font-size:19px}
   .menu-gap{display:none}
   .menu-contact{border-bottom:1px solid #E7E9EA}
