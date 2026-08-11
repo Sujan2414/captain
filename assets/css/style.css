@@ -1875,6 +1875,15 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   width:100%;border-radius:var(--r-card);display:block;
   aspect-ratio:16/9;object-fit:cover;background:#E8ECEE;
 }
+/* pack shots: show the whole bag, don't crop it to a letterbox and don't
+   let it run the full column width */
+.pd-figure.is-pack{display:flex;justify-content:center}
+.pd-figure.is-pack img{
+  width:auto;max-width:min(300px,52%);height:auto;
+  aspect-ratio:auto;object-fit:contain;background:transparent;border-radius:0;
+}
+@media (max-width:760px){.pd-figure.is-pack img{max-width:min(240px,68%)}}
+
 .pd-duo{display:grid;grid-template-columns:1fr 1fr;gap:clamp(14px,1.6vw,24px)}
 .pd-duo figure{margin:0}
 .pd-duo img{aspect-ratio:4/3;object-fit:cover}
