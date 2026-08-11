@@ -2361,11 +2361,11 @@ body.menu-open .subnav{z-index:1100}
   color:var(--slate);text-align:center;
   margin:clamp(48px,6vw,88px) 0 clamp(16px,2vw,24px);
 }
-.ribbon-logos .ribbon-track{animation-duration:78s}
-.ribbon-logos{margin-top:0;padding-block:clamp(28px,3.2vw,46px)}
+.ribbon-logos .ribbon-track{animation-duration:98s}
+.ribbon-logos{margin-top:0;padding-block:clamp(32px,3.7vw,54px)}
 .ribbon-logos .belt{
   list-style:none;display:flex;align-items:center;
-  gap:clamp(38px,5vw,84px);padding-right:clamp(38px,5vw,84px);
+  gap:clamp(58px,7.2vw,124px);padding-right:clamp(58px,7.2vw,124px);
 }
 .ribbon-logos .belt li{display:flex;align-items:center}
 .ribbon-logos img{
@@ -2375,12 +2375,12 @@ body.menu-open .subnav{z-index:1100}
   transition:filter .3s,opacity .3s;
   /* per-logo heights: these marks have very different proportions, so one
      height makes the wide-short ones shout and the square ones vanish */
-  height:clamp(30px,3vw,44px);
+  height:clamp(36px,3.6vw,52px);
 }
-.ribbon-logos img[src*="l-t"]{height:clamp(38px,3.8vw,56px)}
-.ribbon-logos img[src*="apco"]{height:clamp(36px,3.6vw,54px)}
-.ribbon-logos img[src*="swastik"]{height:clamp(34px,3.4vw,50px)}
-.ribbon-logos img[src*="godrej"]{height:clamp(22px,2.2vw,32px)}
+.ribbon-logos img[src*="l-t"]{height:clamp(44px,4.4vw,64px)}
+.ribbon-logos img[src*="apco"]{height:clamp(42px,4.2vw,62px)}
+.ribbon-logos img[src*="swastik"]{height:clamp(48px,4.8vw,70px)}
+.ribbon-logos img[src*="godrej"]{height:clamp(31px,3.1vw,45px)}
 .ribbon-logos li:hover img{filter:grayscale(0);opacity:1}
 @media (prefers-reduced-motion:reduce){
   .ribbon-logos .ribbon-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}
