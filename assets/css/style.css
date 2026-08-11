@@ -1138,6 +1138,11 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
      desktop hero's 40px — so scope --fillet to it rather than raising the
      global value the product plates depend on. */
   .hero-panel,.hero-panel .fillet{--fillet:46px}
+  /* .hero-sticky is pure white on phones, not var(--bg). The plate has to be
+     the same white or every place it meets the page — the card's bottom-right
+     curve, the left fillet's tapered end — draws itself as a faint arc. */
+  .hero-panel{background:#fff}
+  .hero-panel .fillet{--c:#fff}
   /* same rule as .plate: the convex corner matches the concave fillets
      beside it, or the curve breaks where they meet */
   .hero-panel{right:0;bottom:0;border-top-left-radius:var(--fillet)}

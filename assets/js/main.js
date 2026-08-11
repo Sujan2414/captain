@@ -224,16 +224,20 @@
       // is off-screen behind the curtain, so square is right. phones: the
       // plate sits in the card's rounded corner and must repeat its radius,
       // or the two outlines disagree at the same corner.
-      heroPanel.style.borderBottomRightRadius = desktop ? "0px" : `${rad}px`;
+      // a touch tighter than the card's corner, like .plate: equal radii leave
+      // two half-covered edges on the same pixel and the video greys the seam
+      heroPanel.style.borderBottomRightRadius = desktop ? "0px" : `${Math.max(0, rad - 8)}px`;
     }
     // desktop: caption exits sideways with the curtain.
     // mobile:  it stays nested in the video's corner and rides the expansion,
     //          the way the reference does — it must not slide off the card.
     // desktop: caption exits to the right; mobile: it exits downward. Either
     // way the clip above cuts it at the card edge as it leaves.
+    // the px term carries .f-above-panel, which sits a fillet's height above
+    // the plate and so is still on screen when a pure % exit finishes
     heroPanel.style.transform = desktop
       ? `translateX(${e * innerWidth * 0.78}px)`
-      : `translateY(${e * 130}%)`;
+      : `translateY(calc(${e * 130}% + ${e * 52}px))`;
 
 
     // The advancing video edge physically pushes the rail and top bar off
