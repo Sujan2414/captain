@@ -1137,7 +1137,10 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
   /* The hero carries a bigger curve than the cards do — closer to the
      desktop hero's 40px — so scope --fillet to it rather than raising the
      global value the product plates depend on. */
-  .hero-panel,.hero-panel .fillet{--fillet:46px}
+  /* fillet + top-left radius must fit inside the plate's height or the two
+     arcs overlap and the video spikes through between them. JS clamps this to
+     the measured height as well — see fitCaptionFillet(). */
+  .hero-panel,.hero-panel .fillet{--fillet:38px}
   /* .hero-sticky is pure white on phones, not var(--bg). The plate has to be
      the same white or every place it meets the page — the card's bottom-right
      curve, the left fillet's tapered end — draws itself as a faint arc. */
@@ -1163,7 +1166,9 @@ body.menu-open .nav-burger span:last-child{width:20px;transform:translateY(-4px)
      longest word and the clip cut the rest */
   /* the shrink-to-fit here resolves to the longest word and the caption
      overflows — pin an explicit floor sized to the two-line lockup */
-  .hero-panel{padding:16px 18px 12px 26px;width:auto;min-width:min(248px,74vw);max-width:94%}
+  /* taller than the text needs: the plate has to be at least fillet + radius
+     tall to seat both curves on its left edge */
+  .hero-panel{padding:26px 18px 16px 26px;width:auto;min-width:min(248px,74vw);max-width:94%}
   .hero-panel h2{font-size:17px}
   .hero-panel h2{font-size:clamp(17px,4.9vw,48px)}
   .stats{grid-template-columns:repeat(2,1fr)}
@@ -2444,6 +2449,13 @@ body.menu-open .subnav{z-index:1100}
 .ribbon-logos img[src*="swastik"]{height:clamp(48px,4.8vw,70px)}
 .ribbon-logos img[src*="godrej"]{height:clamp(39px,3.9vw,57px)}
 .ribbon-logos li:hover img{opacity:1}
+/* The note above is about phones: filter is what blanked the belt on mobile
+   Blink and WebKit. Hover is a pointer-device affordance, so scope the
+   greyscale to the same devices — phones keep the plain, safe path. */
+@media (hover:hover) and (pointer:fine){
+  .ribbon-logos img{filter:grayscale(1);transition:opacity .3s,filter .3s}
+  .ribbon-logos li:hover img{filter:grayscale(0)}
+}
 @media (prefers-reduced-motion:reduce){
   .ribbon-logos .ribbon-track{animation:none;flex-wrap:wrap;justify-content:center;width:100%}
   .ribbon-logos .belt:last-child{display:none}

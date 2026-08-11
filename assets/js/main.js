@@ -559,8 +559,27 @@
   /* One batched geometry read. Everything the rAF loop needs is captured here
      and refreshed only on resize / after fonts settle, so no frame triggers a
      synchronous layout. */
+  /* The caption's concave fillet sits on the card's foot and its convex
+     corner rounds down from the plate's top, so both eat into the same left
+     edge: fillet + radius must fit inside the plate's height or a wedge of
+     video spikes through between the two arcs. The CSS picks 38px, which
+     suits a 390px phone; this keeps it true on any other. */
+  function fitCaptionFillet() {
+    if (!heroPanel) return;
+    const kids = heroPanel.querySelectorAll(".fillet");
+    if (innerWidth > 760) {
+      heroPanel.style.removeProperty("--fillet");
+      kids.forEach((el) => el.style.removeProperty("--fillet"));
+      return;
+    }
+    const f = clamp(Math.floor(heroPanel.offsetHeight / 2) - 2, 14, 38);
+    heroPanel.style.setProperty("--fillet", f + "px");
+    kids.forEach((el) => el.style.setProperty("--fillet", f + "px"));
+  }
+
   function measureAll() {
     measureHero();
+    fitCaptionFillet();
     measureApproach();
     if (rail) cachedRailW = rail.offsetWidth || 82;
     if (navBrand) cachedBrandRight = (navBrand.offsetLeft + navBrand.offsetWidth) || 380;
